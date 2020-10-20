@@ -1,0 +1,217 @@
+
+<style>
+.bootstrap-select > .dropdown-toggle {
+  
+  height:22px !important;
+}
+.form-control {
+  padding-left:0% !important;
+}
+</style>
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="JHICDataBankModule" ng-controller="JHICDataBankController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span class="active">JHIC DataBank</span>
+            </li>
+        </ul>
+        <% if(req.flash('noDataAvailable') != ""){ %>
+        <div id="hide">
+        <div  id="noData" class="alert alert-danger alert-dismissable" >
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          Sorry, Data is not available.
+      </div> 
+      </div>
+      <%}%> 
+      <script>
+$('#hide').delay(1000).fadeOut(3000); 
+</script>
+      <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet box" style="background-color: white">
+                <div class="headerSection">
+                    <div class="headerLabelSection">
+                        Download JHIC Dataset 
+                    </div>
+                    <div class="tools "></div>
+                </div>
+
+                <div class="filterDiv" >
+                     <form role="form" class="filterTable" id="dataBankForm" action="<%=sails.config.routesPrefix%>/exportDataBankList" method="POST">
+                        <div class="row" style="padding-top: 0.5%;">
+
+                                <div class="col-md-2">
+                                            <span class="input-group-addon filterLabel leftalign">
+                                    County </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                          <select id="countyDropdown" name="county" class="form-control" ng-model="selectCounty" ng-options="c.value for c in counties track by c.key" ng-change="hfLevelCountyChanges()">
+                                    </select>
+                                 </div>
+
+                                  <div class="col-md-2">
+                                         <span class="input-group-addon filterLabel leftalign">
+                                            Sub-County </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                            <select id="inspectorDropdown" name="sub_county" class="form-control" ng-model="selectSubCounty" ng-options="c.value for c in subCounties track by c.key" >
+                                            </select>
+                                 </div>
+
+                        </div>
+                        
+                        <div class="row">
+                                <div class="col-md-2">
+                                        <span class="input-group-addon filterLabel leftalign">
+                                                JHIC Unit </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                 
+                                           <select  name="unit" id="unitDropdown" class="bs-select form-control" data-selected-text-format="count" multiple 
+                                           onchange="unitChange()">
+                                                 <option value="All">All</option>
+                                                 <%
+
+                                                 for(i=1; i<=13; i++) {
+                                                 %>
+                                                 <option value="s<%=i%>"><%=__("s"+i)%></option>
+                                                 <% } %>
+                                             </select>         
+                                              <div id="errorMsg" style="color:#a94442;display:none"><label id="tmp-error" class="error" for="tmp"> JHIC Unit is required.</label></div>
+                                 </div>
+
+                                  <div class="col-md-2">
+                                          <span class="input-group-addon filterLabel leftalign">
+                                                Level </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                           <select id="levelDropdown" name="level" class="form-control" ng-model="selectLevel" ng-options="c.value for c in levels track by c.key" ng-change="filterChanged()">
+                                                </select>
+                                 </div>
+                          </div>
+                         <div class="row">
+                                <div class="col-md-2">
+                                       <span class="input-group-addon filterLabel leftalign">
+                                                    Ownership </span>
+                                                   
+                                 </div>
+
+                                 <div class="col-md-4">
+                                            <select id="ownershipDropdown" name="ownership" class="form-control" ng-model="selectOwnership" ng-options="c.value for c in ownerships track by c.key" ng-change="filterChanged()">
+                                                    </select>
+                                 </div>
+
+                                  <div class="col-md-2">
+                                          <span class="input-group-addon filterLabel">
+                                                            Series </span>
+                                                            
+                                 </div>
+
+                                 <div class="col-md-4">
+                                          <select id="seriesDropdown" class="bs-select form-control" data-selected-text-format="count" name="series" onchange="seriesChange()" multiple  >
+                                                            
+                                                            <option value="All">All</option>
+                                                            <option value="Adherence">Adherence</option>
+                                                            <option value="Max Score">Max Score</option>
+                                                            <option value="Observed Score">Observed Score</option>
+                                                            <option value="Percentage Score">Percentage Score</option>
+                                                        </select>
+                                                        <div id="errorMsg1" style="color:#a94442;display:none"><label id="tmp-error" class="error" for="tmp">Series is required.</label></div>
+                                                       
+                                 </div>
+                               </div>
+                                  <div class="row">
+
+                                <div class="col-md-2">
+                                            <span class="input-group-addon filterLabel leftalign">
+                                    Time </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                          <select id="timeDropdown" name="time" class="form-control"  onchange="filterChanged()">
+                                                               <option value="1">All inspection history</option>
+                                                               <option value="2">Last available inspection</option>
+                                                           </select>
+
+                                 </div>
+
+                                 </div>
+                                 <br/><br/>
+                                   <div class="row">
+
+                                                 <button type="submit" id="exportButton" style="margin-bottom: 2%;" class="btn green button-rounder center-block" > Export to Excel</button>
+
+                                             </div>
+                                             <div class="row">
+                                     <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+                                      <div style="display:inline;"> Note:</div>
+                                      <div style="display:inline;"> For the filters selected, the exported table provides information on the complete JHIC results for all corresponding facilities. </div>
+                       </div>
+                       </div>
+                      
+                                  </form>
+                      
+                    </div>
+
+
+                <div class="filterDiv">
+                   
+                                         <br><br>
+                </div>
+
+
+
+                                 </div>
+                                 <!-- END EXAMPLE TABLE PORTLET-->
+
+                             </div>
+                         </div>
+                     </div>
+                     <!-- END PAGE CONTENT INNER -->
+                 </div>
+
+                 <script>
+                    highlightMenu(["jhicDatabank"]);
+
+                    $("#noData").delay(4000).fadeOut("slow");
+
+                    function seriesChange(){
+
+                      if($("#seriesDropdown").val()==null){
+
+                        $("#exportButton").attr("disabled",true);
+
+                        $("#errorMsg1").show();
+                      }else{
+                         $("#exportButton").attr("disabled",false);
+
+                        $("#errorMsg1").hide();
+                      }
+                    }
+
+                     function unitChange(){
+
+                      if($("#unitDropdown").val()==null){
+
+                        $("#exportButton").attr("disabled",true);
+
+                        $("#errorMsg").show();
+                      }else{
+                         $("#exportButton").attr("disabled",false);
+
+                        $("#errorMsg").hide();
+                      }
+                    }
+                </script>

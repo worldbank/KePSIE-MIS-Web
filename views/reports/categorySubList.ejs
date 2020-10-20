@@ -1,0 +1,63 @@
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="resourceSubListApp"  ng-controller="resourceSubListCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/resources">Resources</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">Documents</span>
+      </li>
+    </ul>
+    <div class="row">
+      <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form bordered">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-list-ul font-red"></i>
+              <span class="caption-subject font-red sbold uppercase">Documents
+              </span>
+              <input type="hidden" id="categoryid" value="<%=req.param('id')%>" />
+
+            </div>
+
+          </div>
+          
+          <div class="portlet-body" >
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+              <table class="table table-striped row-border table-hover dt-responsive  dtr-inline collapsed" id="categorysublist">
+              <thead>
+              <tr>
+              <th class="centerContent">Title</th>
+              <th class="centerContent">Link</th>
+
+              <th class="centerContent">Download</th>
+              <th class="none"> </th> 
+              </tr>
+              </thead>
+
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- END VALIDATION STATES-->
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  highlightMenu(["resources"]);
+
+</script>

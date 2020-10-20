@@ -1,0 +1,216 @@
+<link href="<%=sails.config.assetURL%>/global/css/custom-media-query.css" rel="stylesheet" type="text/css"/>
+
+<style>
+.bootstrap-select > .dropdown-toggle {
+  /*width:95%;*/
+  height:22px !important;
+}
+
+.bs-select {
+    padding-left : 0 !important;
+}
+
+option{
+    width: 100%;
+    text-overflow: ellipsis;
+}
+
+</style>
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="qcReportsTableModule" ng-controller="qcReportsTableCtrl">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                            <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Checks and Quality Reports</span>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Reports</span>
+
+                            </li>
+                        </ul>
+                    </td>
+                    <td width="30%" align="right">
+                        <div class="btn-group btn-group-solid">
+                            <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/reports/figure" 
+                                >
+                                <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                                Figures</a>
+
+                                <a type="button" class="btn green active kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/reports/table" >
+                                    <i class="fa fa-table" style="font-size: 14px;"></i>
+                                    Tables</a>
+
+
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="row" id="reportRow">
+                    <div class="col-md-12">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet box" style="background-color: white">
+                            <div class="headerSection ">
+                                <div class="headerLabelSection">
+                                   Quality Checks - Tables
+                               </div>
+                               <div class="exportSection " style="">
+                                    <!--  <button class="col-md-6"   onclick="tablesToExcel(['summaryReportTable1','summaryReportTable2','summaryReportTable3','summaryReportTable4'], ['All','Kakamega','Kilifi','Meru'], 'SummaryReportTable.xls', 'Excel')">
+                                                Excel
+                                                <i class="fa fa-download"></i>
+                                            </button> -->
+                                            <form  style="display:inline-block" action="<%=sails.config.routesPrefix%>/qualitychecks/reports/table/exportTableAsEXCEL" 
+                                                method="post">
+                                                
+                                                <input type="hidden" name="selectedInspPeriod" value="{{selectedInspPeriod.value}}"/>
+                                                <input type="hidden" name="selectedCounty" value="{{selectedCounty.value}}"/>
+                                                
+                                                <input type="hidden" name="tableHTML" value="{{dataExcel}}"/>
+                                                <button type="submit" >
+                                                 <!--  <button class="col-md-6" ng-click="export2excel()" > -->
+                                                 Excel
+                                                 <i class="fa fa-download"></i>
+                                             </button>
+                                         </form>
+                                         <form  style="display:inline-block"" action="<%=sails.config.routesPrefix%>/qualitychecks/reports/table/exportTableAsPDF"
+                                            method="post">
+                                            <input type="hidden" name="selectedInspPeriod" value="{{selectedInspPeriod.value}}"/>
+                                            <input type="hidden" name="selectedCounty" value="{{selectedCounty.value}}"/>
+
+                                            <input type="hidden" name="tableHTML" value="{{tableHTML}}"/>
+                                            <span>
+                                                <button   type="submit" id="submit">
+                                                    PDF
+                                                    <i class="fa fa-download"></i>
+                                                </button></span>
+
+
+                                            </form>
+
+                                        </div> 
+
+                                    </div>
+
+
+                                    <div class="filterDiv">
+                                     <form role="form" class="filterTable">
+                                        <div class="removeRow row" style="padding-top: 0.5%;">
+                                         <div class="newRow">
+                                             <div class="col-md-1 col-sm-1 col-xs-12">
+                                                <span class="input-group-addon filterLabel leftalign">
+                                                 County </span>
+                                             </div>
+                                             <div class="col-md-3 col-sm-3 col-xs-8">
+                                                <select id="countyDropdown" class="form-control" ng-model="selectedCounty"  ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                                                </select>
+                                            </div>
+
+
+                                            <div class="col-md-1 col-sm-1 col-xs-12">
+                                                <span class="input-group-addon filterLabel leftalign">
+                                                    Inspection Period </span>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-8">
+                                                    <select id="inspPeriodDropdown" class="form-control" ng-model="selectedInspPeriod" ng-options="period.value for period in inspPeriods track by period.key" ng-change="filterChanged()">
+
+                                                    </select>
+                                                </div>
+                                                <!-- /input-group -->
+
+
+                                            </div>
+                                            <div class="newRow">
+
+                                               <div class="col-md-1 col-sm-1 col-xs-12">
+                                                <span class="input-group-addon filterLabel leftalign">
+                                                    Indicator</span>
+                                                </div>
+                                                <div class="col-md-3 col-sm-3 col-xs-8">
+                                         <!--    <selectpicker   data-array="indicators"
+                                            data-selected="selectedIndicator" 
+                                            "> -->
+                                
+                                            <select id="indDropdown" class="bs-select form-control" data-selected-text-format="count" 
+                                            onchange="angular.element(this).scope().indicatorChanged()" multiple >
+
+
+                                            <option value="All">All</option>
+                                            <option value="JHIC Discrepancies">JHIC Discrepancies</option>
+                                            <option value="Scorecard Non-Adherence">Scorecard Non-Adherence</option>
+                                            <option value="Facility Closure Non-Adherence">Facility Closure Non-Adherence</option>
+                                            <option  value="Pharmacy Closure Non-Adherence">Pharmacy Closure Non-Adherence</option>
+                                            <option value="Lab Closure Non-Adherence">Lab Closure Non-Adherence</option>
+                                            <option value="Radiology Closure Non-Adherence">Radiology Closure Non-Adherence</option>
+                                            <option value="Nutrition Closure Non-Adherence">Nutrition Closure Non-Adherence</option>
+                                        </select>
+                                         <div id="errorMsg1" style="color:#a94442;display:none"><label id="tmp-error" class="error" for="tmp">Indicator is required.</label></div>
+                                    </div>
+
+
+                                    <div  class="ng-hide" ng-show="selectedJHICDiscrepancies">
+                                        <div class="col-md-1 col-sm-1 col-xs-12 ">
+
+
+                                            <span class="input-group-addon filterLabel leftalign">
+                                                Inspector </span></div>
+                                                <div class="col-md-3 col-sm-3 col-xs-8">
+                                                    <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector" ng-options="insp.name for insp in inspectors track by insp._id" ng-change="filterChanged()">
+                                                    </select>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <!-- /.row -->
+                                </form>
+                            </div>
+
+
+
+                            <div class="portlet-body" id="summaryReportDiv">
+
+                              <div class="bold" style="font-size: 18px;padding-left: 46%;padding-bottom:5px;">Quality Checks</div>
+
+                              <div id="countyHeader1" class="countyHeader">
+                                County: All
+                            </div>
+                            <table class="table table-bordered table2excel" id="summaryReportTable1" style="border : 2px solid #e5e5e5" cellspacing="0"></table>
+                           
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+        </div>
+    </div>
+
+</div>
+</div>
+<!-- END EXAMPLE TABLE PORTLET-->
+
+
+<script>
+ highlightMenu(["qualityReports","reports"]);
+ $('.bs-select').selectpicker({});
+ $("#indDropdown").selectpicker('val', ['All']);
+
+$("div .dropdown-menu ").addClass("pull-right");
+
+</script>

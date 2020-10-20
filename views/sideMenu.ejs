@@ -1,0 +1,268 @@
+<!-- BEGIN SIDEBAR -->
+<style type="text/css">
+    .page-sidebar .page-sidebar-menu>li>a>.title{
+        font-size: 13px ;
+
+    }
+
+    .page-sidebar .page-sidebar-menu .sub-menu li>a{
+        font-size: 12px ;
+
+    }
+    .page-sidebar-menu>li>.sub-menu>li>a>i {
+        font-size: 11px !important
+    }
+    .page-sidebar-menu>li>.sub-menu>li>.sub-menu>li>a>i {
+        font-size: 10px !important
+    }
+    .hiddenIcon{
+        visibility: hidden;
+    }
+    .page-sidebar.navbar-collapse {
+        border: 0px solid #ccc; 
+    }
+
+    @media screen and (max-width: 992px) {
+        .page-sidebar-menu.page-sidebar-menu-hover-submenu li a>.fa-angle-right {
+         display: none; 
+     }
+ }
+ @media screen and (min-width: 992px) {
+    .page-sidebar-menu.page-sidebar-menu-hover-submenu li a>.fa-angle-right {
+      width: 10px;
+      float: right;
+      margin-right: 5px;
+      margin-left: 5px;
+      margin-top: 3px;
+      display: inline;
+      font-size: 16px;
+
+      height: auto;
+
+      font-weight: 800;
+      text-shadow: none;
+      color: #a0b8c9;
+  }
+}
+
+</style>
+<!--
+ * Used to show and hide toggle arrow
+ * @author: Karthik 
+ -->
+<script type="text/javascript">
+
+  var click_s=0;
+            $('.sidebar-toggler').click(function(){
+                if(click_s % 2 == 0){
+                    $('.fa-angle-right').hide();
+                }
+                else{
+                     $('.fa-angle-right').show();
+                }
+                click_s++;
+            });
+</script>
+<% if(req.session.loggedInUser) { %>
+<div class="page-sidebar navbar-collapse collapse">
+    <ul id="sideMenu" class="page-sidebar-menu  page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+        <li id="dashboardLI" class="nav-item">
+            <a href="<%=sails.config.routesPrefix%>/dashboard" class="nav-link">
+                <i class="fa fa-home"></i>
+                <span class="title">Dashboard</span>
+
+            </a>
+      
+        </li>
+
+        <li id="completeJHICReportsLI">
+            <a id="completeJHICReportsA" href="javascript:;">
+                <i class="fa fa-files-o"></i>
+                <span class="title">Complete JHIC Reports</span>
+                <span class="arrow"></span>
+                <span class="fa fa-angle-right"></span>
+            </a>
+            <ul class="sub-menu">
+                <li id="individualReportLI" class="nav-item">
+                    <a href="<%=sails.config.routesPrefix%>/completejhic/individual" class="nav-link nav-toggle">
+                        <i class="fa fa-newspaper-o"></i>
+                        <span class="title subpadding">Individual JHIC Reports</span>
+                    </a>
+                </li>
+                <li  id="aggregateReportLI" class="nav-item">
+                    <a href="<%=sails.config.routesPrefix%>/completejhic/aggregate" class="nav-link nav-toggle">
+                        <i class="fa fa-bars"></i>
+                        <span class="title subpadding">Aggregate JHIC Reports</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li id="summaryJHICReportsLI">
+            <a  href="<%=sails.config.routesPrefix%>/summaryjhic/figure" class="nav-link nav-toggle">
+                <i class="fa fa-file-text-o"></i>
+                <span class="title subpadding">Summary JHIC Reports</span>
+            </a>
+        </li>
+
+        <% if(req.session.loggedInUser.role!="WB -Supervisors" && req.session.loggedInUser.role!="Inspector" ) { %>
+        <li id="jhicDatabankLI">
+            <a  href="<%=sails.config.routesPrefix%>/jhicdatabank" class="nav-link nav-toggle">
+                <i class="fa fa-bank"></i>
+                <span class="title subpadding">JHIC DataBank</span>
+            </a>
+        </li>
+        <% } %>
+
+    <li id="inspProgressPlanningLI">
+        <a id="inspProgressPlanningA" href="<%=sails.config.routesPrefix%>/facilityLevelProgress" class="nav-link nav-toggle">
+            <i class="fa fa-line-chart"></i>
+            <span class="title subpadding">Facility-Level Progress</span>
+        </a>
+
+    </li>
+     <% var userRole=['Admin','WB -Supervisors',
+                'MOH Coordinator','Inspector','Logistics Firm'];
+
+    if (userRole.indexOf(req.session.loggedInUser.role)!=-1) { %>
+    <li id="inspPlanningLI">
+     <!-- href="<%=sails.config.routesPrefix%>inspectorVisitPlan/figure" -->
+        <a id="inspProgressPlanningA" href="<%=sails.config.routesPrefix%>/inspectorVisitPlan/dataBank" class="nav-link nav-toggle">
+            <i class="fa fa-calendar"></i>
+            <span class="title subpadding">Inspection Planning </span>
+        </a>
+    </li>
+    <% } %>
+
+        <li id="closureOtherIssuesLI">
+            <a  href="<%=sails.config.routesPrefix%>/closure/figure" class="nav-link nav-toggle">
+                <i class="fa fa-exclamation-triangle"></i>
+                <span class="title subpadding">Closures and Other</span>
+                <!-- <span class="arrow"></span>
+                <span class="fa fa-angle-right"></span> -->
+                <span class="title subpadding">Issues</span>
+
+            </a>
+            <!-- <ul class="sub-menu">
+                <li id="closureLI" class="nav-item">
+                    <a href="<%=sails.config.routesPrefix%>/closure/table" class="nav-link nav-toggle">
+                        <i class="fa fa-times-circle-o"></i>
+                        <span class="title subpadding">Closure</span>
+                        <span class="arrow"></span>
+                    </a>
+                </li>
+                <li  id="issuesLI" class="nav-item">
+                    <a href="<%=sails.config.routesPrefix%>/otherIssue" class="nav-link nav-toggle">
+                        <i class="fa fa-gavel"></i>
+                        <span class="title subpadding">Other Issues</span>
+                    </a>
+                </li>
+            </ul> -->
+        </li>
+ <% var userRole=['Admin','WB -Supervisors',
+                'MOH Coordinator','Inspector'];
+
+                if (userRole.indexOf(req.session.loggedInUser.role)!=-1) { %>
+        <li id="qualityReportsLI" style="display:none;">
+            <a  href="javascript:;" class="nav-link nav-toggle">
+                <i class="fa fa-thumbs-o-up"></i>
+                <span class="title subpadding">Quality Reports</span>
+                <span class="arrow"></span>
+                <span class="fa fa-angle-right"></span>
+            </a>
+
+            <ul class="sub-menu">
+                <li id="reportsLI" class="nav-item">
+                    <a href="<%=sails.config.routesPrefix%>/qualitychecks/reports/figure" class="nav-link nav-toggle">
+                        <i class="fa fa fa-file-text-o"></i>
+                        <span class="title subpadding">Reports</span>
+                        <span class="arrow"></span>
+
+
+                    </a>
+
+                </li>
+               
+                <li  id="planningLI" class="nav-item">
+                    <a href="<%=sails.config.routesPrefix%>/qualitychecks/planning/figure" class="nav-link nav-toggle">
+                        <i class="fa fa-calendar-plus-o"></i>
+                        <span class="title subpadding">Planning</span>
+                    </a>
+                </li>
+               
+            </ul>
+        </li>
+ <% } %>
+        <li id="askLI" class="nav-item">
+            <a href="<%=sails.config.routesPrefix%>/ask/askExperts" class="nav-link">
+                <i class="fa fa-commenting-o"></i>
+                <span class="title">Ask the Expert</span>
+            </a>
+        </li>
+
+        <li id="faqLI" class="nav-item" style="display:none;">
+            <a href="<%=sails.config.routesPrefix%>/faq"  class="nav-link">
+                <i class="fa fa-question-circle"></i>
+                <span class="title">FAQ
+                </span>
+            </a>
+        </li>
+
+        <li  id="resourcesLI"  class="nav-item">
+            <a href="<%=sails.config.routesPrefix%>/resources" class="nav-link">
+                <i class="fa fa-wrench"></i>
+                <span class="title">Resources
+                </span>
+            </a>
+        </li>
+        <% if(req.session.loggedInUser.role=="Admin") { %>
+        <li id="userManagementLI" class="nav-item">
+           <input type="hidden" id="userid" value="<%= req.session.loggedInUser.id %>">
+           <a href="<%=sails.config.routesPrefix%>/user/all" class="nav-link">
+            <i class="fa fa-user"></i>
+            <span class="title">User Management</span>
+        </a>
+    </li>
+    <li id="groupLI" class="nav-item">
+
+        <a href="<%=sails.config.routesPrefix%>/group/all" class="nav-link">
+            <i class="fa fa-users"></i>
+            <span class="title">Group Management</span>
+        </a>
+    </li>
+    <li id="hfLI" class="nav-item">
+
+        <a href="<%=sails.config.routesPrefix%>/hf/all" class="nav-link">
+            <i class="fa fa-cloud-upload"></i>
+            <span class="title">Facility Data Management</span>
+
+        </a>
+    </li>
+
+    <li id="auditLogsLI" class="nav-item">
+        <a href="<%=sails.config.routesPrefix%>/user/auditLogs" class="nav-link">
+            <i class="fa fa-clipboard"></i>
+            <span class="title"> Audit Logs</span>
+        </a>
+    </li>
+    <% } %>
+    <li id="aboutLI" class="nav-item">
+       <input type="hidden" id="userid" value="<%= req.session.loggedInUser.id %>"> 
+       <a href="<%=sails.config.routesPrefix%>/about" class="nav-link">
+        <i class="fa fa-user"></i>
+        <span class="title">About KePSIE</span>
+    </a>
+</li>
+</ul>
+</div>
+<% } %>
+
+<script type="text/javascript">
+
+    var loggedInUserRole= "<%= req.session.loggedInUser.role%>" ;
+    var loggedInUser= <%- JSON.stringify(req.session.loggedInUser)%> ;
+    var inspWave= <%- JSON.stringify(CountyService.getInspectionWave() )%>;
+    var logourl="<%=sails.config.logoURL %>";
+   
+</script>

@@ -1,0 +1,182 @@
+
+    
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CLSd-3FnPHmG_R3pVV2yFrURNBT22Tc&callback=initMap"
+    type="text/javascript"></script>
+
+
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper" ng-app="summaryMapModule" ng-controller="summaryMapController">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+            <!-- BEGIN PAGE HEAD-->
+
+            <!-- END PAGE HEAD-->
+            <!-- BEGIN PAGE BREADCRUMB -->
+            <div class="breadcrumbDiv">
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <ul class="page-breadcrumb breadcrumb ">
+                                <li>
+                                    <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                    <i class="fa fa-circle"></i>
+                                </li>
+                                <li>
+                                    <span class="active">Summary JHIC Reports</span>
+                                </li>
+                            </ul>
+
+                        </td>
+                        <td width="30%" align="right">
+                            <div class="btn-group btn-group-solid ">
+                                <a type="button" class="btn green button-rounder kepsie-tabs" href="<%=sails.config.routesPrefix%>/summaryjhic/figure">
+                                   <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                                   Figures</a>
+
+                                    <a type="button" class="btn green button-rounder kepsie-tabs" href="<%=sails.config.routesPrefix%>/summaryjhic/table"> 
+                                    <i class="fa fa-table" style="font-size: 14px;"></i>
+                                    Tables</a>
+
+                                  <a type="button" class="btn green active button-rounder kepsie-tabs" href="<%=sails.config.routesPrefix%>/summaryjhic/map" >
+                                    <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                                    Maps</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+
+                <div class="row" id="reportRow">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        
+                        <div class="portlet box" style="background-color: white">
+                            <div class="headerSection">
+                                <div class="headerLabelSection">
+                                    Summary JHIC Reports - Maps
+                                </div>
+                                <div class="exportSection">
+                                    <form action="<%=sails.config.routesPrefix%>/summaryjhic/map/exportAsKML" method="post">
+                                        <input type="hidden" name="county" value="{{countyValue}}"></input>
+                                        <input type="hidden" name="ownership" value="{{ownershipValue}}"></input>
+                                        <input type="hidden" name="level" value="{{levelValue}}"></input>
+                                        <button type="submit" id="submit">
+                                            KML
+                                            <i class="fa fa-download"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                              <div class="filterDiv">
+                              
+                           <form role="form" class="filterTable">
+                                            <div class="row">
+                                                <div class="col-md-4 filterStyle" >
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon filterLabel">
+                                                            County &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                                         <select id="countyDropdown" class="form-control" ng-model="countyValue"
+                                            onchange="initMap()">
+                                            <%
+                                            var map = CountyService.getCounties();
+                                            for(i in map) {
+                                                %><option value="<%= map[i].key %>"><%= map[i].value %></option><%
+                                            }
+                                            %>
+                                        </select></div>
+                                                    <!-- /input-group -->
+                                                </div>
+                                                <!-- /.col-md-6 -->
+                                                <div class="col-md-4 filterStyle">
+                                                    <div class="input-group">
+                                                       
+                                                        <span class="input-group-addon filterLabel">
+                                                            Ownership </span>
+                                                           <select class="form-control" id="ownershipDropdown" ng-model="ownershipValue"
+                                        onchange="initMap()">
+                                        <option value="all">All</option>
+                                        <option value="Public">Public</option>
+                                        <option value="Private">Private</option>
+                                    </select>
+                                                    </div>
+                                                    <!-- /input-group -->
+                                                </div>
+                                                <div class="col-md-4 filterStyle" >
+                                                    <div class="input-group">
+                                                       
+                                                        <span class="input-group-addon filterLabel">
+                                                           Level&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+                                                            <select class="form-control" id="levelDropdown" ng-model="levelValue"
+                                    onchange="initMap()">
+                                    <option value="all">All</option>
+                                    <option value="2">Level 2</option>
+                                    <option value="3">Level 3</option>
+                                    <option value="4">Level 4</option>
+                                     <option value="5">Level 5</option>
+                                </select>
+                                                    </div>
+                                                    <!-- /input-group -->
+                                                </div>
+                                                <!-- /.col-md-6 -->
+                                            </div>
+                                            <!-- /.row -->
+                                        </form>
+                                        </div>
+
+                <div class="portlet-body">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+    </div>
+    </div>
+    <!-- END PAGE CONTENT INNER -->
+    <div id="markerInfoWindow">
+        <table>
+            <tr>
+                <th colspan="2"><label id="hfNameIW"></label></th>
+            </tr>
+            <tr>
+                <td style="width: 60%;">Facility ID</td>
+                <td><label id="facilityIdIW"></label></td>
+            </tr>
+            <tr>
+                <td>County</td>
+                <td><label id="countyIW"></label></td>
+            </tr>
+            <tr>
+                <td>SubCounty</td>
+                <td><label id="subCountyIW"></label></td>
+            </tr>
+            <tr>
+                <td>Location</td>
+                <td><label id="locationIW"></label></td>
+            </tr>
+            <tr>
+                <td>Ownership</td>
+                <td><label id="pubIW"></label></td>
+            </tr>
+             <tr>
+                <td>Level</td>
+                <td><label id="levelIW"></label></td>
+            </tr>
+            <tr>
+                <td>JHIC Percentage Score</td>
+                <td><label id="totalPSIW"></label></td>
+            </tr>
+            <tr>
+                <td>Compliance Category</td>
+                <td><label id="riskCIW"></label></td>
+            </tr>
+            
+        </table>
+    </div>
+    <div id="legend">
+
+    </div>
+    <script>
+        highlightMenu(["summaryJHICReports"]);
+    </script>

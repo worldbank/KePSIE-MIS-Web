@@ -1,0 +1,74 @@
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/user/all">Data Management</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">Upload Data</span>
+      </li>
+    </ul>
+    <div class="row">
+      <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form bordered">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-user-plus font-red"></i>
+              <span class="caption-subject font-red sbold uppercase">Upload Data</span>
+            </div>
+
+          </div>
+          
+          <div class="portlet-body" ng-app="uploadDataApp"  ng-controller="uploadDataCtrl">
+            <!-- BEGIN FORM-->
+            <form  class="form-horizontal" novalidate>
+              <div class="form-body">
+                <div class="form-group">
+    <label class="control-label col-md-3">File&nbsp;&nbsp;&nbsp;</label>
+    <div class="col-md-7">
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+        <div class="input-group input-large">
+          <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+            <i class="fa fa-file fileinput-exists"></i>&nbsp;
+            <span class="fileinput-filename" > </span>
+
+          </div>
+          <span class="input-group-addon btn default btn-file">
+            <span class="fileinput-new"> Select file </span>
+            <span class="fileinput-exists"> Change </span>
+            <input type="file" id="fileupl" name="..."  file-model="myFile" ng-model="document" > </span>
+            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+          </div>
+        </div>
+        <div id="dvPreview">
+        </div>
+      </div>
+
+    </div>
+              </div>
+              <div class="form-actions">
+  <div class="row">
+    <div class="col-md-offset-3 col-md-8">
+      <button type="submit" ng-click="uploadData()" class="btn green">Save</button>
+      <a type="button" class="btn grey-salsa btn-outline" href="<%=sails.config.routesPrefix%>/user/all">Cancel</a>
+    </div>
+  </div>
+</div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

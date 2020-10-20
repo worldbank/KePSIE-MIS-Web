@@ -1,0 +1,90 @@
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="inspProgressModule" ng-controller="inspProgressController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span class="active">Inspector Progress Report</span>
+            </li>
+        </ul>
+
+        <div class="row" id="reportRow">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box" style="background-color: white">
+                    <div class="headerSection">
+                        <div class="headerLabelSection">
+                            Inspector Progress Report
+                        </div>
+                        <div class="exportSection">
+                            <form action="<%=sails.config.routesPrefix%>/report/inspprogress/exportAsPDF" method="post">
+                                <input type="hidden" name="tableTitle" value="Inspector Progress Report"></input>
+                                <input type="hidden" name="tableHTML" value="{{tableHTML}}"></input>
+                                <input type="hidden" name="tableCSS" value="{{tableCSS}}"></input>
+                                <button type="submit" id="submit">Export as PDF</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="filterDiv">
+                        <!-- <table class="filterTable">
+                            <tr>
+                                <td class="filterLabel">HF/Unit :
+                                    <select class="filterDropdown" id="hfUnitDropdown" onchange="onFilterChange()">
+                                        <option value="1">All</option>
+                                        <option value="2">By Unit</option>
+                                    </select>
+                                </td>
+                                <td class="filterLabel">HF Type :
+                                    <select class="filterDropdown" id="hfTypeDropdown" onchange="onFilterChange()">
+                                        <option value="1">All</option>
+                                        <option value="2">By Level</option>
+                                        <option value="3">By Ownership</option>
+                                    </select>
+                                </td>
+                                <td class="filterLabel">HF Region :
+                                    <select class="filterDropdown" id="hfRegionDropdown" onchange="onFilterChange()">
+                                        <option value="1">All</option>
+                                        <option value="2">By County</option>
+                                        <option value="3">By Sub-county</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table> -->
+                    </div>
+                    <div class="portlet-body" id="inspProgressReportDiv">
+                        <table class="table table-bordered" id="inspProgressReportTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th id="inspectorH">Inspector Id</th>
+                                <th>Visited</th>
+                                <th>Pending</th>
+                                <th>Total</th>
+                                <th>Progress</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inspProgressBody">
+                            
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+</div>
+
+<script>
+    highlightMenu(["reports", "inspProgressReport"]);
+</script>

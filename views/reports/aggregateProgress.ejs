@@ -1,0 +1,162 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.src.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/grouped-categories.js"></script>
+
+<style>
+
+   .progressFigure {
+    width:100%;
+    text-align: center;
+    margin: 0px auto;
+
+}
+</style> 
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="aggregateProgressModule" ng-controller="aggregateProgressCtrl">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                            <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span style=" color: #337ab7;">Inspection Progress
+                                </span>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Aggregate Progress</span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td width="30%" align="right">
+                        <div class="btn-group btn-group-solid ">
+                            <a type="button" class="btn green active resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/aggregateProgress" style="border-color :#fdfdfd;">
+                                <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                                Figures</a>
+
+                                <a type="button" class="btn green resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/aggregateProgress/dataBank" style="border-color:#fdfdfd" >
+                                    <i class="fa fa-table" style="font-size: 14px;"></i>
+                                    Tables</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet box" style="background-color: white">
+                            <div class="headerSection">
+                                <div class="headerLabelSection">
+                                    Aggregate Progress Reports
+                                </div>
+                                <div class="exportSection">
+                                   <form style="display:inline-block" id="reportPDFForm" action="<%=sails.config.routesPrefix%>/summaryjhic/figure/exportFigureAsPDF" method="POST">
+                                    <input type="hidden" id="reportHTML" name="reportHTML"/>
+
+                                </form>
+                                <button id="export_all">
+                                    PDF
+                                    <i class="fa fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div class="filterDiv">
+                         <form role="form" class="filterTable">
+                            <div class="row">
+                                <div class="col-md-4 filterStyle" >
+                                    <div class="input-group">
+                                        <span style="padding-right: 50px" class="input-group-addon filterLabel">
+                                         County &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+                                         <select id="countyDropdown" class="form-control" ng-model="selectedCounty" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                                         </select></div>
+                                         <!-- /input-group -->
+                                     </div>
+                                     <!-- /.col-md-6 -->
+                                     <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+
+                                            <span class="input-group-addon filterLabel">
+                                                Inspector's Name </span>
+                                                <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector" ng-options="insp.name for insp in inspectors track by insp._id" ng-change="filterChanged()">
+                                                </select>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4 filterStyle" >
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon filterLabel">
+                                                    Inspection Period </span>
+                                                    <select id="inspPeriodDropdown" class="form-control" ng-model="selectedInspPeriod" ng-options="period.value for period in inspPeriods track by period.key" ng-change="inspectionPeriodChanged()">
+
+                                                    </select>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </form>
+                                </div>
+
+
+
+                                <div id="innerHTML" class="portlet-body" >
+
+                                 
+
+                                   <table class="table table-bordered progressFigure" style="width:100%">
+
+                                    <tr>
+                                        <td id="ProgressCountyFigure" style="width:50%" class="figure">
+
+                                        </td>
+                                        <td id="ProgressInspectorFigure" style="width:50%" class="figure">
+
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                                      <!--   <div id="ProgressCountyFigure"  class=" col-md-6 col-sm-6 table-bordered figure" >
+
+                                        </div>
+                                        <div id="ProgressInspectorFigure"  class="col-md-6 col-sm-6 table-bordered figure ">
+                                        </div> -->
+
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END EXAMPLE TABLE PORTLET-->
+                        </div>
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT INNER -->
+            </div>
+
+            <script>
+              highlightMenu(["inspProgressPlanning","aggregateProgress"]);
+              
+          </script>
+          <link href="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/grouped-styles" rel="stylesheet" type="text/css"/>
+
+          

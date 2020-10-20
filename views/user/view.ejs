@@ -1,0 +1,128 @@
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="<%=sails.config.routesPrefix%>/user/all">User Management</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span class="active">User Profile</span>
+            </li>
+        </ul>
+        <!-- BEGIN PAGE BASE CONTENT -->
+        <div class="profile" ng-app="userViewApp" ng-controller="userViewCtrl">
+            <div class="tabbable-line tabbable-full-width">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a id="profiletab" data-toggle="tab"> Profile </a>
+                    </li>
+                   
+                    
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="profileusertab">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <ul class="list-unstyled profile-nav">
+                                    <li>
+
+                                      <% if(req.session.loggedInUser.path !="" && req.session.loggedInUser.path !=undefined){ %>
+                                        <img id="viewImg" src="<%=sails.config.routesPrefix%>/upload/{{user.path}}" class="img-responsive pic-bordered" alt="" />
+                                         <%}else{ %>
+                                <img  src="<%=sails.config.routesPrefix%>/images/profilephoto.png" />
+                                <% } %>
+
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <form action="#" class="form-horizontal">
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Name :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block">{{user.name}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Email Address :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block"> {{user.email}} </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-hide="hideContact">
+                                                <label class="col-md-3 control-label">Contact No :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block">{{user.contactno}} </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ">
+                                                <label class="col-md-3 control-label">Organization  :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block"> {{user.organization }} </span>
+                                                </div>
+                                            </div>
+                                    
+                                            <div class="form-group ">
+                                                <label class="col-md-3 control-label">Role :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block"> {{user.role}} </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ng-hide" ng-show="showInspectorId">
+                                                <label class="col-md-3 control-label">Inspector ID :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block"> {{user.inspectorId}} </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group ng-show" ng-hide="reportViewer">
+                                                <label class="col-md-3 control-label">County :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block"> {{user.county}} </span>
+                                                </div>
+                                            </div>
+                                             <div class="form-group ng-hide" ng-show="user.role=='B&Cs - ITEG' || user.role=='B&Cs - Licensing decision-makers'">
+                                                <label class="col-md-3 control-label">Group :</label>
+                                                <div class="col-md-4">
+
+                                                    <span class="help-block"> {{user.group}} </span>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </form>
+                                    <!-- END FORM-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    highlightMenu(["userManagement"]);
+
+</script>

@@ -1,0 +1,224 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.src.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/grouped-categories.js"></script>
+<link href="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/grouped-styles"
+rel="stylesheet" type="text/css"/>
+<link href="<%=sails.config.assetURL%>/global/css/custom-media-query.css" rel="stylesheet" type="text/css"/>
+
+<style>
+    .bootstrap-select > .dropdown-toggle {
+      /*width:95%;*/
+      height:22px !important;
+  }
+  .bs-select {
+    padding-left : 0 !important;
+}
+</style>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="qcReportsFigureModule" ng-controller="qcReportsFigureCtrl">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                            <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Checks and Quality Reports</span>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Reports</span>
+
+                            </li>
+                            
+                        </ul>
+                    </td>
+
+                    <td width="30%" align="right">
+                        <div class="btn-group btn-group-solid ">
+
+
+                            <a type="button" class="btn green active kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/reports/figure" >
+                               <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                               Figures</a>
+
+                               <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/reports/table" >
+                                <i class="fa fa-table" style="font-size: 14px;"></i>
+                                Tables</a>
+
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="row" id="reportRow">
+                <div class="col-md-12">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet box" style="background-color: white">
+                        <div class="headerSection">
+                            <div class="headerLabelSection">
+                                Checks and Quality Reports - Figures
+                            </div>
+                            <div class="exportSection">
+                            <form style="display:inline-block" id="reportPDFForm" action="<%=sails.config.routesPrefix%>/summaryjhic/figure/exportFigureAsPDF" method="POST">
+                                    <input type="hidden" id="reportHTML" name="reportHTML"/>
+
+                                </form>
+                                <button id="export_all">
+                                    PDF
+                                    <i class="fa fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="filterDiv">
+                         <form role="form" class="filterTable">
+                            <div class="removeRow row" style="padding-top: 0.5%;">
+                                <div class="newRow">
+                                    <div class="col-md-1 col-sm-1 col-xs-12">
+                                        <span class="input-group-addon filterLabel leftalign">
+                                         County </span>
+                                     </div>
+                                     <div class="col-md-3 col-sm-3 col-xs-8">
+                                         <select id="countyDropdown" class="form-control" ng-model="selectedCounty" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                                         </select>
+                                     </div>
+                                     <!-- /input-group -->
+
+
+                                     <div class="col-md-1 col-sm-1 col-xs-12">
+                                        <span class="input-group-addon filterLabel leftalign">
+                                            Inspection Period </span>
+                                        </div>
+                                        <div class="col-md-3 col-sm-3 col-xs-8">
+                                            <select id="inspPeriodDropdown"  class="form-control" ng-model="selectedInspPeriod" ng-options="period.value for period in inspPeriods track by period.key"
+                                            onchange="angular.element(this).scope().inspectionPeriodChanged()">
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- /.col-md-6 -->
+
+                                    <div class="newRow">
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                            <span class="input-group-addon filterLabel leftalign">
+                                                Indicator</span>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-xs-8">
+                                            
+                                                <selectpicker  id="indicatorDropdown1" data-array="indicators"
+                                                data-selected="selectedIndicator"
+                                                 data-none-selected-text="All" 
+                                                ng-change="filterChanged()">
+                                            </selectpicker>
+                                             <div id="errorMsg1" style="color:#a94442;display:none"><label id="tmp-error" class="error" for="tmp">Indicator is required.</label></div>
+
+                                    </div>
+
+                                    <div  class="ng-hide" ng-show="selectedClosureNonAdherence" >
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+
+
+                                            <span class="input-group-addon filterLabel leftalign">
+                                                Closure Sub-Category</span>
+                                            </div>
+                                            <div class="col-md-3 col-sm-3 col-xs-8">
+
+                                                <selectpicker  id="ClosureSubListDropdown" data-array="closures"
+                                                data-selected="selectedClosureSubList" 
+                                                data-none-selected-text="Facility Closure Non-Adherence"
+                                                ng-change="filterChanged()">
+                                            </selectpicker>
+                                            <div id="errorMsg" style="color:#a94442;display:none"><label id="tmp-error" class="error" for="tmp">Closure Sub-Category is required.</label></div>
+                                        </div>
+                                    </div>
+
+                                    <div  class="ng-hide" ng-show="selectedJHICDiscrepancies">
+                                        <div class="col-md-1 col-sm-1 col-xs-12 ">
+
+
+                                            <span class="input-group-addon filterLabel leftalign">
+                                                Inspector </span></div>
+                                                <div class="col-md-3 col-sm-3 col-xs-8">
+                                                    <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector" ng-options="insp.name for insp in inspectors track by insp._id" ng-change="filterChanged()">
+                                                    </select>
+
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                    <!-- /.row -->
+                                </form>
+                            </div>
+
+
+
+                            <div id="innerHTML" class="portlet-body table-responsive" >
+
+
+
+
+                                <table class="table table-bordered" id="summaryReportFigure1"  style="width:100%">
+
+                                    <tr>
+                                        <td id="figure1" style="width:50%" class="figure">
+
+                                        </td>
+                                        <td id="figure2" style="width:50%"  class="figure"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="figure3" style="width:50%"  class="figure"></td>
+                                        <td id="figure4"  style="width:50%" class="figure"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="figure5" style="width:50%"  class="figure"></td>
+                                        <td id="figure6" style="width:50%" class="figure"></td>
+                                    </tr>
+                                    <tr>
+                                        <td id="figure7" style="width:50%" class="figure"></td>
+                                        <td id="figure8" style="width:50%"  class="figure"></td>
+                                    </tr>
+                                    <tr><td colspan="2" height="5" style="
+                                        padding: 0px;font-size: 11px !important; ">
+                                        Note: Only some facilities in each county are selected for quality checks. </td></tr>
+
+                                    </table>
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END EXAMPLE TABLE PORTLET-->
+                    </div>
+                </div>
+
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+
+            <!-- END PAGE CONTENT INNER -->
+
+
+            <script>
+                var filename = "<%=__('summary_jhic_figure_filename')%>";
+                highlightMenu(["qualityReports","reports"]);
+
+
+            </script>
+            <link href="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/grouped-styles" rel="stylesheet" type="text/css"/>

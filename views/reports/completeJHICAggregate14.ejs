@@ -1,0 +1,179 @@
+<div class="panel panel-default table1 table-responsive">
+    <div class="header1" onClick="hideShow('s14Body')">
+        <a class="secLink" href="javascript:void(0)">
+            <%= __("s14") %>
+        </a>
+    </div>
+    <table class="table table1" cellspacing="0">
+        <tbody id="s14Body">
+         
+        <tr class="header2">
+            <td align="right" class="text-right sectionCell14">&nbsp;</td>
+            <td colspan="4"><%= __("s14d") %></td>
+        </tr>
+        <tr>
+            <td class="text-right sectionCell14">&nbsp;</td>
+            <td colspan="4">
+                <table class="table innertable" cellspacing="0" width="100%" 
+                style="border-collapse: initial;">
+                    <tr>
+                        <th class="leftCell"><%= __("s14d_1a") %></th>
+                      <!--   <th class="leftCell" style="width:1%">&nbsp;</th> -->
+                        <th class="leftCell"><%= __("s14d_1b") %></th>
+                        <th class="scoreCell greyBackground"><%= __("s14d_1c") %><br />Score</th>
+                        <th class="scoreCell"><%= __("s14d_1d") %><br />Score</th>
+                        <th class="scoreCell"><%= __("s14d_1e") %><br />Score</th>
+                    </tr>
+
+
+
+
+                     <% for(var i=2;i<=13;i++){ %>
+                    <tr>
+                        <td class="text-left sectionCell" style="width:11%">Section <%=i%></td>
+                        
+                        <td class="labelCell"><%= __("s"+i) %></td>
+
+                        
+                        <td class="contentCell1 " ng-class="{'notAvail': score['s<%=i%>_ms']=='N/A'}">{{score.s<%=i%>_ms}}</td>
+                       
+                         
+                         
+                       
+                        <td class="contentCell1" ng-class="{'notAvail': score['s<%=i%>_os']=='N/A'}">{{score.s<%=i%>_os}}</td>
+                       
+                         
+                      
+                       
+                        <td class="contentCell1" ng-class="{'notAvail': score['s<%=i%>_ps']=='N/A'}">{{score.s<%=i%>_ps}}</td>
+                        
+        
+                    </tr>
+                    <% } %>
+                 <!--    <tr>
+                        <td class="text-left sectionCell" style="width:11%">Section 2</td>
+                      
+                        <td class="labelCell"><%= __("s2") %></td>
+                       
+                        <td class="contentCell1 greyBackground">{{score.s2_ms}}</td>
+                        
+                       
+                      
+                        <td class="contentCell1">{{score.s2_os}}</td>
+                        
+                        <td class="contentCell1">{{score.s2_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 3</td>
+                      
+                        <td class="labelCell"><%= __("s3") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s3_ms}}</td>
+                        <td class="contentCell1">{{score.s3_os}}</td>
+                        <td class="contentCell1">{{score.s3_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 4</td>
+                      
+                        <td class="labelCell"><%= __("s4") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s4_ms}}</td>
+                        <td class="contentCell1">{{score.s4_os}}</td>
+                        <td class="contentCell1">{{score.s4_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 5</td>
+                       
+                        <td class="labelCell"><%= __("s5") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s5_ms}}</td>
+                        <td class="contentCell1">{{score.s5_os}}</td>
+                        <td class="contentCell1">{{score.s5_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 6</td>
+                       
+                        <td class="labelCell"><%= __("s6") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s6_ms}}</td>
+                        <td class="contentCell1">{{score.s6_os}}</td>
+                        <td class="contentCell1">{{score.s6_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 7</td>
+                       
+                        <td class="labelCell"><%= __("s7") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s7_ms}}</td>
+                        <td class="contentCell1">{{score.s7_os}}</td>
+                        <td class="contentCell1">{{score.s7_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 8</td>
+                      
+                        <td class="labelCell"><%= __("s8") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s8_ms}}</td>
+                        <td class="contentCell1">{{score.s8_os}}</td>
+                        <td class="contentCell1">{{score.s8_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 9</td>
+                      
+                        <td class="labelCell"><%= __("s9") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s9_ms}}</td>
+                        <td class="contentCell1">{{score.s9_os}}</td>
+                        <td class="contentCell1">{{score.s9_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 10</td>
+                       
+                        <td class="labelCell"><%= __("s10") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s10_ms}}</td>
+                        <td class="contentCell1">{{score.s10_os}}</td>
+                        <td class="contentCell1">{{score.s10_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 11</td>
+                      
+                        <td class="labelCell"><%= __("s11") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s11_ms}}</td>
+                        <td class="contentCell1">{{score.s11_os}}</td>
+                        <td class="contentCell1">{{score.s11_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 12</td>
+                       
+                        <td class="labelCell"><%= __("s12") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s12_ms}}</td>
+                        <td class="contentCell1">{{score.s12_os}}</td>
+                        <td class="contentCell1">{{score.s12_ps}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-left sectionCell">Section 13</td>
+                     
+                        <td class="labelCell"><%= __("s13") %></td>
+                        <td class="contentCell1 greyBackground">{{score.s13_ms}}</td>
+                        <td class="contentCell1">{{score.s13_os}}</td>
+                        <td class="contentCell1">{{score.s13_ps}}</td>
+                    </tr> -->
+
+                    <tr>
+                      
+                        <td class="text-left sectionCell">&nbsp;</td>
+                     
+                        <td class="labelCell boldCell"><%= __("s14d_total") %></td>
+                        <td class="contentCell1 greyBackground boldCell">{{total_ms.toFixed(2)}}</td>
+                        <td class="contentCell1 boldCell">{{total_os.toFixed(2)}}</td>
+                        <td class="contentCell1 boldCell">{{total_ps.toFixed(2)}}%</td>
+                    </tr>
+                    <tr class="sectionNote ">
+           
+            <td colspan="6" style="font-size: 11px;">Note: N/A is used to indicate when information is not available, because health facilities inspected may not have that particular unit/service. </td>
+        </tr>
+
+
+
+
+
+
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

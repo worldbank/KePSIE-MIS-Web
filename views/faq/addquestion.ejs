@@ -1,0 +1,142 @@
+<style>
+.bootstrap-select > .dropdown-toggle {
+  /*width:95%;*/
+  height:22px !important;
+}
+</style>
+
+<div class="page-content-wrapper" style=" overflow-x: hidden;">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+
+
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+
+       <li>
+        <a href="<%=sails.config.routesPrefix%>/faq">FAQ</a>
+        <i class="fa fa-circle"></i>
+      </li>
+
+      <li>
+        <span class="active">Add Question</span>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form bordered">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-commenting-o font-red"></i>
+              <span class="caption-subject font-red sbold uppercase">Question</span>
+            </div>
+          
+          </div>
+         
+          
+
+         <div class="portlet-body" ng-app="faqApp"  ng-controller="faqCtrl">
+          <!-- BEGIN FORM-->
+          <form  id="form1" class="form-horizontal"  name="faqForm" novalidate>
+            <div class="form-body">
+
+      
+        <div class="form-group ">
+          <label class="control-label col-md-3">Select JHIC Section or Issue
+           <span class="required"> * </span>
+         </label>
+         <div class="col-md-7">
+          <select tabindex=1  id="sections" class="form-control" ng-model="faq.category" ng-change="sectionValue()" name="category" ng-class="{ 'has-error' : faqForm.category.$invalid && !faqForm.category.$pristine }"
+          required /> 
+          <option value="">Select...</option>
+          
+          <% for(var i=1;i<=14;i++){ %>
+          <option value="s<%=i%>" ><%= __("s"+i) %></option>
+          <%}%>
+           <option value="Other">Other</option>
+          
+        </select> 
+
+      </div>
+      <p class="col-md-3 col-md-offset-3 ng-hide" ng-show="(faqForm.category.$touched || submitted) && faqForm.category.$error.required"
+      style="color:#a94442">JHIC Section is required.</p>
+    </div>
+    
+    
+
+
+<div class="form-group">
+
+  <label class="control-label col-md-3">Question
+   <span class="required"> * </span>
+ </label>
+ <div class="col-md-7">
+ <trix-editor tabindex=2 angular-trix trix-initialize="trixInitialize(e, editor);" trix-change="trixChange(e, editor);" trix-selection-change="trixSelectionChange(e, editor);" trix-focus="trixFocus(e, editor);" trix-blur="trixBlur(e, editor);" trix-file-accept="trixFileAccept(e, editor);" trix-attachment-add="trixAttachmentAdd(e, editor);" trix-attachment-remove="trixAttachmentRemove(e, editor);" ng-model="faq.question" name="question"  ng-class="{ 'has-error' : faqForm.question.$invalid && !faqForm.question.$pristine }" required ></trix-editor>
+ 
+
+
+  
+</div>
+<p class="col-md-offset-3 col-md-3 ng-hide"  ng-show="(faqForm.question.$touched || submitted) && faqForm.question.$error.required"
+style="color:#a94442">Question is required.</p> 
+</div>
+
+<div class="form-group">
+
+  <label class="control-label col-md-3">Answer
+   <span class="required"> * </span>
+ </label>
+ <div class="col-md-7">
+ <trix-editor tabindex=3 angular-trix trix-initialize="trixInitialize(e, editor);" trix-change="trixChange(e, editor);" trix-selection-change="trixSelectionChange(e, editor);" trix-focus="trixFocus(e, editor);" trix-blur="trixBlur(e, editor);" trix-file-accept="trixFileAccept(e, editor);" trix-attachment-add="trixAttachmentAdd(e, editor);" trix-attachment-remove="trixAttachmentRemove(e, editor);" ng-model="faq.answer" name="answer"  ng-class="{ 'has-error' : faqForm.answer.$invalid && !faqForm.answer.$pristine }" required  ></trix-editor>
+ 
+  
+</div>
+<p class="col-md-offset-3 col-md-3 ng-hide"  ng-show="(faqForm.answer.$touched || submitted) && faqForm.answer.$error.required"
+style="color:#a94442">Answer is required.</p> 
+</div>
+ <div class="row">
+            <label class="control-label italic">
+              <i >
+               Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+             </label>
+
+           </div>
+<div class="form-actions">
+  <div class="row">
+    <div class="col-md-offset-4 col-md-7">
+      <button type="submit"  ng-click="addQuestion(faqForm)" class="btn green button-rounder">Submit</button>
+      <a type="button" class="btn grey-salsa button-rounder btn-outline" href="<%=sails.config.routesPrefix%>/faq">Cancel</a>
+    </div>
+  </div>
+</div>
+
+</form>
+
+</div>
+
+
+
+
+
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+ 
+<script type="text/javascript">
+
+  highlightMenu(["faq"]);
+   var loggedInUserRole = "<%= req.session.loggedInUser.role %>";
+</script>

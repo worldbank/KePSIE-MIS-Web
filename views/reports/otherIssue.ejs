@@ -1,0 +1,171 @@
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="otherIssuesModule" ng-controller="otherIssuesCtrl">
+
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <% if(req.flash('closureRequest') != ""){ %>
+    <div id="hide">
+      <div id="facilityCloseAlert" class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>                        
+        Your Request for Facility Close is Successfully Sent.
+      </div>
+    </div>
+    <%}%> 
+    <script>
+      $('#hide').delay(1000).fadeOut(3000); 
+    </script>
+    <div class="breadcrumbDiv">
+      <table width="100%">
+        <tr>
+          <td>
+            <ul class="page-breadcrumb breadcrumb ">
+              <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span style=" color: #337ab7;">Closures and Other Issues</span>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span class="active">Other Issues</span>
+              </li>
+            </ul>
+          </td> 
+          <td width="60%" align="right">
+            <div class="btn-group btn-group-solid ">
+             <a type="button" id="facility" class="btn green active resTab kepsie-tabs"  
+             href="<%=sails.config.routesPrefix%>/otherIssue" style="border-color :#fdfdfd;">
+             <i class="fa fa-table" style="font-size: 14px;"></i>
+             Report Issue</a>
+
+             <a type="button" id="department" class="btn green  resTab kepsie-tabs" 
+             href="<%=sails.config.routesPrefix%>/otherIssue/summary" style="border-color:#fdfdfd" >
+             <i class="fa fa-list" style="font-size: 14px;"></i>
+             Summary</a>
+             
+
+
+           </div>
+         </td>
+
+       </tr>
+     </table>
+   </div>
+
+   <!-- BEGIN MAIN CONTENT -->
+   <div class="row">
+    <div class="col-md-12">
+      <div class="portlet box" style="background-color: white">
+
+        <!-- BEGIN HEADER -->
+        <div class="headerSection">
+          <div class="headerLabelSection">
+            Report Other Issues
+          </div>
+        </div>
+
+        <!-- END HEADER -->
+
+        <!-- BEGIN FORM SECTION -->
+        <div class="portlet-body form formSection " >
+          <form class="form-horizontal" name="otherIssuesForm"  novalidate>
+            <div class="form-body">                           
+
+              <div class="form-group">
+                <label class="col-md-2 control-label">Facility ID<span class="required"> * </span></label>
+                <div class="col-md-5">
+                  
+                 <select id="selectedFacility" class="bs-select form-control" name="facilityId" 
+                 ng-model="otherIssues.facilityId" 
+                 data-live-search="true"   onchange="angular.element(this).scope().changeFacility()"
+                 required >
+                 <option value="">Select...
+                 </option>
+                 <% for(var i=0;i< facilityId.length;i++){ %>
+                 <option value="<%= facilityId[i]['_hfid'] %>"><%= facilityId[i]["_hfname"] %> (<%= facilityId[i]["_hfid"] %>)</option>
+                 <% }%>
+               </select>
+
+
+             </div>
+             <div class="col-md-offset-2 col-md-8">
+              <div class="" ng-messages="otherIssuesForm.facilityId.$error">
+
+                <div ng-message="pattern" style="color:#a94442">Must be a valid 5 digits Facility ID.</div>
+              </div>
+              <p class="ng-hide" ng-show="(otherIssuesForm.facilityId.$touched || submitted) && otherIssuesForm.facilityId.$error.required"
+              style="color:#a94442">Facility ID is required.</p>
+              <p class=" ng-hide" ng-show="facilityExist && !otherIssuesForm.facilityId.$error.required 
+              "  style="color:#a94442">Facility doesn't exist.</p>
+
+              <p class="ng-hide" ng-show="otherIssues.facilityId!=null" style="color:#333333">You are submitting a Issue for a {{facilityName}}</p>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-2 control-label">Issues<span class="required"> * </span></label>
+            <div class="col-md-5" >
+              <select class="bs-select form-control Issues " name="Issues" ng-model="otherIssues.ms_issue" ng-class="{ 'has-error' : otherIssuesForm.Issues.$invalid && !otherIssuesForm.Issues.$pristine }" required>
+               <option value="">Select...</option>
+               <%  var otherIssues = CountyService.getOtherIssues();
+               for(i in otherIssues) { %>
+
+               <option value="<%= otherIssues[i] %>"><%= otherIssues[i] %></option>
+
+               <% } %>
+
+
+             </select>
+           </div>
+           <p class="col-md-offset-2 col-md-8 ng-hide" ng-show="(otherIssuesForm.Issues.$touched || submitted) && otherIssuesForm.Issues.$error.required"
+           style="color:#a94442">Issue is required.</p>
+         </div>
+         <div class="form-group">
+          <label class="col-md-2 control-label" >Please write your comment<span class="required"> * </span>
+          </label>     
+          <div class="col-md-5 otherissue_resp" >
+            <textarea class="form-control" rows="5" name="comment" ng-model="otherIssues.ms_issue_comment" ng-class="{ 'has-error' : otherIssuesForm.comment.$invalid && !otherIssuesForm.comment.$pristine }" required ></textarea>
+            <p class="ng-hide" ng-show="(otherIssuesForm.comment.$touched || submitted) && otherIssuesForm.comment.$error.required"
+            style="color:#a94442">Comment is required.</p>
+          </div>
+
+        </div>
+        <div class="row">
+          <label class="control-label col-md-5 italic">
+            <i >
+             Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+           </label>
+
+         </div>
+         <br>
+         <div class="form-group">
+          <label class="col-md-2 control-label"></label>
+          <div class="col-md-5">
+            <button type="submit" ng-click="otherIssuesSubmit(otherIssuesForm)"  class="btn green button-rounder center-block" style="width: 30%;">Submit</button>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+
+</div>
+</div>
+</div>
+<!-- END MAIN CONTENT -->
+
+</div>
+<!-- END CONTENT BODY -->
+</div>
+
+
+<script>
+  highlightMenu(["closureOtherIssues","issues"]);
+  $("#facilityCloseAlert").delay(4000).fadeOut("slow");
+</script>
+

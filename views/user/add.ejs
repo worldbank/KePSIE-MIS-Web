@@ -1,0 +1,307 @@
+<script language="javascript" type="text/javascript">
+  $(function () {
+    $("#fileupload").change(function () {
+      if (typeof (FileReader) != "undefined") {
+        var dvPreview = $("#dvPreview");
+        dvPreview.html("");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+        $($(this)[0].files).each(function () {
+          var file = $(this);
+          if (regex.test(file[0].name.toLowerCase())) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var img = $("<img />");
+              img.attr("style", "height:100px;width: 100px");
+              img.attr("src", e.target.result);
+              dvPreview.append(img);
+            }
+            reader.readAsDataURL(file[0]);
+          } else {
+            
+            dvPreview.html("");
+            return false;
+          }
+        });
+      } else {
+
+      }
+    });
+  });
+</script>
+<style type="text/css">
+ p{
+  margin-bottom: 0px
+}
+</style>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/user/all">User Management</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">Add User</span>
+      </li>
+    </ul>
+    <div class="row">
+      <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form bordered">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-user-plus font-red"></i>
+              <span class="caption-subject font-red sbold uppercase">New User</span>
+            </div>
+
+          </div>
+          
+           <div class="portlet-body" ng-app="addUserApp"  ng-controller="addUserCtrl">
+            <!-- BEGIN FORM-->
+            <form  class="form-horizontal"  name="userDetailAddForm" novalidate>
+              <div class="form-body">
+
+               <div class="form-group">
+                <label class="control-label col-md-3">Name
+                  <span class="required"> * </span>
+                </label>
+                <div class="col-md-7">
+                  <input type="text" name="name" ng-model="user.name"  class="form-control" ng-class="{ 'has-error' : userDetailAddForm.name.$invalid && !userDetailAddForm.name.$pristine }" ng-pattern="/^[a-zA-Z ]*$/" required /> 
+
+                </div>
+                <div class="col-md-offset-3 col-md-8">
+                 <div class="" ng-messages="userDetailAddForm.name.$error">
+
+                  <div ng-message="pattern" style="color:#a94442">Only characters are allowed.</div>
+                </div>
+                <p class=" ng-hide" ng-show="(userDetailAddForm.name.$touched || submitted) && userDetailAddForm.name.$error.required"
+                style="color:#a94442">Name is required.</p>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-md-3">Email
+                <span class="required"> * </span>
+              </label>
+              <div class="col-md-7">
+                <input name="email" type="email" ng-model="user.email" class="form-control" ng-class="{ 'has-error' : userDetailAddForm.email.$invalid && !userDetailAddForm.email.$pristine }" ng-pattern="/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i"
+                required ng-blur="checkemail()"/> 
+
+              </div>
+              <div class="col-md-offset-3 col-md-8">
+                <div class="" ng-messages="userDetailAddForm.email.$error">
+
+                  <div ng-message="pattern" style="color:#a94442">Email is invalid.</div>
+                </div>
+
+                <p class=" ng-hide" ng-show="(userDetailAddForm.email.$touched || submitted) && userDetailAddForm.email.$error.required"  style="color:#a94442">Email is required.</p>
+
+                <p class=" ng-hide" ng-show="emailExist"  style="color:#a94442">Email is already exists.</p>
+              </div>
+            </div> 
+
+            <div class="form-group">
+              <label class="control-label col-md-3">Contact Number&nbsp;&nbsp;</label>
+              <div class="col-md-7">
+
+                <input name="contactno" type="tel" ng-model="user.contactno" class="form-control" ng-pattern="/^[0-9]{10,13}$/" ng-class="{ 'has-error' : userDetailAddForm.contactno.$invalid && !userDetailAddForm.contactno.$pristine }" /> 
+
+              </div>
+              <div class="col-md-offset-3 col-md-8">
+                <div class="" ng-messages="userDetailAddForm.contactno.$error">
+
+
+                  <div ng-message="pattern" style="color:#a94442">Must be a valid 10 to 13 digit Contact number.</div>
+
+                </div>
+                <!-- <p class=" ng-hide" ng-show="(userDetailAddForm.contactno.$touched || submitted) && userDetailAddForm.contactno.$error.required"
+                style="color:#a94442">Contact Number is required.</p> -->
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-md-3">Organization
+                <span class="required"> * </span>
+              </label>
+              <div class="col-md-7">
+                <select  class="form-control" name="organization" title="{{user.organization}}" ng-model="user.organization" ng-class="{ 'has-error' : userDetailAddForm.organization.$invalid && !userDetailAddForm.organization.$pristine }" 
+                ng-options="org.OrgName as org.OrgName for org in organizations" ng-change="organizationname()"
+                required /> 
+                <option value="">Select...</option>
+              </select> 
+            </div>
+            <p class="col-md-offset-3 col-md-8 ng-hide" ng-show="(userDetailAddForm.organization.$touched || submitted) && userDetailAddForm.organization.$error.required"
+            style="color:#a94442">Organization is required.</p>
+          </div>
+
+          <div class="form-group ng-hide" ng-show="otherOrganization">
+            <label class="control-label col-md-3">Other, specify
+              <span class="required"> * </span>
+            </label>
+            <div class="col-md-7">
+              <input type="text" id="otherOrganization" class="form-control"  name="otherOrganization" ng-model="user.otherOrganization" ng-class="{ 'has-error' : userDetailAddForm.otherOrganization.$invalid && !userDetailAddForm.otherOrganization.$pristine }" required
+              /> 
+            </div>
+            <p class="col-md-offset-3 col-md-8 ng-hide" ng-show="(userDetailAddForm.otherOrganization.$touched || submitted) && userDetailAddForm.otherOrganization.$error.required"
+            style="color:#a94442">Organization is required.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-md-3">Designation&nbsp;&nbsp;</label>
+            <div class="col-md-7">
+              <input name="occupation" type="text"  ng-model="user.designation" class="form-control" ng-class="{ 'has-error' : userDetailAddForm.occupation.$invalid 
+                    && !userDetailAddForm.occupation.$pristine }" ng-pattern="/^[a-zA-Z ]*$/" />
+
+            </div>
+             <div class="col-md-offset-3 col-md-3">
+                  <div class="" ng-messages="userDetailAddForm.occupation.$error">
+
+                  <div ng-message="pattern" style="color:#a94442">Only alphabets are allowed.</div>
+                </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3">Role
+              <span class="required"> * </span>
+            </label>
+            <div class="col-md-7">
+
+             <select class="form-control" ng-model="user.role" title="{{user.role}}" name="role" ng-class="{ 'has-error' : userDetailAddForm.role.$invalid && !userDetailAddForm.role.$pristine }" 
+             ng-options="rol.RoleName as rol.RoleName for rol in roles" ng-change="rolename()"
+             required > 
+             <option value="">Select...</option>
+           </select> 
+         </div>
+         <p class="col-md-offset-3 col-md-8 ng-hide" ng-show="(userDetailAddForm.role.$touched || submitted) && userDetailAddForm.role.$invalid"
+         style="color:#a94442">Role is required.</p>
+       </div>
+
+         <div class="form-group ng-hide" ng-show="grpDetail">
+            <label class="control-label col-md-3">Group
+              <span class="required"> * </span>
+            </label>
+            <div class="col-md-7">
+
+             <select class="form-control" ng-model="user.group" title="{{user.group}}" name="group" ng-class="{ 'has-error' : userDetailAddForm.group.$invalid && !userDetailAddForm.group.$pristine }" 
+             ng-options="grp.GrpName as grp.GrpName for grp in groups" ng-change="grpname()"
+             required > 
+             <option value="">Select...</option>
+           </select> 
+         </div>
+         <p class="col-md-offset-3 col-md-8 ng-hide" ng-show="(userDetailAddForm.group.$touched || submitted) && userDetailAddForm.group.$invalid"
+         style="color:#a94442">Group is required.</p>
+       </div>
+
+       <div class="form-group ng-hide" ng-show="showInspectorId">
+        <label class="control-label col-md-3">Inspector ID
+          <span class="required"> * </span>
+        </label>
+        <div class="col-md-7">
+          <input type="text" id="inspect" class="form-control" name="inspectorId" ng-pattern="/^[a-zA-Z0-9 ]*$/" ng-model="user.inspectorId" ng-class="{ 'has-error' : userDetailAddForm.inspectorId.$invalid && !userDetailAddForm.inspectorId.$pristine }" required
+          /> 
+        </div>
+        <div class="col-md-offset-3 col-md-8">
+         <div class="" ng-messages="userDetailAddForm.inspectorId.$error">
+
+                  <div ng-message="pattern" style="color:#a94442">Invalid Inspector ID.</div>
+                </div>
+        <p class="ng-hide" ng-show="(userDetailAddForm.inspectorId.$touched || submitted) && userDetailAddForm.inspectorId.$error.required"
+        style="color:#a94442">Inspector ID is required.</p>
+        </div>
+      </div>
+
+
+      <div class="form-group ng-hide" ng-show="reportViewer">
+        <label class="control-label col-md-3">County
+          <span class="required"> * </span>
+        </label>
+        <div class="col-md-7">
+
+         <select id="county" class="form-control" title="{{user.county}}" ng-model="user.county" 
+          name="county" ng-class="{ 'has-error' : userDetailAddForm.county.$invalid && !userDetailAddForm.county.$pristine }" 
+
+         required /> 
+         <option value="">Select...</option>
+         <option value="Kakamega">Kakamega</option>
+         <option value="Kilifi">Kilifi</option>
+         <option value="Meru">Meru</option>
+         
+
+       </select> 
+     </div>
+     <p class="col-md-offset-3 col-md-8 ng-hide" ng-show="(userDetailAddForm.county.$touched || submitted) && userDetailAddForm.county.$error.required"
+     style="color:#a94442">County is required.</p>
+   </div>
+
+
+   <div class="form-group">
+    <label class="control-label col-md-3">Photo&nbsp;&nbsp;&nbsp;</label>
+    <div class="col-md-7">
+      <div class="fileinput fileinput-new" data-provides="fileinput">
+        <div class="input-group input-large">
+          <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+            <i class="fa fa-file fileinput-exists"></i>&nbsp;
+            <span class="fileinput-filename" > </span>
+
+          </div>
+          <span class="input-group-addon btn default btn-file">
+            <span class="fileinput-new"> Select file </span>
+            <span class="fileinput-exists"> Change </span>
+            <input type="file" id="fileupload" name="..."  file-model="myFile" 
+            ng-model="document"  ng-change="changePhoto()"> </span>
+            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+          </div>
+        </div>
+
+        <div id="dvPreview">
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+     <label class="col-md-offset-3 col-md-7" ng-show="fileType"
+     class="help-block ng-hide"  style="color:#a94442">
+     Only jpg or png image file is allowed.
+   </label>
+ </div>
+<div class="row">
+            <label class="control-label col-md-4 italic">
+              <i style="margin-left:15px">
+               Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+             </label>
+
+           </div>
+</div>
+<div class="form-actions">
+  <div class="row">
+    <div class="col-md-offset-3 col-md-8">
+      <button type="submit" ng-click="userDetailAdd(userDetailAddForm)" class="btn green button-rounder">Save</button>
+      <a type="button" class="btn grey-salsa btn-outline button-rounder" href="<%=sails.config.routesPrefix%>/user/all">Cancel</a>
+    </div>
+  </div>
+</div>
+</form>
+
+</div>
+</div>
+<!-- END VALIDATION STATES-->
+</div>
+</div>
+
+
+</div>
+</div>
+<script>
+  highlightMenu(["userManagement"]);
+
+</script>

@@ -1,0 +1,200 @@
+<style>
+.bootstrap-select > .dropdown-toggle {
+  /*width:95%;*/
+  height:22px !important;
+}
+
+.my-padding {
+  /*width:95%;*/
+  font-size:12px !important;
+  padding-right: 0px !important;
+}
+</style>
+<div class="page-content-wrapper"  ng-app="faqApp" ng-controller="faqCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+
+      <li>
+        <span class="active">FAQ</span>
+      </li>
+    </ul>
+  <% if(req.session.loggedInUser.role=="Admin") { %>
+    <div class="row">
+     <div class="button-facility1">
+  
+      <a id="askQuestion" href="<%=sails.config.routesPrefix%>/faq/add" class="btn green button-rounder"> 
+       <i class="fa fa-plus"></i> Add Question
+     </a>
+
+   </div>
+
+    <div class="button-facility1">
+  
+      <a id="askQuestion" href="<%=sails.config.routesPrefix%>/faq/import" class="btn green button-rounder"> 
+       <i class="fa fa-plus"></i> Import from Ask the Expert
+     </a>
+
+     
+   </div>
+ </div> 
+   <%  } %>
+ <br>
+ <% if(req.flash('faqDeletedMessage') != "" ){ %>
+  <div id="hide">
+    <div  class="alert alert-success alert-dismissable" >
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Question deleted successfully.
+    </div> 
+    </div>
+    <%}%> 
+<% if(req.flash('faqUpdateMessage') != "" ){ %>
+ <div id="hide">
+    <div  class="alert alert-success alert-dismissable" >
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Question edited successfully.
+    </div> 
+    </div>
+    <%}%> 
+<% if(req.flash('faqAddMessage') != "" ){ %>
+  <div id="hide">
+    <div  class="alert alert-success alert-dismissable" >
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Question added successfully.
+    </div> 
+    </div>
+    <%}%> 
+<script>
+$('#hide').delay(1000).fadeOut(3000); 
+</script>
+ <div class="row">
+  <div class="col-md-12">
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet box" style="background-color: white">
+      <div class="headerSection">
+        <div class="headerLabelSection">
+          Questions
+        </div>
+        <div class="tools "></div>
+      </div>
+
+      <div class="filterDiv" >
+                     <form role="form" class="filterTable">
+                        <div class="row" style="padding-top: 0.5%;">
+
+                                <div class="col-md-2 col-sm-2">
+                                          <span class="input-group-addon filterLabel leftalign">
+                JHIC Unit </span>
+                                 </div>
+
+                                 <div class="col-md-4 col-sm-4 my-padding">
+                                
+                                            <select id="unit" data-selected-text-format="count"  name="unit" ng-model="unit" class="bs-select form-control" ng-change="filterChange()"  >
+                 <option value="All">All</option>
+                  <option value="sGen"><%=__("sGen")%></option>
+                 <%
+
+                 for(i=1; i<=13; i++) {
+                 %>
+                 <option value="s<%=i%>"><%=__("s"+i)%></option>
+                 <% } %>
+               
+               </select>
+              
+                                 </div>
+
+                                  <div class="col-md-2 col-sm-2">
+                                         <span class=" input-group-addon filterLabel leftalign">General Search Bar
+              </span> 
+                                 </div>
+
+                                 <div class="col-md-4 col-sm-4">
+                                             <input id="generalSearchText" class="form-control" type="text"  ng-keyup="filterChange()"></input>
+                                 </div>
+
+                         </div>
+                        
+                                  </form>
+                     
+   </div>
+ <br/>
+
+ <div id="deleteConfirmation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header alert alert-danger" style="color: #a94442">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                 <!--    <span class="glyphicon glyphicon-trash"/>
+                                                    <div class="modal-title "> 
+                                                   <h4>Delete User</h4>
+                                                    
+                                               </div> -->
+                                               <span class="panel-icon"><i class="icon-trash"></i>
+                                               </span>
+                                               <span class="modal-title "> Delete Question</span>
+                                           </div>
+                                           <div class="modal-body">
+                                            <p> Are you sure you want to delete this Question ? </p>
+                                        </div>
+                                        <div class="modal-footer">
+
+                                            <button data-dismiss="modal" ng-click="deleteQuestion()" class="btn blue">Yes</button>
+                                            <button class="btn default" data-dismiss="modal" aria-hidden="true">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+<div class="portlet-body" id="faqDiv">
+
+ <table class="table table-striped table-bordered table-hover dt-responsive  dtr-inline collapsed"
+  id="queList" style="width:100%;">
+        <thead>
+          <tr>
+            <th> Question</th>            
+             <th> Actions</th>       
+             <th class="none"> </th> 
+          </tr>
+        </thead>
+
+      </table>
+    </div> 
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+      
+
+<script>
+  highlightMenu(["faq"]);
+
+  var loggedInUserRole = "<%=req.session.loggedInUser.role%>";
+</script>
+

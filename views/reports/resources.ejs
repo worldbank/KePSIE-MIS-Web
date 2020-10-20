@@ -1,0 +1,253 @@
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="resourcesApp" ng-controller="resourcesCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+   <div id="deleteConfirmation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header alert alert-danger" style="color: #a94442">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+          
+          <span class="panel-icon"><i class="glyphicon glyphicon-trash"></i>
+          </span>
+          <span class="modal-title "> Delete Category</span>
+        </div>
+        <div class="modal-body">
+          <p> Are you sure you want to delete this Category ? </p>
+        </div>
+        <div class="modal-footer">
+
+          <button data-dismiss="modal" ng-click="deleteCategory()" class="btn blue button-rounder">Yes</button>
+          <button class="btn default button-rounder" data-dismiss="modal" aria-hidden="true">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="addResources" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addResources" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header alert alert-info" >
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+          <span class="panel-icon">
+           <i class="glyphicon glyphicon-edit"></i>
+         </span>
+         <span class="modal-title ">New Category</span>
+       </div>
+       <div class="modal-body">
+
+         <form class="form-horizontal" name="addResourcesForm"  novalidate>
+           <div class="row">
+
+
+            <span class="col-md-2">
+              Name </span>
+              <input type="text" class="form-control col-md-5 " style="width:60%;padding:3px;height:26px;" id="add_resources" name="add_resources" ng-model="category.name"
+              ng-class="{ 'has-error' : addResourcesForm.add_resources.$invalid && !addResourcesForm.add_resources.$pristine }" ng-blur="checkCategory()" required />
+
+
+            </div>
+            <div class="row">
+            <p class="col-md-offset-2 col-md-8 ng-hide" ng-show="categoryExist"  style="color:#a94442;margin:0px;margin-left:14%">Category is already exists.</p>
+              <p class="col-md-offset-2 col-md-8 ng-hide" ng-show="(addResourcesForm.add_resources.$touched || submitted) && addResourcesForm.add_resources.$error.required"
+              style="color:#a94442;margin:0px;margin-left:14%">Name is required.</p>
+            </div>
+
+          </form>
+
+        </div>
+        <div class="modal-footer">
+
+          <button  ng-click="addCategory(addResourcesForm)" class="btn blue button-rounder">Submit</button>
+          <button class="btn default button-rounder" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="editResources" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editResources" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header alert alert-info" >
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+          <span class="panel-icon">
+           <i class="glyphicon glyphicon-edit"></i>
+         </span>
+         <span class="modal-title ">Edit Category</span>
+       </div>
+       <form role="form" class="form-horizontal" name="editResourcesForm" action="<%=sails.config.routesPrefix%>/resources/editCategory" method="POST" novalidate>
+         <div class="modal-body">
+
+
+           <div class="row">
+
+
+            <span class="col-md-2">
+              Name </span>
+              <input type="text" class="form-control col-md-5 " style="width:60%;padding:3px;height:26px;" id="edit_resources" name="name" ng-model="categoryEdit.name"
+              ng-class="{ 'has-error' : editResourcesForm.name.$invalid && !editResourcesForm.name.$pristine }" ng-blur="checkeditCategory()" required />
+
+              <input type="hidden" name="id" id="categoryId" >
+
+            </div>
+            <div class="row">
+              <p class="col-md-offset-2 col-md-8 ng-hide" ng-show="categoryEditExist"  style="color:#a94442;margin:0px;margin-left:14%">Category is already exists.</p>
+              <p class="col-md-offset-2 col-md-8 ng-hide" ng-show="(editResourcesForm.name.$touched || submitted) && editResourcesForm.name.$error.required"
+              style="color:#a94442;margin:0px;margin-left:14%">Name is required.</p>
+            </div>
+
+
+
+          </div>
+          <div class="modal-footer">
+
+            <button  type="submit" class="btn blue button-rounder">Submit</button>
+            <button class="btn default button-rounder" data-dismiss="modal" aria-hidden="true">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- BEGIN PAGE BREADCRUMB -->
+  <ul class="page-breadcrumb breadcrumb">
+    <li>
+      <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span class="active">Resources</span>
+    </li>
+  </ul>
+  <% if(req.flash('userDeletedMessage') != ""){ %>
+  <div id="hide">
+  <div  class="alert alert-success alert-dismissable" >
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    Category deleted successfully.
+  </div> 
+  </div>
+  <%}%> 
+  <% if(req.flash('userUpdatedMessage') != ""){ %>
+  <div id="hide">
+  <div  class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>                        
+    Category edited successfully.
+  </div>
+  </div>
+  <%}%> 
+  <% if(req.flash('userAddedMessage') != ""){ %>
+  <div id="hide">
+  <div  class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>                        
+    Category added successfully.
+  </div>
+  </div>
+  <%}%> 
+  <script>
+$('#hide').delay(1000).fadeOut(3000); 
+</script>
+  <% if(req.session.loggedInUser.role!="Admin") { %>
+
+  <br>
+  <div class="portlet light bordered" >
+    <div class="portlet-title">
+      <div class="resources">
+        <i class="icon-bubble font-green-sharp"></i>
+        <span class="caption-subject font-green-sharp sbold">Categories</span>
+      </div>
+
+    </div>
+    <div class="portlet-body">
+      <div class="tiles">
+       <% for(var i=0;i< resources.length;i++){ %>
+       <a href="<%=sails.config.routesPrefix%>/resources/categorySubList/<%= resources[i].id %>">
+       <div class="thumbnail tile tile-medium bg-blue-steel" >
+        <div class="tile-body">
+          <i class="fa fa-folder-open"></i>
+        </div>
+        <div class="tile-object">
+
+          <div class="name"><%= resources[i].name %></div>
+
+        </div>
+      </div>
+      </a>
+      <% } %>
+
+    </div>
+  </div>
+</div>
+
+<% }else{ %>
+<div class="row">
+ <div class="col-md-3">
+
+  <a href="#addResources" class="btn green button-rounder" data-toggle="modal" > 
+   <i class="fa fa-plus"></i>  Add Category
+
+ </a>
+</div>
+</div>    
+<br>
+
+<div class="row" >
+  <div class="col-md-12">
+
+    <div class="portlet box" style="background-color: white">
+      <div class="headerSection">
+        <div class="headerLabelSection">
+
+         Category List
+
+        </div>
+        <div class="tools "></div>
+      </div>
+      <div class="portlet-body">
+        <table class="table table-striped table-bordered table-hover" id="categoryList">
+          <thead>
+            <tr>
+              <th style="text-align: center;"> Categories</th>
+              <th style="text-align: center;"> Actions</th>
+            </tr>
+          </thead>
+
+         <!--  <tr>
+            <td>Regulation</td>
+            <td style="text-align: center;">
+              <a  class="actionDiv" href="<%=sails.config.routesPrefix%>/resources/include"  title="Include">
+                <i class="fa fa-plus"></i></a> 
+                <a  class="actionDiv "  title="Edit"><i class="icon-pencil"></i></a>
+                <a  class="actionDiv "  title="Delete"><i class="icon-trash"></i></a>
+              </td>
+            </tr> -->
+
+
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <% } %>
+  <div id="reportDiv">
+
+  </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+</div>
+
+<script>
+  highlightMenu(["resources"]);
+
+</script>
+
+
+

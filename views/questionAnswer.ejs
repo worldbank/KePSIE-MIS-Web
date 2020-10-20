@@ -1,0 +1,144 @@
+<style>
+
+  .bootstrap-select > .dropdown-toggle {
+    /*width:95%;*/
+    height:22px !important;
+  }
+</style>
+
+<div class="page-content-wrapper"  ng-app="queAnsApp" ng-controller="queAnsCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+
+      <li>
+        <span class="active">Ask the Expert</span>
+      </li>
+    </ul>
+    <% var userRole=['Admin','WB -Supervisors',
+
+    'Inspector'];
+
+    if (userRole.indexOf(req.session.loggedInUser.role)!=-1) { %>
+    <div class="row">
+
+     <div class="col-md-2">
+
+      <a id="askQuestion" href="<%=sails.config.routesPrefix%>/ask/newQuestion" class="btn green button-rounder center-block"> 
+        <i class="fa fa-plus"></i>
+
+        Ask Question
+      </a>
+    </div>
+  </div> 
+  <% } %>   
+  <br>
+  <% if(req.flash('queryDeletedMessage') != ""){ %>
+  <div id="hide">
+    <div  class="alert alert-success alert-dismissable" >
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Query deleted successfully.
+    </div> 
+  </div>
+  <%}%> 
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- BEGIN EXAMPLE TABLE PORTLET-->
+      <div class="portlet box" style="background-color: white">
+        <div class="headerSection">
+          <div class="headerLabelSection">
+            Questions
+          </div>
+         <div class="exportSection">
+            <form style="display:inline-block" id="queForm" action="<%=sails.config.routesPrefix%>/ask/exportExcel" method="POST">
+              <input type="hidden" id="section" name="section" value="{{unit}}"/>
+            </form>                     
+            <button ng-click="export2Excel()">
+                Excel
+                <i class="fa fa-download"></i>
+            </button>
+          </div>
+          <div class="tools "></div>
+        </div>
+
+        <div class="filterDiv" >
+         <form role="form" class="filterTable">
+          <div class="row" style="padding-top: 0.5%;">
+
+            <div class="col-md-2">
+              <span class="input-group-addon filterLabel leftalign">
+                Category / JHIC Section </span>
+              </div>
+
+              <div class="col-md-4">
+                <select id="unit" data-selected-text-format="count"  name="unit" ng-model="unit" class="bs-select form-control" ng-change="filterChange()" multiple >
+                 <option value="All">All</option>
+                 <%
+
+                 for(i=1; i<=14; i++) {
+                 %>
+                 <option value="s<%=i%>"><%=__("s"+i)%></option>
+                 <% } %>
+                 <option value="Inspection Protocols and Procedures">Inspection Protocols and Procedures</option>
+                <option value="Logistics">Logistics</option>
+                <option value="Other">Other</option>
+               </select>
+             </div>
+
+
+             <div class="col-md-2">
+               <span class=" input-group-addon filterLabel leftalign">General Search Bar
+               </span> 
+             </div>
+
+             <div class="col-md-4">
+               <input id="generalSearchText" class="form-control" type="text"  ng-keyup="filterChange()">
+             </div>
+
+           </div>
+         </form>
+
+       </div>
+       <br/>
+       <div class="portlet-body" id="hfLevelReportDiv">
+
+         <table class="table table-striped row-border table-hover" id="QueAnslist">
+          <thead>
+            <tr>
+              <th> Category / JHIC Section</th>
+              <th> Query</th>            
+              <th> Status</th>
+              <th> Actions</th> 
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<style type="text/css">
+  .queryDiv{
+    max-width: 550px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .actionDiv .btn{
+    border-radius: 12px !important;
+  }
+  
+</style>
+<script>
+  highlightMenu(["ask"]);
+  $('#hide').delay(1000).fadeOut(3000);
+</script>
+

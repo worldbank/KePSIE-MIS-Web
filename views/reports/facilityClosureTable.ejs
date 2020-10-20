@@ -1,0 +1,131 @@
+<style>
+
+  .bootstrap-select > .dropdown-toggle {
+    /*width:95%;*/
+    height:22px !important;
+  }
+  .filter-option {
+    padding-left: 2% !important;
+  }
+</style>
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="closureModule" 
+ ng-controller="closureCtrl">
+
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+    <!-- BEGIN PAGE HEAD-->
+
+    <!-- END PAGE HEAD-->
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <div class="breadcrumbDiv">
+       <table width="100%">
+        <tr>
+          <td>
+            <ul class="page-breadcrumb breadcrumb ">
+              <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span class="active">Closures and Other Issues</span>
+              </li>
+            </ul>
+          </td>
+          <td width="60%" align="right">
+            <div class="btn-group btn-group-solid ">
+              <a type="button" id="facility" class="btn green button-rounder"    href="<%=sails.config.routesPrefix%>/closure/figure" style="border-color :#fdfdfd;">
+                <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                Figures
+              </a>
+               <a type="button" id="facility" class="btn green active button-rounder" style="border-color :#fdfdfd;">
+                <i class="fa fa-table" style="font-size: 14px;"></i>
+                Tables
+              </a>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div> 
+        <div class="row" id="reportRow">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box" style="background-color: white">
+                    <div class="headerSection">
+                        <div class="headerLabelSection">
+                            Closures Report - Tables
+                        </div>   
+                    </div>
+                    <div class="filterDiv" style="background-color: white">
+                        <form role="form" class="filterTable" id="progressAndActionForm" action="<%=sails.config.routesPrefix%>/closure/exportExcel" method="POST">
+                            <div class="row">      
+                             <!-- /.col-md-6 -->
+                             <div class="col-md-4 filterStyle" >
+                                <div class="input-group">
+                                    <span class="input-group-addon filterLabel">
+                                        Regulatory Authority 
+                                    </span>
+                                    <select class="form-control" name="authority" id="authorityDropdown" ng-model="selectAuthority">
+                                        <option value="All">All</option>
+                                        <option value="Clinical Officers Council">Clinical Officers Council</option>
+                                        <option value="Medical Laboratory Technicians and Technologists Board">Medical Laboratory Technicians and Technologists Board</option>
+                                        <option value="Medical Practitioners and Dentist Board">Medical Practitioners and Dentist Board</option>
+                                        <option value="Ministry of Health">Ministry of Health</option>
+                                        <option value="Nursing Council of Kenya">Nursing Council of Kenya</option>
+                                        <option value="Pharmacy and Poisons Board">Pharmacy and Poisons Board</option>
+                                        <option value="Radiation Protection Board">Radiation Protection Board</option>
+                                        <option value="Nutritionists and Dieticians Institute">Nutritionists and Dieticians Institute</option>
+                                    </select>
+                                </div>
+                                    <!-- /input-group -->
+                                </div>
+                                <div class="col-md-4 filterStyle" >
+                                    <div class="input-group">
+                                        <span  class="input-group-addon filterLabel">
+                                             County &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        </span>
+                                        <select id="countyDropdown" class="form-control" ng-model="selectedCounty" 
+                                        name="county" ng-options="c.value for c in counties track by c.key">
+                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 filterStyle databank_resp" >
+                                    <div class="input-group">
+                                        <span class="input-group-addon filterLabel">Status </span>
+                                        <select class="form-control" name="status" id="statusDropdown" ng-model="selectStatus">
+                                            <option value="All">All</option>
+                                            <option value="Yes">Pending</option>
+                                            <option value="No">Resolved</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                         <br><br>
+
+                        <div class="row">
+                          <button type="submit" style="margin-bottom: 2%;" 
+                         class="btn green button-rounder center-block"">
+                         Export to Excel</button>
+                        </div>
+                </form>
+                      <br><br>
+                       
+   </div>
+
+                
+
+
+             </div>
+         </div>
+         <!-- END EXAMPLE TABLE PORTLET-->
+     </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+<script>
+   highlightMenu(["closureOtherIssues","closure"]);
+</script>

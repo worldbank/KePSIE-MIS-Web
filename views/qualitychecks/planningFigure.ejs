@@ -1,0 +1,148 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+
+<style>
+  .bootstrap-select > .dropdown-toggle {
+    /*width:95%;*/
+    height:22px !important;
+  }
+  .bs-select {
+    padding-left : 0 !important;
+  }
+</style>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="qcPlanFigureModule" ng-controller="qcPlanFigureCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <div class="breadcrumbDiv">
+      <table width="100%">
+        <tr>
+          <td>
+            <ul class="page-breadcrumb breadcrumb ">
+              <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span class="active">Checks and Quality Reports</span>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span class="active">Planning</span>
+
+              </li>
+
+            </ul>
+          </td>
+
+          <td width="30%" align="right">
+            <div class="btn-group btn-group-solid ">
+
+
+              <a type="button" class="btn green active kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/figure" >
+               <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+               Figures</a>
+
+               <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/table" >
+                <i class="fa fa-table" style="font-size: 14px;"></i>
+                Tables</a>
+
+
+                <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/map" >
+                  <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                  Maps</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+            <div class="portlet box"  style="background-color: white">
+              <div class="headerSection">
+                <div class="headerLabelSection">
+                  Quality Checks Visit Plan - Figures
+                </div>
+                                  
+                    </div>
+                    <div class="filterDiv">
+                     <form role="form" class="filterTable">
+                      <div class="row">
+                        <div class="col-md-6 filterStyle" >
+                          <div class="input-group">
+                            <span class="input-group-addon filterLabel">
+                             Indicator </span>
+                             <select id="indicatorDropdown" 
+
+                             class="bs-select form-control" data-selected-text-format="count" multiple
+                             onchange="angular.element(this).scope().filterChanged()"  >
+
+                             <option key="All" selected>All</option>
+                             <option key = "JHIC Discrepancies">JHIC Discrepancies</option>
+                             <option key = "Scorecard Non-Adherence">Scorecard Non-Adherence</option>
+                             <option key = "Facility Closure Non-Adherence">Facility Closure Non-Adherence</option>
+                             <option key = "Pharmacy Closure Non-Adherence">Pharmacy Closure Non-Adherence</option>
+                             <option key = "Lab Closure Non-Adherence">Lab Closure Non-Adherence</option>
+                             <option key = "Radiology Closure Non-Adherence">Radiology Closure Non-Adherence</option>
+                             <option key = "Nutrition Closure Non-Adherence">Nutrition Closure Non-Adherence</option>
+
+
+
+                           </select>
+                           <div id="errorMsg1" style="color:#a94442;display:none"><label id="tmp-error" class="error" for="tmp">Indicator is required.</label></div>
+
+
+                         </div>
+                         <!-- /input-group -->
+                       </div>
+                       <!-- /.col-md-6 -->
+                       <div class="col-md-6 filterStyle" >
+                        <div class="input-group">
+
+                          <span class="input-group-addon filterLabel">
+                            County  </span>
+                            <select class="form-control" id="countyDropdown" ng-model="selectCounty" ng-options="c.value for c in counties track by c.key" 
+                            ng-change="changeCounty()">
+                          </select>
+                        </div>
+                        <!-- /input-group -->
+                      </div>
+
+                    </div>
+                    <!-- /.row -->
+                  </form>
+
+                </div>
+                <div class="portlet-body" >
+
+                 <div class="row" id="projectionFigure" ></div>
+
+               </div>
+
+
+
+
+             </div>
+           </div>
+           <!-- END EXAMPLE TABLE PORTLET-->
+         </div>
+
+       </div>
+     </div>
+     <!-- END EXAMPLE TABLE PORTLET-->
+
+     <!-- END PAGE CONTENT INNER -->
+   </div>
+
+   <script>
+    var filename = "<%=__('summary_jhic_figure_filename')%>";
+    highlightMenu(["qualityReports","planning"]);
+  </script>

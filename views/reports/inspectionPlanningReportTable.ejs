@@ -1,0 +1,203 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.src.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="inspectionPlanningTableModule" ng-controller="inspectionPlanningTableController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                            <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Inspection Planning Reports</span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td width="30%" align="right">
+                        <div class="btn-group btn-group-solid ">
+                                <a type="button" class="btn green active kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectionplanning/table" >
+                                <i class="fa fa-table" style="font-size: 14px;"></i>
+                                Tables</a>
+
+                              <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectionplanning/map"  >
+                                <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                                Maps</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box" style="background-color: white">
+                    <div class="headerSection">
+                        <div class="headerLabelSection">
+                            Inspection Planning Reports
+                        </div>
+                        <div class="exportSection">
+                            <button ng-click="exportExcel()">
+                                Excel
+                                <i class="fa fa-download"></i>
+                            </button>
+                            <button ng-click="exportPDF()">
+                                PDF
+                                <i class="fa fa-download"></i>
+                            </button>
+                            <form id="reportExcelForm" action="<%=sails.config.routesPrefix%>/inspectionplanning/table/exportAsExcel" method="POST">
+                                <input type="hidden" id="visitPlanData" name="visitPlanData" value="{{visitPlanData}}"/>
+                                <input type="hidden" id="inspProgressData" name="inspProgressData" value="{{inspProgressData}}"/>
+                                <input type="hidden" id="reportType" name="reportType" value="{{currentReport}}"/>
+                                <input type="hidden" id="county" name="county" value="{{selectedCounty.value}}"/>
+                                <input type="hidden" id="inspectorName" name="inspectorName" value="{{selectedInspector.name}}"/>
+                                <input type="hidden" id="inspPeriod" name="inspPeriod" value="{{selectedInspPeriod.value}}"/>
+                            </form>
+                            <form id="reportPDFForm" action="<%=sails.config.routesPrefix%>/inspectionplanning/table/exportAsPDF" method="POST">
+                                <input type="hidden" id="reportHTML" name="reportHTML"/>
+                                <input type="hidden" id="reportCSS" name="reportCSS"/>
+                                <input type="hidden" id="reportType" name="reportType" value="{{currentReport}}"/>
+                                <input type="hidden" id="county" name="county" value="{{selectedCounty.value}}"/>
+                                <input type="hidden" id="inspectorName" name="inspectorName" value="{{selectedInspector.name}}"/>
+                                <input type="hidden" id="inspPeriod" name="inspPeriod" value="{{selectedInspPeriod.value}}"/>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="filterDiv">
+
+                           <div class="filterDiv">
+                       <form role="form" class="filterTable">
+                                        <div class="row">
+                                            <div class="col-md-4 filterStyle" >
+                                                <div class="input-group">
+                                                    <span style="padding-right: 50px" class="input-group-addon filterLabel">
+                                                       County </span>
+                                                      <select id="countyDropdown" class="form-control" ng-model="selectedCounty" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                                    </select></div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                            <div class="col-md-4 filterStyle" >
+                                                <div class="input-group">
+                                                   
+                                                    <span class="input-group-addon filterLabel">
+                                                        Inspector's Name </span>
+                                                        <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector" ng-options="insp.name for insp in inspectors track by insp.inspectorId" ng-change="filterChanged()">
+                                    </select>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <div class="col-md-4 filterStyle" >
+                                                <div class="input-group">
+                                                   
+                                                    <span class="input-group-addon filterLabel">
+                                                        Inspection Period </span>
+                                                        <select id="inspPeriodDropdown" class="form-control" ng-model="selectedInspPeriod" ng-options="period.value for period in inspPeriods track by period.key" ng-change="inspectionPeriodChanged()">
+
+                                    </select>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </form>
+                                    </div>
+
+                       
+                    </div>
+                     <div class="actionsDiv">
+                            <div  class="actionDiv">
+                                <a style="font-size: 12px;" class="btn btn-primary selectBtnStyle" href="javascript:;" title="Visit Plans" id="visitPlansBtn" ng-click="changeTable('VisitPlans')">Visit Plans</a>
+                            </div>
+                            <div class="actionDiv">
+                                <a style="font-size: 12px;" class="btn btn-primary normalBtnStyle" href="javascript:;" title="Inspector Progress" id="inspProgressBtn" ng-click="changeTable('InspectorProgress')">Inspector Progress</a>
+                            </div>
+                    </div>
+                    <div class="row" id="reportRow">
+                        <div class="col-md-12" id="reportContainer" style="float: left">
+                            <div class="portlet-body" id="inspectionPlanningReportDiv">
+                             <div id="inspVisitPlanReport">
+                                <table class="table table-bordered" id="inspVisitPlanReportTable" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                     
+                                        <th colspan="15" style="text-align: center">Visit Plan for Inspection Period: {{selectedInspPeriod.value}}</th>
+                                    </tr>
+                                    <tr>
+                                   
+                                        <th>County</th>
+                                        <th>Sub-County</th>
+                                       <!--  <th id="inspectorH">Inspector<br />Name</th>
+                                       -->
+                                       <th >Inspector<br />Name</th>
+                                       <th>Facility<br />Id</th>
+                                        <th>Facility<br />Name</th>
+                                        <th>Ownership</th>
+                                        <th>Level</th>
+                                      
+                                     
+                                        <th>In-Charge<br />Name</th>
+                                        <th>In-Charge<br />Phone</th>
+                                         <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inspVisitPlanBody">
+                                    
+                                </tbody>
+                                </table>
+                                </div>
+                                <div id="inspProgressReport" style="display: none">
+                                <table class="table table-bordered" id="inspProgressReportTable" cellspacing="0" >
+                                <thead>
+                                    <tr>
+                                        <th colspan="13" style="text-align: center">Progress Report of Inspector: {{selectedInspector.name}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Inspector Name</th>
+                                        <th>Visited</th>
+                                        <th>Pending</th>
+                                        <th>Total</th>
+                                        <th>Progress</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inspProgressBody">
+                                    
+                                </tbody>
+                                </table>
+                                </div>
+                            </div>
+                             <div id="inspectorProgressChart"> 
+
+                        </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+</div>
+
+<script>
+    highlightMenu(["inspPlanning"]);
+</script>

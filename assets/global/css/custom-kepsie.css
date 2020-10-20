@@ -1,0 +1,879 @@
+
+.alert-dismissable .close, .alert-dismissible .close{
+
+    right: 0px !important;
+}
+
+
+
+.notes{
+    font-weight: normal;
+    font-size: 11px;
+    font-style: italic;
+}
+
+.headerSection {
+    background-color: #31708f;
+    width: 100%;
+    border-radius: 5px 5px 0 0 !important;
+    color: white;
+    font-size: 16px;
+    float: left
+}
+
+.exportSection {
+    float: right;
+    padding:4px;
+}
+
+.exportSection button {
+    color: #31708F;
+    border-radius: 5px !important;
+    font-size: 13px;
+}
+
+.input-group-addon {
+    text-align: left !important;
+}
+
+.filterTable {
+    width: 97%;
+    margin: 50px 15px 0px 15px;
+    background-color: rgba(229, 229, 229, 0.43);
+    border: 1px solid #ddd;
+    font-size: 13px;
+    /*padding-right: 1%;
+    padding-top: 1%;*/
+    margin-left: 1.5%;
+    margin-right: 1.5%;
+    margin-top: 1%;
+    /*padding:1%;*/
+    padding: 6px 12px;
+}
+
+.filterTable td {
+    padding: 6px;
+    vertical-align: top;
+    width: 25%;
+}
+
+/*.filterTable td {
+    padding: 6px;
+    vertical-align: top;
+    width: 33%;
+    }
+    */
+.filterTable select {
+    width: 95%;
+}
+
+/*.actionDiv {
+    float: left
+}*/
+
+.actionDiv .btn {
+    padding: 2px 8px;
+    font-weight: bold;
+    border-radius: 3px !important;
+    background-color: #ccc;
+    border-color: #ccc;
+    color: #333;
+}
+
+.filterLabel{
+    border: 0px;
+    font-size: 13px;
+}
+
+.filterTable .form-control, output {
+    font-size: 13px;
+    padding: 0px;
+    padding-left: 1%;
+    height: 22px
+}
+
+.filterStyle{
+    padding-top: 0.5%;
+    padding-bottom: 0.5%
+} 
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+    background-color: #fff
+}   
+
+.fixwidth-text {width:95%}
+
+.button-rounder {border-radius: 5px 5px 5px 5px !important;}
+
+.kepsie-tabs {border-radius: 5px 5px 5px 5px !important;border-color: #fdfdfd !important;}
+
+.button-facility {
+    width: 225px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.button-facility1 {
+    width: 130px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: 1px solid #c2cad8 !important;
+}
+
+.select2-container--default{
+    width: 100% !important;
+}
+
+#QueAnslist td a {
+    color:#333333;
+}
+
+.actionsDiv {
+    display: inline-table;
+    margin: 0 auto;
+    float:inherit;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.actionDiv {
+    text-align: center;
+}
+
+.filterLabel{
+    border: 0px;
+    font-size: 13px;
+}
+
+.bootstrap-select>.dropdown-toggle:hover { 
+background-color: #fff;
+}
+
+#QueAnslist td {
+padding:3px !important;
+font-size: 13px;
+vertical-align: middle;
+}
+
+.centerIcon {text-align: center};
+
+#QueAnslist th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.button-radius {
+  border-radius: 5px 5px 5px 5px !important;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+text-indent : 0px;
+}
+
+#hfLevelReportDiv td {
+    padding: 3px !important;
+    font-size: 13px;
+}
+
+#hfLevelReportTable td {
+    vertical-align: middle;
+}
+
+#hfLevelReportTable th {
+    text-align: center;
+}
+
+.dt-body-center{text-align: center;}
+
+p{ margin-bottom: 0%;}
+
+
+.Issues{ width: 80%;}
+
+.bootstrap-select.btn-group .dropdown-toggle .filter-option {
+   /* overflow: initial;*/
+}
+
+.centerAlignCell { text-align: center;}
+
+.exportButtonsDiv div a {
+    padding: 6px;
+    border-radius: 5px !important
+}
+
+.headerLabelSection {
+    float: left;
+    padding: 7px;
+    font-size: 16px;
+}
+
+.filterDiv {
+    width: 100%;
+    font-size: 13px;
+    padding-top:40px;
+}
+
+.normalBtnStyle {
+    background-color: white !important;
+    color: #333 !important;
+    border-color:#ccc !important
+}
+
+.normalBtnStyle:hover {
+    background-color: #ccc !important;
+    color: #333 !important;
+    border-color:#ccc !important
+}
+
+.selectBtnStyle {
+    background-color: #ccc !important;
+    color: #333 !important;
+    border-color:#ccc !important
+}
+
+small { font-size: 9px; }
+
+th { padding: 3px 8px !important;}
+
+th.secondH { font-size: 12px !important; }
+
+.centerCell { text-align: center; }
+
+.leftCell { text-align: left !important }
+
+.bottom_border {
+    //border-bottom: 1px solid #BFBFBF !important;
+}
+
+.bottom_dark_border {
+    border-bottom: 2px solid #BFBFBF !important;
+}
+
+.right_border {
+    //border-right: 1px solid #BFBFBF !important;
+}
+
+.b2 { border-radius: 5px 5px 5px 5px !important }
+
+.actionDiv {
+margin-left: 8px !important;
+float: left;
+}
+
+.portlet-form .form-actions, .form .form-actions {
+    background-color: #fff
+}
+
+#markerInfoWindow label {
+    margin: 0px auto !important;
+}
+#markerInfoWindow{ display: none; }
+
+#markerPlanningInfoWindowTable td {
+    padding-right: 10px !important;
+    padding-bottom: 5px !important
+}
+
+.select2-selection{
+    min-height: 22px !important;
+    border: 1px solid #c2cad8 !important;
+}
+
+.select2-selection__choice{
+    height: 18px;
+    padding-top: 0px !important;
+    margin-top: 1px !important;
+}
+
+.select2-search__field{
+    margin-top: 1px !important;
+}
+
+.resultCell {
+    width : 20px;
+    text-align: center;
+}
+
+.nonCompliantCell {
+    background-color: rgba(255, 0, 0, 0.77)
+}
+
+.partiallyCell {
+    background-color: rgba(255, 165, 0, 0.72)
+}
+
+.minimallyCell {
+    background-color: rgba(255, 255, 0, 0.44)
+}
+
+.substantiallyCell {
+    background-color: rgba(0, 128, 0, 0.45)
+}
+
+.fullyCell {
+    background-color: rgba(128, 0, 128, 0.3)
+}
+
+.bootstrap-select{
+    width: 95% !important
+}
+
+.sectionNote{
+    
+}
+
+.table{
+    margin: auto;
+}
+
+/*.bootstrap-select.form-control:not([class*=col-]) {
+  width : 100% !important;
+}
+*/
+.centerContent{
+  text-align: center;
+}
+
+.bodyDiv {
+    float: left;
+    width: 100%;
+    background-color: white
+}
+.figure {
+    border : 1px solid rgb(221, 221, 221);
+}
+
+#pagehead {
+    color: #697882;
+    font-size: 17px;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}
+
+#reportContainer td {
+    font-size: 13px;
+}
+
+#reportContainer th {
+    font-size: 14px;
+}
+
+.filebtn{
+    line-height: 0 !important;
+}
+
+.date-picker{
+    width: 80% !important;
+}
+
+textarea{max-width: 90%}
+
+th {
+    vertical-align : middle !important;
+}
+
+.nonCompliantCell {
+    background-color: rgba(255, 0, 0, 0.77)
+}
+
+.partiallyCell {
+    background-color: rgba(255, 165, 0, 0.72)
+}
+
+.minimallyCell {
+    background-color: rgba(255, 255, 0, 0.44)
+}
+
+.substantiallyCell {
+    background-color: rgba(0, 128, 0, 0.45)
+}
+
+.fullyCell {
+    background-color: rgba(128, 0, 128, 0.3)
+}
+
+.hideCell {
+    display: none !important;
+    width : 0px !important;
+}
+
+#markerPlanningInfoWindow {
+    display: none;
+}
+
+#markerPlanningInfoWindowTable label {
+    margin: 0px auto !important;
+}
+
+#markerPlanningInfoWindowTable td {
+    padding-right: 10px !important;
+    padding-bottom: 5px !important
+}
+
+#hfNameIW {
+    font-size: 22px;
+    color: #337ab7;
+}
+
+.exportButtonsDiv div {
+    height: 0px;
+    padding-right: 13px;
+    padding-top: 1px;
+}
+
+.normalBtnStyle {
+    background-color: white !important;
+    color: #333 !important;
+    border-color:#ccc !important
+}
+.normalBtnStyle:hover {
+    background-color: #ccc !important;
+    color: #333 !important;
+    border-color:#ccc !important
+}
+.selectBtnStyle {
+    background-color: #ccc !important;
+    color: #333 !important;
+    border-color:#ccc !important
+}
+
+#inspVisitPlanReportTable td {
+    font-size: 13px;
+    padding: 5px !important
+}
+
+#inspVisitPlanReportTable th {
+    font-size: 14px;
+    padding: 6px !important
+}
+
+#inspProgressReportTable td {
+    font-size: 13px;
+    padding: 5px !important
+}
+
+#inspProgressReportTable th {
+    font-size: 14px;
+    padding: 6px !important
+}
+
+#inspectionPlanningReportDiv {
+    padding: 0px 10px 10px 15px !important;
+}
+
+.headerLabelDiv {
+    float: left;
+    padding: 7px;
+}
+
+.exportButtonsDiv {
+    float: right;
+}
+
+.exportButtonsDiv div a {
+    padding: 6px;
+    border-radius: 5px !important
+}
+
+.leftalign { text-align:left !important;}
+
+th {
+    padding: 3px 8px !important;
+}
+
+.bottom_dark_border {
+    border-bottom: 2px solid #BFBFBF !important;
+}
+
+.exportButtonsDiv div a {
+    padding: 6px;
+    border-radius: 5px !important
+}
+
+#markerProgressInfoWindow {
+    display: none;
+}
+
+#markerProgressInfoWindowTable label {
+    margin: 0px auto !important;
+}
+
+#markerProgressInfoWindowTable td {
+    padding-right: 10px !important;
+    padding-bottom: 5px !important
+}
+
+#legend {
+    background: white;
+    padding: 3px;
+    background-color: white;
+    border: 1px solid grey;
+    right: 8px !important;
+    display: none
+}
+
+#legend div {
+    padding: 4px;
+}
+
+#legend span {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.modal-body{
+  padding-top: 0px;
+}
+
+#inspectionProgressReportDiv {
+    padding: 0px 10px 10px 15px !important;
+}
+
+#inspectionProgressReportTable td {
+    font-size: 13px;
+    padding: 5px !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#inspectionProgressReportTable th {
+    font-size: 14px;
+    padding: 6px !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#inspectionProgressReportTable1 td {
+    font-size: 13px;
+    padding: 5px !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#inspectionProgressReportTable1 th {
+    font-size: 14px;
+    padding: 6px !important;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#inspectionProgressReportTable {
+    border: 2px solid #BFBFBF;
+}
+
+#inspectionProgressReportTable1 {
+    border: 2px solid #BFBFBF;
+}
+
+select {
+    color: black;
+    font-size: 14px;
+}
+
+tspan:first-child {
+  padding-left: 10px;
+}
+/*
+.countyHeader {
+    float: left;
+    padding: 7px;
+    background-color: rgb(49, 112, 143);
+    color: white;    
+    border-radius: 5px 5px 0px 0px !important;
+    display: none;
+}
+*/
+
+.figureHeading {
+    padding-left: 0% !important;
+    padding-bottom: 0% !important; 
+}
+
+tr.noBorder td {border: 0; }
+
+.figureByUnitByLevel , .figureByUnitByOwnerShipByCounty{
+    border-top-color: rgb(231, 236, 241);
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: rgb(231, 236, 241);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: rgb(231, 236, 241);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: rgb(231, 236, 241);
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-image-source: initial;
+    border-image-slice: initial;
+    border-image-width: initial;
+    border-image-outset: initial;
+    border-image-repeat: initial;
+}
+
+#map {
+    width: 100%;
+    height: 500px;
+    background-color: #CCC;
+}
+
+#markerInfoWindow {
+    display: none;
+}
+
+.countyHeader {
+    float: left;
+    padding: 7px;
+    background-color: rgb(49, 112, 143);
+    color: white;
+    padding-left: 10px;
+    padding-right: 25px;
+    border-radius: 5px 5px 0px 0px !important;
+    display: none;
+    margin-top: 10px;
+}
+
+.countyHeaderMargin {
+    margin-top: 10px
+}
+
+#summaryReportDiv td {
+    padding: 4px !important;
+    font-size: 13px !important;
+}
+
+#summaryReportDiv th {
+    padding: 4px !important;
+    font-size: 14px !important;
+}
+
+.dropdown-toggle {
+ height: 22px !important;
+ font-size: 13px !important;
+ color: #555 !important; 
+ padding-left: 1% !important;
+}
+
+.round-button{
+font-size: 13px !important;
+ color: #555 !important; 
+ height: 32px !important;
+ padding-left: 10% !important;
+}
+
+button.dropdown-toggle {
+    padding: 0px 0px 0px 0px !important;
+    background-color: #fff !important;
+    height: 35px !important;
+}
+
+.dropdown-toggle:hover { 
+    background-color: #fff;
+}
+
+.modal-body{
+    padding-top: 0px;
+}
+
+.map {
+    width: 100%;
+    height: 400px;
+    background-color: #CCC;
+}
+
+.about-text>h4 {
+  padding : 5px !important;
+  background-color: #337ab7 !important;
+  text-align: center;
+}
+
+.about-text>p {
+    color: #485a6a;
+}
+
+.about-text {
+    height: auto !important;
+    padding: 0!important;
+}
+
+.alert {
+    padding: 10px !important;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.img-with-text { text-align: center; }
+}
+
+select {
+    color: black;
+    font-size: 14px;
+}
+
+.legend {
+    background: white;
+    padding: 3px;
+    background-color: white;
+    border: 1px solid grey;
+    left: 8px !important;
+    display: none
+}
+
+.legend div {
+    padding: 4px;
+}
+
+.legend span {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.progress_bar{
+    margin-top: 13px;
+}
+.filter-option{
+  padding-left: 1%;
+}
+
+/*
+@author:Karthik
+@purpose:Added to make textbox and select box responsive in Create New Group screen.
+*/
+@media screen and (min-width: 1000px) {
+      .grp_resp{
+       width: 61%;
+                }
+}
+@media screen and (max-width: 1000px) {
+      .grp_resp{
+       width: 61%;
+                }
+}
+
+@media (max-width: 1000px) and (min-width: 501px) {
+     .grp_resp{
+         width: 105%;
+    }
+}
+
+@media (max-width: 500px) and (min-width: 50px) {
+    .grp_resp{
+         width: 105%;
+    }
+}
+
+/*
+@author:Karthik
+@purpose:Added to make textbox and select box responsive in Other issue screen.
+*/
+@media screen and (min-width: 1000px) {
+      .otherissue_resp{
+       width: 44%;
+                }
+}
+@media screen and (max-width: 1000px) {
+      .otherissue_resp{
+       width: 44%;
+                }
+}
+
+@media (max-width: 1000px) and (min-width: 501px) {
+     .otherissue_resp{
+         width: 105%;
+    }
+}
+
+@media (max-width: 500px) and (min-width: 50px) {
+    .otherissue_resp{
+         width: 105%;
+    }
+}
+
+
+
+/*
+@author:Karthik
+@purpose:Added to make select boxex responsive in aggregateProgress/dataBank screen.
+*/
+@media screen and (min-width: 1000px) {
+      .databank_resp{
+       width: 32%;
+                }
+}
+@media screen and (max-width: 1000px) {
+      .databank_resp{
+       width: 32%;
+                }
+}
+
+@media (max-width: 1000px) and (min-width: 501px) {
+     .databank_resp{
+         width: 104%;
+         
+    }
+}
+
+@media (max-width: 500px) and (min-width: 50px) {
+    .databank_resp{
+         width: 104%;
+    }
+}
+
+
+
+/*
+@author:Karthik
+@purpose:Added to make select boxex responsive in closureTab/facility screen.
+*/
+@media screen and (min-width: 1000px) {
+      
+.facilityID_resp{
+    width:44%;
+}
+.facilityID_resp1{
+    width:42%;
+}
+}
+@media screen and (max-width: 1000px) {
+      
+.facilityID_resp{
+     width:44%;
+}
+.facilityID_resp1{
+     width:42%;
+}
+
+}
+
+@media (max-width: 1000px) and (min-width: 501px) {
+     .facilityID_resp{
+         width: 104%;
+         
+    }
+     .facilityID_resp1{
+         width: 100%;
+         
+    }
+}
+
+@media (max-width: 500px) and (min-width: 50px) {
+    .facilityID_resp{
+         width: 104%;
+    }
+     .facilityID_resp1{
+         width: 140%;
+    }
+}
+
+.line-pulse>div {
+    border-radius: 100% !important;
+  }
+  
+
+

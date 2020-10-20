@@ -1,0 +1,114 @@
+
+<div class="page-content-wrapper" ng-app="groupApp" ng-controller="groupCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">Group Management</span>
+      </li>
+    </ul>
+     <% if(req.flash('groupDeletedMessage') != ""){ %>
+     <div id="hide">
+    <div  class="alert alert-success alert-dismissable" >
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Group deleted successfully.
+    </div> 
+    </div>
+    <%}%> 
+      <% if(req.flash('groupUpdatedMessage') != ""){ %>
+      <div id="hide">
+    <div  class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>                        
+      Group updated successfully.
+    </div>
+    </div>
+    <%}%> 
+    <% if(req.flash('groupAddedMessage') != ""){ %>
+    <div id="hide">
+    <div  class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>                        
+      Group added successfully.
+    </div>
+    </div>
+    <%}%> 
+    <script>
+$('#hide').delay(1000).fadeOut(3000); 
+</script>
+<div class="row">
+     <div class="col-md-3">
+
+      <a href="<%=sails.config.routesPrefix%>/group/new" class="btn green button-rounder"> 
+       <i class="fa fa-plus"></i>  Add Group
+
+     </a>
+   </div>
+ </div> 
+
+
+
+                                        <div id="deleteConfirmation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header alert alert-danger" style="color: #a94442">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                                
+                                                 <span class="panel-icon"><i class="glyphicon glyphicon-trash"></i>
+                                                 </span>
+                                                 <span class="modal-title "> Delete Group</span>
+                                               </div>
+                                               <div class="modal-body">
+                                                <p> Are you sure you want to delete this Group ? </p>
+                                              </div>
+                                              <div class="modal-footer">
+
+                                                <button data-dismiss="modal" ng-click="deleteGroup()" class="btn blue">Yes</button>
+                                                <button class="btn default" data-dismiss="modal" aria-hidden="true">No</button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+<br/>
+ <div class="row" >
+                                          <div class="col-md-12 col-sm-12">
+
+
+                                            <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                            <div class="portlet box green" style="background-color: white">
+                                              <div class="headerSection">
+                                                <div class="headerLabelSection">
+                                                Group List
+                                                </div>
+                                                <div class="tools "></div>
+                                              </div>
+                                              <div class="portlet-body">
+                                                <table class="table table-striped table-bordered table-hover" id="grouplist">
+                                                  <thead>
+                                                    <tr>
+                                                     
+                                                      <th class="centerContent"> Name</th>
+                                                      <th class="centerContent"> No. of Members</th>
+                                                      <th class="centerContent"> Purpose</th>
+                                                      <th class="centerContent"> Actions</th>
+                                                    </tr>
+                                                  </thead>
+
+                                                </table>
+                                              </div>
+                                            </div> 
+                                            </div>
+                                            </div> 
+
+
+
+    </div>
+    </div>
+<script>
+    highlightMenu(["group"]);
+    </script>

@@ -1,0 +1,185 @@
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CLSd-3FnPHmG_R3pVV2yFrURNBT22Tc&callback=initVisitPlanMap"
+type="text/javascript"></script>
+
+<style type="text/css">
+@media (max-width: 500px) and (min-width: 50px) {
+   .maps_resp{
+    width: 116%;
+}
+}
+@media (min-width: 768px)and (min-height:1024px) {
+.maps_resp{
+    width: 107%;
+    }
+
+    @media (min-width: 980px) and (min-height:1024px) {
+.maps_resp{
+    width: 105%;
+    }
+
+
+</style>
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="inspectorVisitPlanMapModule" ng-controller="inspectorVisitPlanMapCtrl">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+      
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                           <li>
+                            <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                            <i class="fa fa-circle"></i>
+                        </li>
+                        <li>
+                            <span style=" color: #337ab7;">Inspection  Planning</span>
+                            <i class="fa fa-circle"></i>
+                        </li>
+                        <li>
+                            <span class="active">Inspector Visit Plan</span>
+                        </li>
+                    </ul>
+                </td>
+                <td width="30%" align="right">
+                    <div class="btn-group btn-group-solid ">
+                       <!-- <a type="button" class="btn green resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectorVisitPlan/figure" >
+                        <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                        Figures</a> -->
+                        <a type="button" class="btn green resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectorVisitPlan/dataBank" >
+                            <i class="fa fa-table" style="font-size: 14px;"></i>
+                            Tables</a>
+                            
+
+                            <a type="button" class="btn green active resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectionplanning/map" >
+                                <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                                Maps</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="row" id="reportRow">
+                <div class="col-md-12">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet box" style="background-color: white">
+                        <div class="headerSection">
+                            <div class="headerLabelSection">
+                                Inspector Visit Plan - Maps 
+                            </div>
+                            <div class="exportSection">
+                                <form action="<%=sails.config.routesPrefix%>/visitPlan/map/exportAsKML" method="post">
+                                    <input type="hidden" name="county" value="{{selectedCounty.value}}"></input>
+                                    <input type="hidden" name="inspector" value="{{selectedInspector._id}}"></input>
+                                    <input type="hidden" name="inspPeriod" value="{{selectedInspPeriod.value}}"></input>
+                                    <button type="submit" id="submit">
+                                        KML
+                                        <i class="fa fa-download"></i>
+                                    </button>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="filterDiv">
+                         <form role="form" class="filterTable">
+                            <div class="row">
+                                <div class="col-md-4 filterStyle maps_resp" >
+                                    <div class="input-group">
+                                        <span style="padding-right: 50px" class="input-group-addon filterLabel ">County</span>
+                                         <select id="countyDropdown" class="form-control" ng-model="selectedCounty" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                                         </select></div>
+                                         <!-- /input-group -->
+                                     </div>
+                                     <!-- /.col-md-6 -->
+                                     <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+                                         
+                                            <span class="input-group-addon filterLabel">
+                                                Inspector's Name </span>
+                                                <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector" ng-options="insp.name for insp in inspectors track by insp._id" ng-change="inspectorChanged()">
+                                                </select>
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4 filterStyle" >
+                                            <div class="input-group">
+                                             
+                                                <span class="input-group-addon filterLabel">
+                                                    Inspection Period </span>
+                                                    <select id="inspPeriodDropdown" class="form-control" ng-model="selectedInspPeriod" ng-options="period.value for period in inspPeriods track by period.key" ng-change="inspectionPeriodChanged()">
+
+                                                    </select>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </form>
+                                    
+
+                                    
+                                </div>
+                                <div class="portlet-body">
+                                    <div id="map"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END EXAMPLE TABLE PORTLET-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT INNER -->
+        </div>
+        <div id="markerPlanningInfoWindow">
+            <table id="markerPlanningInfoWindowTable">
+                <tr>
+                    <th colspan="2"><label id="hfNameIW"></label></th>
+                </tr>
+                <tr>
+                    <td> HF ID</td>
+                    <td><label id="facilityIdIW"></label></td>
+                </tr>
+                <tr>
+                    <td>County</td>
+                    <td><label id="countyIW"></label></td>
+                </tr>
+                <tr>
+                    <td>Subcounty</td>
+                    <td><label id="subCountyIW"></label></td>
+                </tr>
+                <tr>
+                    <td>Ownership</td>
+                    <td><label id="ownershipIW"></label></td>
+                </tr>
+                <tr>
+                    <td>Level</td>
+                    <td><label id="levelIW"></label></td>
+                </tr>
+                <tr>
+                    <td>Date planned to be visited</td>
+                    <td><label id="planDateIW"></label></td>
+                </tr>
+                <tr>
+                    <td>Inspection number</td>
+                    <td><label id="inspNumberIW"></label></td>
+                </tr>
+                <tr>
+                    <td>Inspection type</td>
+                    <td><label id="inspTypeIW"></label></td>
+                </tr>
+                
+                
+                
+            </table>
+        </div>
+        <div id="legend">
+
+        </div>
+        <script>
+            highlightMenu(["inspPlanning"]);
+        </script>

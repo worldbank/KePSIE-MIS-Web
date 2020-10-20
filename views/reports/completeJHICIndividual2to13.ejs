@@ -1,0 +1,413 @@
+
+
+<%
+function nextChar(c) {
+return String.fromCharCode(c.charCodeAt(0) + 1);
+}
+for(i=2; i<14; i++) {
+if(info["s"+i+"_os"]!=undefined && info["s"+i+"_ms"]!=undefined && info["s"+i+"_ps"]!=undefined && info["s"+i+"_os"]!=null && info["s"+i+"_ms"]!=null && info["s"+i+"_ps"]!=null) {
+%>
+<div class="panel panel-default table1 table-responsive">
+    <div class="header1" onClick="hideShow('s<%=i%>Body')">
+        <a class="secLink" href="javascript:void(0)">
+            Section <%=i%>: <%= __("s"+i) %>
+        </a>
+    </div>
+    <table class="table table1" cellspacing="0">
+        <tbody id="s<%=i%>Body">
+         
+            <tr>
+                <th align="right" class="text-right sectionCell">&nbsp;</th>
+                <th align="right" class="text-right" style="width:1%">&nbsp;</th>
+                <th  class="scoreCell" style="text-align: right"> </th>
+                <th class="scoreCell greyBackground">Max<br />Score</th>
+                <th class="scoreCell">Observed<br />Score</th>
+                <th class="scoreCell">Percentage<br />Score</th>
+            </tr>
+            <%
+            //level-2
+            var labelAlp = 'a';
+            var nextLabel = __('s'+i+labelAlp);
+            while(nextLabel!=('s'+i+labelAlp)) {
+            %>
+            <tr class="header2">
+                <td align="right" class="text-right sectionCell"><%=labelAlp.toUpperCase()%>.</td>
+                <td class="labelCell" colspan="2"><%= __('s'+i+labelAlp) %></td>
+
+
+                <%
+                if(info['s'+i+labelAlp+'_os'] !== undefined && info['s'+i+labelAlp+"_ms"]!=undefined && info['s'+i+labelAlp+"_ps"]!=undefined && 
+                info['s'+i+labelAlp+'_os'] !== null && info['s'+i+labelAlp+"_ms"]!=null && 
+                info['s'+i+labelAlp+"_ps"]!=null && info['s'+i+labelAlp+'_ms'] !== -1) {
+                %>
+
+                
+                <td class="contentCell greyBackground"><%=info['s'+i+labelAlp+'_ms'].toFixed(2)%></td>
+                <td class="contentCell"><%=info['s'+i+labelAlp+'_os'].toFixed(2)%></td>
+                <td class="contentCell"><%=info['s'+i+labelAlp+'_ps'].toFixed(2)%>%</td>
+                <%
+            } else {
+            %>
+            <td class="contentCell greyBackground notAvail">N/A</td>
+            <td class="contentCell notAvail">N/A</td>
+            <td class="contentCell notAvail">N/A</td>
+            <%
+        }
+        %>
+        
+    </tr>
+
+    <% if('s'+i+labelAlp.toUpperCase()=='s11C') {%>
+    <tr  class="notes">
+        <td align="right" colspan="1"></td>
+        <td colspan="10">For this set of questions, if the facility produces radioactive waste, then use the scores indicated below for each question. The maximum score for this set of questions is 20. If the facility does not produce radioactive waste, then score the full section (Section 11) out of a maximum total score of 80.</td>
+    </tr>
+    <% } %>
+    <%
+
+    //level-3
+    var labelNum = "1";
+    var nextLabel1 = req.__('s'+i+labelAlp+"_"+labelNum);
+    while(nextLabel1!=('s'+i+labelAlp+"_"+labelNum)) {
+
+    %>
+    <tr class="header3">
+        <td align="right" class="text-right sectionCell">&nbsp;</td>
+        <td align="right" class="text-right"><%=labelNum%>.</td>
+        <td class="labelCell"><%= __('s'+i+labelAlp+"_"+labelNum) %><br>
+            
+
+          <!--   <% if('s'+i+labelAlp+"_"+labelNum=='s4a_4') {%>
+
+         <span class=" notes">For this set of questions, if all elements are available then each question is worth 3.3 points. If only one (either grass or bushes) is available then each question is worth 5 points. If neither grass nor bushes are available then the remaining question is worth 10 points. The maximum score is 10.
+         </span>
+         <% } %> -->
+
+     </td>
+     
+
+
+
+     <%
+     if(info['s'+i+labelAlp+"_"+labelNum+'_os'] !== undefined && info['s'+i+labelAlp+"_"+labelNum+'_ms'] !== undefined && 
+     info['s'+i+labelAlp+"_"+labelNum+'_ps'] !== undefined && 
+     info['s'+i+labelAlp+"_"+labelNum+'_os'] !== null && info['s'+i+labelAlp+"_"+labelNum+'_ms'] !== null && 
+     info['s'+i+labelAlp+"_"+labelNum+'_ps'] !== null && 
+     info['s'+i+labelAlp+"_"+labelNum+'_ms'] !="" && info['s'+i+labelAlp+"_"+labelNum+'_ms'] !=-1) {
+     %>
+
+     
+
+
+     <td class="contentCell greyBackground"><%=info['s'+i+labelAlp+"_"+labelNum+'_ms'].toFixed(2)%></td>
+     <td class="contentCell"><%=info['s'+i+labelAlp+"_"+labelNum+'_os'].toFixed(2)%></td>
+     <td class="contentCell"><%=info['s'+i+labelAlp+"_"+labelNum+'_ps'].toFixed(2)%>%</td>
+     <%
+ } else {
+ %>
+ <td class="contentCell greyBackground notAvail">N/A</td>
+ <td class="contentCell notAvail">N/A</td>
+ <td class="contentCell notAvail">N/A</td>
+ <%
+}
+%>
+</tr>
+
+<!-- <% if('s'+i+labelAlp+"_"+labelNum=='s9a_1') {%>
+<tr>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right"></td>
+    <td class=" notes">Adequate ventilation is defined as at least 5% of the overall wall size of the room, or artificial ventilation. How well does this facility satisfy this criterion?
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+</tr>
+<% } %> -->
+
+<% if('s'+i+labelAlp+"_"+labelNum=='s4a_4') {%>
+<tr>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right"></td>
+    <td class=" notes">For this set of questions, if all elements are available then each question is worth 3.3 points. If only one (either grass or bushes) is available then each question is worth 5 points. If neither grass nor bushes are available then the remaining question is worth 10 points. The maximum score is 10.
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+</tr>
+<% } %>
+
+<% if('s'+i+labelAlp+"_"+labelNum=='s3c_2') {%>
+<tr>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right"></td>
+    <td class=" notes">For this set of questions, if the facility has inpatient services then each question is worth 1.25 points. If there are no inpatient services then each question is worth 1.5 points. The maximum score is 5.
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+</tr>
+<% } %>
+<% if('s'+i+labelAlp+"_"+labelNum=='s2c_3') {%>
+<tr>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right"></td>
+    <td class=" notes">For this set of questions, If the facility is Level 4 or above then each question is worth 1.25 points. If the facility is not Level 4 or above then each question is worth 1.67 points. The maximum score is 5.
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+</tr>
+<% } %>
+<% if('s'+i+labelAlp+"_"+labelNum=='s2c_2') {%>
+<tr>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right"></td>
+    <td class=" notes">For this set of questions, if the facility is Level 4 or above then each question is worth 5 points. If the facility is not Level 4 or above then the question is worth 10 points. The maximum score is 10.
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+</tr>
+<% } %>
+
+  <!--   <% if('s'+i+labelAlp+"_"+labelNum=='s9a_1') {%>
+    <tr  class="notes">
+        <td align="right" class="text-right sectionCell">&nbsp;</td>
+        <td   colspan="2">Adequate ventilation is defined as at least 5% of the overall wall size of the room, or artificial ventilation. How well does this facility satisfy this criterion?</td>
+    </tr>
+    <% } %>  -->
+
+    <%
+
+    //level-4
+    var labelAlp1 = "a";
+    var nextLabel2 = req.__('s'+i+labelAlp+"_"+labelNum+labelAlp1);
+    while(nextLabel2!=('s'+i+labelAlp+"_"+labelNum+labelAlp1)) {
+    %> 
+    <tr>
+     <% if('s'+i+labelAlp+"_"+labelNum+labelAlp1=='s6a_6b') {%>
+     <td align="right" class="text-right sectionCell">&nbsp;</td>
+     <td align="right" class="text-right">&nbsp;</td>
+     <td  class=" labelCell ">
+        Confirm partographs have the following information:
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+    <% } %>
+
+    <% if('s'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4h') {%>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right">&nbsp;</td>
+    <td   class=" labelCell ">
+        Confirm that the following emergency equipment is available:
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+    <% } %>
+    <% if('s'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4c') {%>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right">&nbsp;</td>
+    <td   class=" labelCell ">
+        Confirm that the emergency tray has the following essential drugs:
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+    <% } %>
+    <% if('s'+i+labelAlp+"_"+labelNum+labelAlp1=='s3b_2a') {%>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right">&nbsp;</td>
+    <td  class=" labelCell ">
+        Are the following performance indicators collected and monitored?
+    </td>
+    <td class="contentCell greyBackground"></td>
+    <td class="contentCell "></td>
+    <td class="contentCell "></td>
+    <% } %>
+  
+</tr> 
+<tr>
+
+    <td align="right"   class="text-right sectionCell">&nbsp;</td>
+    <td align="right"  class="text-right">&nbsp;</td>
+    <%
+    if('s'+i+labelAlp+"_"+labelNum+labelAlp1=='s3b_2a' || 's'+i+labelAlp+"_"+labelNum+labelAlp1=='s3b_2b' || 's'+i+labelAlp+"_"+labelNum+labelAlp1=='s3b_2c' || 's'+i+labelAlp+"_"+labelNum+labelAlp1=='s3b_2d' || 's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4c' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4d' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4e' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4f' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4g' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4h' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4i' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4j' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4k' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s5a_4l' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s6a_6b' ||'s'+i+labelAlp+"_"+labelNum+labelAlp1=='s6a_6c' ||'s'+i+labelAlp+"_"+labelNum+labelAlp1=='s6a_6d' ||'s'+i+labelAlp+"_"+labelNum+labelAlp1=='s6a_6e' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s6a_6f' ||
+    's'+i+labelAlp+"_"+labelNum+labelAlp1=='s6a_6g'  ) {
+    %>
+    
+    
+    
+    <td class="labelCell" style="padding-left:30px !important" ><%= __('s'+i+labelAlp+"_"+labelNum+labelAlp1) %></td>
+
+    
+    
+    <% }else{ %>
+    
+    
+    
+    <td class="labelCell"><%= __('s'+i+labelAlp+"_"+labelNum+labelAlp1) %></td>
+
+    <% } %>
+
+    <%
+    if(info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_os'] !== undefined
+    && info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ms'] !== undefined
+    && info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ps'] !== undefined
+    &&info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_os'] !== null
+    && info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ms'] !== null
+    && info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ps'] !== null
+    &&
+     info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ms'] !== "" && info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ms'] !== -1  ) {
+    %>
+    <td class="contentCell greyBackground" ><%=info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ms'].toFixed(2) %> </td>
+    <td class="contentCell"><%=info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_os'].toFixed(2)%></td>
+    <td class="contentCell"><%=info['s'+i+labelAlp+"_"+labelNum+labelAlp1+'_ps'].toFixed(2)%>%</td>
+    <%
+} else {
+%>
+<td class="contentCell greyBackground notAvail">N/A</td>
+<td class="contentCell notAvail">N/A</td>
+<td class="contentCell notAvail">N/A</td>
+<%
+}
+%>  
+</tr>
+<%
+labelAlp1 = nextChar(labelAlp1);
+nextLabel2 = req.__('s'+i+labelAlp+"_"+labelNum+labelAlp1);
+}
+labelNum = parseInt(labelNum) + 1;
+nextLabel1 = req.__('s'+i+labelAlp+"_"+labelNum);
+}
+labelAlp = nextChar(labelAlp);
+nextLabel = req.__('s'+i+labelAlp);
+}
+%>
+</tbody>
+</table>
+</div>
+<%
+}
+}
+%>
+<div class="panel panel-default table1 table-responsive">
+    <div class="header1"  onClick="hideShow('ratingTable')">
+        <a class="secLink" href="javascript:void(0)">
+            Risk rating table to guide decisions on risk categorization of facilities, and accompanying recommended actions
+        </a>
+    </div>
+    <table class="table table1" cellspacing="0">
+        <tbody id="ratingTable">
+
+            <tr>
+                <td class="text-right sectionCell14">&nbsp;</td>
+                <td colspan="4">
+                    <table class="table innertable" cellspacing="0" width="100%">
+                        <tr>
+                            <th  style="width: 30%;">Facility score (% of maximum score)</th>
+
+                            <th  style=" width: 30%;">Compliance category</th>
+                            <th  style="width: 40%;">Warning/sanction/reward</th>
+                            
+
+                        </tr>
+                        <tr>
+                            <td  class="">0-10% *(or absence of licenses)</td>
+
+                            <td  class="">Non-Compliant</td>
+                            <td  class=" "><b>Close facility.</b><br> Recommend prosecution where requisite registration and licensing is absent (as specifed by the respective legislation).<br> Closed facilities that have a license, may ask for a re-inspection after corrections for purposes of reopening and re-categorization, subject to the criteria established by the competent authority.</td>
+
+                        </tr>
+
+                        <tr>
+                            <td  class="">11-40%</td>
+
+                            <td  class="">Minimally compliant</td>
+                            <td  class=" "><b>3-month notice for correction + re-inspection.</b><br>Facility will be closed if it does not score over 40% of the maximum score in the 3rd inspection.<br>Facility may ask for re-inspection for purposes of re-categorization after corrections.</td>
+
+                        </tr>
+                          <tr>
+                    <td  class="">41-60%</td>
+
+                    <td  class="">Partially Compliant</td>
+                    <td  class=" "><b>6-month notice for correction + re-inspection.</b><br>Facility will be closed if it does not score over 60% of the maximum score in the 3rd inspection.<br>Facility may ask for re-inspection for purposes of re-categorization after corrections.</td>
+
+                </tr>
+                <tr>
+                    <td  class="">61-75%</td>
+
+                    <td  class="">Substantially Compliant</td>
+                    <td  class=" "><b>12-month notice for correction + re-inspection.</b>
+                    <br>
+                        Facility may ask for re-inspection for purposes of re-categorization
+
+                        after corrections.</td>
+
+                    </tr> 
+                    <tr>
+                        <td  class=""> >75%</td>
+
+                        <td  class="">Fully Compliant</td>
+                        <td  class=" ">No re-inspection for two years.</td>
+
+                    </tr>
+                        </table>
+
+                    </td>
+                </tr>
+              
+                    </tbody>
+               </table>
+            <!--  </td>
+        </tr>
+        
+    </table>
+</td>
+</tr>
+<tr>
+<td><img src="<%=sails.config.assetURL%>/images/<%= info['s14d_1a'] %>" width="100%"></td>
+</tr>
+</tbody>
+</table> -->
+</div>
+
+<% if(info['s14d_1a']!=undefined && info['s14d_1a']!=null){ %>
+
+<div id="scanPanel" class="panel panel-default table1">
+    <div class="header1"  onClick="hideShow('summaryReport')">
+        <a class="secLink" href="javascript:void(0)">
+            Inspection Summary Report
+        </a>
+    </div>
+    <table class="table table1" cellspacing="0">
+        <tbody id="summaryReport">
+        <tr>
+<td>
+<img id="scanCopy" src="<%=sails.config.assetURL%>/signature/<%= info['s14d_1a'] %>" 
+ alt="No Image Found" width="100%" />
+
+
+ </td>
+</tr>
+</tbody></table>
+</div>
+<% } %>
+<script type="text/javascript">
+    $("#scanCopy").error(function () { 
+    $("#scanPanel").hide(); 
+});
+</script>

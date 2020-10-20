@@ -1,0 +1,330 @@
+ <script type="text/javascript">
+  $( document ).ready(function() {
+
+   $('#changepasswordtab').hide();
+   $('#profiletab').click(function () {
+    $('#profileusertab').show();
+    $('#changepasswordtab').hide();
+  });
+   $('#passwordtab1').click(function () {
+     $('#profileusertab').hide();
+     $('#changepasswordtab').show();
+
+   });
+
+ });
+
+
+</script>
+
+<style>
+
+
+.mybtn{
+  padding: 10px;
+  background-color: #3598dc;
+  border-color: #3598dc;
+  color: #FFFFFF;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+/*padding: 6px 12px;*/
+  font-size: 14px;
+}
+
+.fileinput {
+  display: inline-block;
+  position: relative;
+}
+.fileinput:hover .img-profile {
+  opacity: 0.5;
+}
+.fileinput .hover-div {
+  display: none;
+  /*position: absolute;*/
+  text-align: center;
+  top: 0;
+  left: 0;
+  /*right: 0;*/
+  margin-top: 0px;
+  margin-left: 0px;
+  z-index: 10;
+  /* width of image container */
+}
+.fileinput:hover .hover-div {
+  display: inline-block;
+}
+</style>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" >
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">User Profile</span>
+      </li>
+    </ul>
+
+   
+                                  
+
+    <!-- BEGIN PAGE BASE CONTENT -->
+    <div class="profile" >
+      <div class="tabbable-line tabbable-full-width">
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a id="profiletab" data-toggle="tab"> Profile </a>
+          </li>
+          <li class="">
+            <a id="passwordtab1" data-toggle="tab"> Change Password </a>
+          </li>
+          
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="profileusertab">
+            <div class="row">
+              <div class="col-md-3" ng-app="userViewApp"  ng-controller="viewChangeImageCtrl">
+               <div id="deleteConfirmation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header alert alert-danger" style="color: #a94442">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            
+                       <span class="panel-icon"><i class="glyphicon glyphicon-trash"></i>
+                       </span>
+                       <span class="modal-title "> Remove Profile Picture</span>
+                     </div>
+                     <div class="modal-body">
+                      <p> Are you sure you want to remove this profile picture ? </p>
+                    </div>
+                    <div class="modal-footer">
+
+                      <button data-dismiss="modal" ng-click="removePhoto()" class="btn blue">Yes</button>
+                      <button class="btn default" data-dismiss="modal" aria-hidden="true">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+               <input type="hidden" id="uid" value="<%= req.session.loggedInUser.id %>"> </input>
+               <div class="form-group">
+                <div class="fileinput fileinput-new" data-provides="fileinput">
+                  <div class="fileinput-new thumbnail" style="width: auto; height: auto;">
+                 <% if(req.session.loggedInUser.path !="" && req.session.loggedInUser.path !=undefined){ %>
+                    <img src="<%=sails.config.routesPrefix%>/upload/<%= req.session.loggedInUser.path %>" alt="" style="margin: 0px;max-width: 200px; max-height: 150px;padding: 0px" class="img-profile"/>
+                    <%}else{ %>
+                     <img src="<%=sails.config.routesPrefix%>/images/profilephoto.png" alt="" style="margin: 0px" class="img-profile"/>
+                    <% } %>
+                     
+                     <span  class="btn-file hover-div" >
+                      <a href="#" class="glyphicon glyphicon-pencil circle mybtn fileinput-new"  data-toggle="tooltip" data-placement="bottom" title="Change Image" ></a>
+
+                       <input type="file" id="imageChange" name="..." title="Change Image" file-model="newFile" ng-model="document"  ng-change="changePhoto()">
+
+                        </span>
+
+                         <span  class="btn-file hover-div" >
+                             <% if(req.session.loggedInUser.path !="" && req.session.loggedInUser.path !=undefined){ %>
+                      <a href="#deleteConfirmation" class="glyphicon glyphicon-remove circle mybtn fileinput-new" data-toggle="modal" title="Delete"  data-toggle="tooltip" data-placement="bottom" title="Remove Image" ></a>
+                      <% } %>
+                      </span>    
+                    </div>
+                      
+                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;padding: 0px"> </div>
+
+                     <div ng-show="fileType" class="help-block ng-hide"  style="color:#a94442">Only jpg or png image file is allowed.</div>
+                    <div>
+                     
+                     
+                        <span class="fileinput-exists btn green" ng-click="changeImage()"> Update </span>
+                       
+                        <a href="javascript:;" class="btn grey fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                      </div>
+                    </div>
+
+                  </div>
+              
+              </div>
+              <div class="col-md-9">
+                <div class="portlet-body form">
+
+                  <!-- BEGIN FORM-->
+                  <form action="#" class="form-horizontal">
+                    <div class="form-body">
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Name :</label>
+                        <div class="col-md-4">
+
+                          <span class="help-block"><%= req.session.loggedInUser.name %></span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Email Address :</label>
+                        <div class="col-md-4">
+
+                          <span class="help-block"><%= req.session.loggedInUser.email %> </span>
+                        </div>
+                      </div>
+                       <% if(req.session.loggedInUser.contactno != undefined ){ %>
+                      <div class="form-group" >
+                        <label class="col-md-3 control-label">Contact No :</label>
+                        <div class="col-md-4">
+
+                          <span class="help-block"><%= req.session.loggedInUser.contactno %> </span>
+                        </div>
+                      </div>
+                       <% } %>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Organization  :</label>
+                        <div class="col-md-4">
+                          <% if(req.session.loggedInUser.organization != "other"){ %>
+                          <span class="help-block"> <%= req.session.loggedInUser.organization %> </span>
+                          <% }else{ %>
+                          <span class="help-block"> <%= req.session.loggedInUser.otherOrganization %> </span>
+                          <% } %>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Role :</label>
+                        <div class="col-md-4">
+
+                          <span class="help-block"> <%= req.session.loggedInUser.role %> </span>
+                        </div>
+                      </div>
+                      <% if(req.session.loggedInUser.role == "Inspector" ){ %>
+                      <div class="form-group ng-hide" ng-show="showInspectorId">
+                        <label class="col-md-3 control-label">Inspector ID :</label>
+                        <div class="col-md-4">
+
+                          <span class="help-block"><%= req.session.loggedInUser.inspectorId %> </span>
+                        </div>
+                      </div>
+                      <% } %>
+                       <% if(req.session.loggedInUser.group != "  " && (req.session.loggedInUser.group)){ %>
+                      <div class="form-group " >
+                        <label class="col-md-3 control-label">Group :</label>
+                        <div class="col-md-4">
+
+                          <span class="help-block"><%= req.session.loggedInUser.group %> </span>
+                        </div>
+                      </div>
+                      <% } %>
+                      <% if(req.session.loggedInUser.county != "  " && (req.session.loggedInUser.county)){ %>
+                      <div class="form-group" >
+                        <label class="col-md-3 control-label">County :</label>
+                        <div class="col-md-4">
+
+                          <span class="help-block"><%= req.session.loggedInUser.county %> </span>
+                        </div>
+                      </div>
+                      <% } %>
+                      
+                    </div>
+
+                  </form>
+                  <!-- END FORM-->
+
+                </div>
+              </div>
+              <span style="color: #737373;font-style: italic;"><b>Note:</b> Please contact us at <a href="mailto:kenyapatientsafety@gmail.com" >kenyapatientsafety@gmail.com</a> with any questions, issues, or requests.</span>
+            </div>
+          </div>
+          <div class="tab-pane active" id="changepasswordtab" ng-app="userViewApp"  ng-controller="userViewCtrl">
+
+            <input type="hidden" id="uemail" value="<%= req.session.loggedInUser.email %>"> </input>
+            <div class="row" style="margin-bottom: 40px">
+              <label class="control-label col-md-5 italic">
+                <i style="margin-left:15px">
+                 Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+               </label>
+
+             </div>
+             <div class="portlet-body" >
+              <form  class="form-horizontal"  name="profilechangePasswordForm" novalidate>
+
+                <div class="form-body">
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3">Old Password
+                      <span class="required"> * </span>
+                    </label>
+                    <div class="col-md-4">
+                      <input  type="password" name="oldPassword" ng-model="oldPassword"  class="form-control" ng-minlength="5" ng-maxlength="10" ng-class="{ 'has-error' : profilechangePasswordForm.oldPassword.$invalid 
+                      && !profilechangePasswordForm.oldPassword.$pristine }" required /> 
+
+                    </div>
+                     <div class="col-md-offset-3 col-md-8">
+                    <p class=" ng-hide" ng-show="(profilechangePasswordForm.oldPassword.$touched || passwordsubmitted) && profilechangePasswordForm.oldPassword.$error.required"
+                    style="color:#a94442">Password is required.</p>
+                    <p class="ng-hide" ng-show="invalidPassword"
+                    style="color:#a94442">Invalid Password.</p>
+                    <p ng-show="profilechangePasswordForm.oldPassword.$error.minlength"
+                    class="ng-hide" style="color:#a94442">Minimum Length is 5.</p>
+
+                    <p ng-show="profilechangePasswordForm.oldPassword.$error.maxlength"
+                    class=" ng-hide" style="color:#a94442">Maximum Length is 10.</p>
+                  </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3">New password
+                      <span class="required"> * </span>
+                    </label>
+                    <div class="col-md-4">
+                      <input  type="password" name="newPassword" ng-model="newPassword"  class="form-control" ng-minlength="5" ng-maxlength="10" ng-class="{ 'has-error' : profilechangePasswordForm.newPassword.$invalid 
+                      && !profilechangePasswordForm.newPassword.$pristine }" required /> 
+
+                    </div>
+                     <div class="col-md-offset-3 col-md-8">
+                    <p class=" ng-hide" ng-show="(profilechangePasswordForm.newPassword.$touched ||  
+                    passwordsubmitted) 
+                    && profilechangePasswordForm.newPassword.$error.required"
+                    style="color:#a94442">New Password is required.</p>
+                    <p ng-show="profilechangePasswordForm.newPassword.$error.minlength"
+                    class="ng-hide" style="color:#a94442">Minimum Length is 5.</p>
+
+                    <p ng-show="profilechangePasswordForm.newPassword.$error.maxlength"
+                    class=" ng-hide" style="color:#a94442">Maximum Length is 10.</p>
+                  </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3">Confirm new password
+                      <span class="required"> * </span>
+                    </label>
+                    <div class="col-md-4">
+                      <input  type="password" name="confirmPassword" ng-model="confirmPassword"  class="form-control" ng-disabled="profilechangePasswordForm.newPassword.$invalid" ng-class="{ 'has-error' : profilechangePasswordForm.confirmPassword.$invalid 
+                      && !profilechangePasswordForm.confirmPassword.$pristine }" required cmpr-to="newPassword"  /> 
+
+                    </div>
+                     <div class="col-md-offset-3 col-md-8">
+                    <div ng-messages="profilechangePasswordForm.confirmPassword.$error" >
+                      <div ng-message="required  ng-hide" ng-show="(profilechangePasswordForm.confirmPassword.$touched || passwordsubmitted) && profilechangePasswordForm.confirmPassword.$error.required" style="color:#a94442">Please enter New Password again.</div>
+                      <div ng-message="cmprTo"  style="color:#a94442">Passwords do not match.</div>
+                    </div>
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <div class="row">
+                      <div class="col-md-offset-3 col-md-8">
+                        <button type="submit" ng-click="profilechangePassword(profilechangePasswordForm)" ng-disabled="profilechangePasswordForm.$invalid" class="btn green button-rounder">Change</button>
+                        <a type="button" class="btn grey-salsa btn-outline button-rounder" href="<%=sails.config.routesPrefix%>/dashboard">Cancel</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

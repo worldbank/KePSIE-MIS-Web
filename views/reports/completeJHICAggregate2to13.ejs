@@ -1,0 +1,105 @@
+<%
+function nextChar(c) {
+return String.fromCharCode(c.charCodeAt(0) + 1);
+}
+
+
+var i;
+for(i=2; i<14; i++) {
+
+%>
+<div class="panel panel-default table1 table-responsive" id="s<%=i%>">
+    <div class="header1" onClick="hideShow('s<%=i%>Body')">
+        <a class="secLink" href="javascript:void(0)">
+            Section <%=i%>:<%= __("s"+i) %>
+        </a>
+    </div>
+    <table class="table table1" cellspacing="0">
+        <tbody id="s<%=i%>Body">
+        
+            <tr>
+                <th align="right" class="text-right sectionCell">&nbsp;</th>
+                <th align="right" class="text-right" style="width:1%">&nbsp;</th>
+                <th  class="scoreCell" style="text-align: right"> </th>
+                <th class="scoreCell greyBackground">Max<br />Score</th>
+                <th class="scoreCell">Observed<br />Score</th>
+                <th class="scoreCell">Percentage<br />Score</th>
+            </tr>
+            <%
+            //level-2
+            var labelAlp = 'a';
+            var temp = 1;
+            var nextLabel = __('s'+i+labelAlp);
+            while(nextLabel!=('s'+i+labelAlp)) {
+            %>
+            <tr class="header2">
+                <td align="right" class="text-right sectionCell"><%=labelAlp.toUpperCase()%>.</td>
+                <td class="labelCell" colspan="2"><%= __('s'+i+labelAlp) %></td>
+             
+                <td class="contentCell greyBackground">{{score['s'+'<%=i%>'+'<%=labelAlp%>'+'_ms']}}</td>
+
+
+                <td class="contentCell">{{score['s'+'<%=i%>'+'<%=labelAlp%>'+'_os']}} </td>
+                <td class="contentCell">{{score['s'+'<%=i%>'+'<%=labelAlp%>'+'_ps']}}</td>
+      
+    </tr>
+    <% if('s'+i+labelAlp.toUpperCase()=='s11C') {%>
+    <tr  class="questionCell">
+        <td align="right" colspan="1"></td>
+        <td colspan="10">(For this set of questions, if the facility produces radioactive waste, then use the scores indicated below for each question. The maximum score for this set of questions is 20. If the facility does not produce radioactive waste, then score the full section (Section 11) out of a maximum total score of 80.)</td>
+    </tr>
+    <% } %>
+    <%
+
+    //level-3
+    var labelNum = "1";
+    var nextLabel1 = req.__('s'+i+labelAlp+"_"+labelNum);
+    while(nextLabel1!=('s'+i+labelAlp+"_"+labelNum)) {
+    %>
+
+    <tr class="header3">
+        <td align="right" class="text-right sectionCell">&nbsp;</td>
+        <td align="right" class="text-right"><%=labelNum%>.</td>
+        <td class="labelCell"><%= __('s'+i+labelAlp+"_"+labelNum) %></td>
+     
+        <td class="contentCell " ng-class="{'notAvail': score['s<%=i%><%=labelAlp%>_<%=labelNum%>_ms']=='N/A'}">
+            {{score['s<%=i%><%=labelAlp%>_<%=labelNum%>_ms']}}</td>
+            <td class="contentCell " ng-class="{'notAvail': score['s<%=i%><%=labelAlp%>_<%=labelNum%>_os']=='N/A'}">{{score['s<%=i%><%=labelAlp%>_<%=labelNum%>_os']}} </td>
+            <td class="contentCell" ng-class="{'notAvail': score['s<%=i%><%=labelAlp%>_<%=labelNum%>_ps']=='N/A'}">{{score['s<%=i%><%=labelAlp%>_<%=labelNum%>_ps']}}</td>
+     
+</tr>
+<%
+
+//level-4
+var labelAlp1 = "a";
+var nextLabel2 = req.__('s'+i+labelAlp+"_"+labelNum+labelAlp1);
+while(nextLabel2!=('s'+i+labelAlp+"_"+labelNum+labelAlp1)) {
+%>  
+<tr>
+    <td align="right" class="text-right sectionCell">&nbsp;</td>
+    <td align="right" class="text-right">&nbsp;</td>
+    <td class="labelCell"><%= __('s'+i+labelAlp+"_"+labelNum+labelAlp1) %></td>
+  
+    <td class="contentCell " ng-class="{'notAvail': score['s<%=i%><%=labelAlp%>_<%=labelNum%><%=labelAlp1%>_ms']=='N/A'}">{{score['s<%=i%><%=labelAlp%>_<%=labelNum%><%=labelAlp1%>_ms']}}</td>
+    <td class="contentCell" ng-class="{'notAvail': score['s<%=i%><%=labelAlp%>_<%=labelNum%><%=labelAlp1%>_os']=='N/A'}">{{score['s<%=i%><%=labelAlp%>_<%=labelNum%><%=labelAlp1%>_os']}}</td>
+    <td class="contentCell" ng-class="{'notAvail': score['s<%=i%><%=labelAlp%>_<%=labelNum%><%=labelAlp1%>_ps']=='N/A'}">{{score['s<%=i%><%=labelAlp%>_<%=labelNum%><%=labelAlp1%>_ps']}}</td>
+   
+</tr>
+<%
+labelAlp1 = nextChar(labelAlp1);
+nextLabel2 = req.__('s'+i+labelAlp+"_"+labelNum+labelAlp1);
+}
+labelNum = parseInt(labelNum) + 1;
+nextLabel1 = req.__('s'+i+labelAlp+"_"+labelNum);
+}
+labelAlp = nextChar(labelAlp);
+nextLabel = req.__('s'+i+labelAlp);
+}
+%>
+</tbody>
+</table>
+</div>
+<%
+}
+
+%>

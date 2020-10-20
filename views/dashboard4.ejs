@@ -1,0 +1,251 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.src.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+
+
+
+
+
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CLSd-3FnPHmG_R3pVV2yFrURNBT22Tc&callback=initMap1"
+type="text/javascript"></script>
+
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="dashboardModule" ng-controller="dashboardController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content" >
+        <!-- BEGIN PAGE HEAD-->
+        <div class="page-head">
+            <!-- BEGIN PAGE TITLE -->
+            <div class="page-title">
+                <h1>Dashboard
+                    <small>dashboard & statistics</small>
+                </h1>
+            </div>
+            <!-- END PAGE TITLE -->
+
+        </div>
+        <!-- END PAGE HEAD-->
+       
+        <!-- BEGIN PAGE BASE CONTENT -->
+        <!-- BEGIN DASHBOARD STATS 1-->
+
+
+        <div class="row">
+                <div class="col-md-6">
+                     <div class="portlet light portlet-fit ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class=" icon-layers font-green"></i>
+                                <span class="caption-subject font-green bold uppercase">Inspection Performance</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body row"> 
+                            <div class="col-md-12">
+                                <div id="figure" ></div>
+                            </div>
+                           
+
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="col-md-6">
+                     <div class="portlet light portlet-fit ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class=" fa fa-bar-chart font-green"></i>
+                                <span class="caption-subject font-green bold uppercase">Inspection Progress : Wave {{wave}}</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body row">
+                            
+                            <div class="col-md-12"> 
+                                <div id="figureProgress" ></div>
+                             </div>
+ 
+                        </div>
+                    </div> 
+                </div>
+
+        </div>
+
+       
+       
+        </div>
+        <!-- END PAGE BASE CONTENT -->
+    </div>
+    <!-- END CONTENT BODY -->
+</div>
+<!-- END CONTENT -->
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" >
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE BREADCRUMB -->
+  
+
+
+            <div class="row" id="reportRow">
+
+                <div class="col-md-12">
+                <div class="col-md-6">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet box" style="background-color: white">
+                        <div class="headerSection">
+                            <div class="headerLabelSection">
+                               Kakamega
+                                                           </div>
+                           
+                        </div>
+           
+            <div class="portlet-body">
+                <div id="map1" class="map"></div>
+              <!--   <div class="progress progress_bar">
+  <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{progress_kakamega}}"
+  aria-valuemin="0" aria-valuemax="100" style="width:{{progress_kakamega}}%;color: black;">
+    Progress:{{progress_kakamega}}% 
+  </div>
+</div> -->
+            </div>
+        </div>
+    </div>
+
+     <div class="col-md-6">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet box" style="background-color: white">
+                        <div class="headerSection">
+                            <div class="headerLabelSection">
+                               Kilifi
+                            </div>
+                           
+                        </div>
+            
+            <div class="portlet-body">
+                <div id="map2" class="map"></div>
+             <!--    <div class="progress progress_bar">
+  <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{progress_kilifi}}"
+  aria-valuemin="0" aria-valuemax="100" style="width:{{progress_kilifi}}%;color: black;">
+    Progress:{{progress_kilifi}}% 
+  </div>
+</div> -->
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- END EXAMPLE TABLE PORTLET-->
+</div>
+  <div class="row" >
+
+                <div class="col-md-12">
+                <div class="col-md-6">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet box" style="background-color: white">
+                        <div class="headerSection">
+                            <div class="headerLabelSection">
+                               Meru
+                                                           </div>
+                           
+                        </div>
+            
+            <div class="portlet-body">
+                <div id="map3" class="map"></div>
+              <!--   <div class="progress progress_bar ">
+  <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="{{progress_meru}}"
+  aria-valuemin="0" aria-valuemax="100" style="width:{{progress_meru}}%;color: black;">
+    Progress:{{progress_meru}}%
+  </div>
+</div> -->
+            </div>
+        </div>
+    </div>
+
+</div>
+    <!-- END EXAMPLE TABLE PORTLET-->
+</div>
+</div>
+
+
+</div>
+<!-- END PAGE CONTENT INNER -->
+<div class="portlet-body row" id="markerInfoWindow">
+    <table>
+        <tr>
+            <th colspan="2"><label id="facilityIdIW"></label></th>
+        </tr>
+        <tr>
+            <td>Latitude</td>
+            <td><label id="latIW"></label></td>
+        </tr>
+        <tr>
+            <td>Longitude</td>
+            <td><label id="lngIW"></label></td>
+        </tr>
+        <tr>
+            <td>Hf Name</td>
+            <td><label id="hfNameIW"></label></td>
+        </tr>
+        <tr>
+            <td>Sub County</td>
+            <td><label id="subCountyIW"></label></td>
+        </tr>
+        <tr>
+            <td>Location</td>
+            <td><label id="locationIW"></label></td>
+        </tr>
+        <tr>
+            <td>Level</td>
+            <td><label id="levelIW"></label></td>
+        </tr>
+        <tr>
+            <td>Ownership</td>
+            <td><label id="pubIW"></label></td>
+        </tr>
+        <tr>
+            <td>Market Size</td>
+            <td><label id="marketSizeIW"></label></td>
+        </tr>
+        <tr>
+            <td>Patients Month</td>
+            <td><label id="patientsMonthIW"></label></td>
+        </tr>
+        <tr>
+            <td>Total PS</td>
+            <td><label id="totalPSIW"></label></td>
+        </tr>
+        <tr>
+            <td>RiskC</td>
+            <td><label id="riskCIW"></label></td>
+        </tr>
+        <tr>
+            <td>Third</td>
+            <td><label id="thirdIW"></label></td>
+        </tr>
+    </table>
+</div>
+<div id="legend1" class="legend" >
+
+</div>
+<div id="legend2" class="legend" >
+
+</div>
+<div id="legend3" class="legend">
+
+</div>
+
+
+<script>
+    highlightMenu(["dashboard"]);
+</script>

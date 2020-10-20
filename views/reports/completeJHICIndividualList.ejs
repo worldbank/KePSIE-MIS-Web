@@ -1,0 +1,132 @@
+<link href="<%=sails.config.assetURL%>/global/css/custom-media-query.css" rel="stylesheet" type="text/css"/>
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="completeJHICIndividualListModule" ng-controller="completeJHICIndividualListController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span style=" color: #337ab7;">Complete JHIC Reports</span>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span class="active">Individual JHIC Reports</span>
+            </li>
+        </ul>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box" style="background-color: white">
+                    <div class="headerSection">
+                        <div class="headerLabelSection">
+                            Individual JHIC Reports
+                        </div>
+                        <div class="tools "></div>
+                    </div>
+
+                    <div class="filterDiv" >
+                       <form role="form" class="filterTable">
+                        <div class="row" style="padding-top: 0.5%;">
+                             
+                            <div class="col-md-2 col-sm-2 col-xs-12 ">
+                              <span class="input-group-addon filterLabel leftalign">
+                                County </span>
+                            </div>
+
+
+                            <div class="col-md-4 col-sm-4 col-xs-8">
+                                <select id="countyDropdown" class="form-control" ng-model="selectCounty" ng-options="c.value for c in counties track by c.key" ng-change="hfLevelCountyChanges()">
+                                </select>
+                            </div>
+
+
+
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <span class="input-group-addon filterLabel leftalign">
+                                    Inspector's Name </span>
+                                </div>
+
+                                <div class="col-md-4 col-sm-4 col-xs-8">
+                                 <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector" ng-options="insp.name for insp in inspectors track by insp._id" ng-change="hfLevelFilterChanges()">
+                                 </select>
+                             </div>
+
+                         </div>
+
+                         <div class="row">
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                              <span class=" input-group-addon filterLabel leftalign">Inspection Date (From) </span> 
+
+                          </div>
+
+                          <div class="col-md-4 col-sm-4 col-xs-8">
+                              <input type="text"  class="form-control fixwidth-text" id="fromDate"/>
+
+                              <input type="hidden" id="fromDateV" />
+                          </div>
+
+                          <div class="col-md-2 col-sm-2 col-xs-12">
+                           <span class=" input-group-addon filterLabel">
+                            Inspection Date (To) </span>
+                        </div>
+
+                        <div class="col-md-4 col-sm-4 col-xs-8">
+                            <input type="text" class=" form-control fixwidth-text"  id="toDate"/>
+                            <input type="hidden" id="toDateV" />
+                            <span class="" id="dateValidation"  style="color:#a94442;display: none">From Date must be before To Date</span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="padding-bottom: 6px;">
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                         <span class=" input-group-addon filterLabel leftalign">General Search Bar<br/>
+                         </span> 
+
+                     </div>
+
+                     <div class="col-md-4 col-sm-4 col-xs-8" >
+                      <input id="generalSearchText" class="form-control fixwidth-text" type="text"  onkeyup="hfLevelFilterChanges1()" />
+                  </div>
+
+
+
+              </form>
+          </div>
+      </div>
+                <div class="portlet-body table-responsive" id="hfLevelReportDiv">
+                    <table class="table  table-bordered col-md-12 col-sm-12 col-xs-12" id="hfLevelReportTable" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Facility ID</th>
+                                <th>County</th>
+                                <th>Facility Name</th>
+                                <th>Inspection Number</th>
+                                <th>Inspector Name</th>
+                                <th>Inspection Date</th>
+                                <th>Inspection Type</th>
+                                <th>Reports</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+</div>
+
+<script>
+    highlightMenu(["completeJHICReports","individualReport"]);
+</script>

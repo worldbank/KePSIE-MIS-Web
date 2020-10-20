@@ -1,0 +1,171 @@
+<style>
+.bootstrap-select > .dropdown-toggle {
+  /*width:95%;*/
+  height:22px !important;
+}
+</style>
+
+<div class="page-content-wrapper"  ng-app="faqExpertApp" ng-controller="faqExpertCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+        <li>
+        <a href="<%=sails.config.routesPrefix%>/faq">FAQ</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">Import from Ask the Expert</span>
+      </li>
+    </ul>
+    <div class="row">
+     <div class="col-md-2 col-sm-2">
+
+      <a id="askQuestion" href="<%=sails.config.routesPrefix%>/ask/newQuestion" class="btn green button-rounder"> 
+       <i class="fa fa-plus"></i> Ask Question
+     </a>
+   </div>
+ </div>    
+ <br>
+
+ <div class="row">
+  <div class="col-md-12 col-sm-12">
+    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+    <div class="portlet box" style="background-color: white">
+      <div class="headerSection">
+        <div class="headerLabelSection">
+          Questions
+        </div>
+        <div class="tools "></div>
+      </div>
+
+      <div class="filterDiv" >
+                     <form role="form" class="filterTable">
+                        <div class="row">
+
+                                <div class="col-md-2">
+                                          <span class="input-group-addon filterLabel leftalign">
+                JHIC Unit </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                    
+                                            <select id="unit" data-selected-text-format="count"  name="unit" ng-model="unit" class="bs-select form-control" ng-change="filterChange()" multiple >
+                 <option value="All">All</option>
+                 <%
+
+                 for(i=1; i<=13; i++) {
+                 %>
+                 <option value="<%=__('s'+i)%>"><%=__("s"+i)%></option>
+                 <% } %>
+               </select>
+                                 </div>
+
+                                  <div class="col-md-2">
+                                        <span class="input-group-addon filterLabel leftalign">
+                Board </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                            <select name="board" id="board" ng-model="board" data-selected-text-format="count"ng-change="filterChange()" class="bs-select form-control pull-right
+"    
+                 multiple />
+                 <option value="All">All</option>
+                <% _.each(groupDetail, function (group) { %>
+                <option value=<%= group.name %>><%= group.name %></option>
+                <% }) %> 
+              </select> 
+                                 </div>
+
+                        </div>
+                          <div class="row">
+
+                              
+
+                                  <div class="col-md-2">
+                                         <span class=" input-group-addon filterLabel leftalign">General Search Bar
+              </span> 
+                                 </div>
+
+                                 <div class="col-md-4">
+                                             <input id="generalSearchText" class="form-control" type="text"  ng-keyup="filterChange()"></input>
+                                 </div>
+
+                        </div>
+                        
+                                  </form>
+                     
+   </div>
+ <br/>
+<div class="portlet-body" id="hfLevelReportDiv">
+ <form  class="form-horizontal"  name="importFAQForm" novalidate>
+  <div class="table-toolbar">
+  <div class="row">
+     <div class="col-md-2">
+   <button type="submit" ng-click="importFAQ(importFAQForm)" class="btn green button-rounder">Import All Selected</button>
+
+     </div>
+   <div class="col-md-3">
+   <button type="submit" ng-click="importSingleFAQ(importFAQForm)" class="btn green button-rounder">Import Single and Edit</button>
+     
+     </div>
+
+     </div>
+<br/>
+       <div id="selectAlert" class="alert alert-danger alert-dismissable " ng-show="flag"  >
+      
+        Please select one question.
+    </div> 
+
+    
+     </div>
+     <div class="table-scrollable">
+ <table class="table table-striped row-border table-hover" id="QueAnslist">
+        <thead>
+          <tr>
+            <th> </th>            
+            <th> Query</th>            
+            <th> Status</th>
+            
+          </tr>
+        </thead>
+
+      </table>
+</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<script>
+  highlightMenu(["faq"]);
+    var loggedInUserRole = "<%=req.session.loggedInUser.role%>";
+  //  $("#selectAlert").delay(4000).fadeOut("slow");
+</script>
+

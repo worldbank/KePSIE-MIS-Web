@@ -1,0 +1,154 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.src.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+
+
+<style>
+.bootstrap-select > .dropdown-toggle {
+  /*width:95%;*/
+  height:22px !important;
+}
+
+.filter-option {
+    padding-left: 2% !important;
+}
+</style>
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="aggregateProgressModule" ng-controller="aggregateProgressCtrl">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                            <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span style=" color: #337ab7;">Inspection Progress</span>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Aggregate Progress</span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td width="30%" align="right">
+                        <div class="btn-group btn-group-solid ">
+                            <a type="button" class="btn green resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/aggregateProgress" >
+
+                                <i class="fa fa-bar-chart" style="font-size: 14px;">
+                                </i>
+                               Figures</a>
+
+                                <a type="button" class="btn green active resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/aggregateProgress/dataBank" >
+                                    <i class="fa fa-table" style="font-size: 14px;"></i>
+                                    Tables</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet box" >
+                            <div class="headerSection">
+                                <div class="headerLabelSection">
+                                    Aggregate Progress Reports
+                                </div>
+
+                            </div>
+    
+   
+                            <div class="filterDiv" style="background-color: white">
+
+
+                             <form role="form" class="filterTable" action="<%=sails.config.routesPrefix%>/aggregateProgress/exportDatabank" method="POST">
+
+                                   <div class="row">
+                                    <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+                                            <span  class="input-group-addon filterLabel">
+                                             County &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                             <select id="countyDropdown" class="form-control" ng-model="selectedCounty" 
+                                             name="county" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                                         </select></div>
+                                         <!-- /input-group -->
+                                     </div>
+                                     <!-- /.col-md-6 -->
+                                     <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+
+                                            <span class="input-group-addon filterLabel">
+                                                Inspector's Name </span>
+                                                <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector"  name="inspId" ng-options="insp.name for insp in inspectors track by insp._id" ng-change="filterChanged()">
+                                                </select>
+                                                <input type="hidden" name="inspName" value="{{selectedInspector.name}}">
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4 filterStyle databank_resp" >
+                                            <div class="input-group">
+
+                                                <span class="input-group-addon filterLabel">
+                                            Inspection Period </span>
+
+                                                    <selectpicker id="inspPeriodDropdown" name="inspPeriod" data-array="inspPeriods" data-selected="selectedInspector" onchange="periodChange()"></selectpicker>
+                                                     <div id="errorMsg1" style="color:#a94442;display:none"><label id="tmp-error" class="error" for="tmp">Inspection Period is required.</label></div>
+
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                        </div>
+                                        <br><br>
+                                        <div class="row">
+                                         <button type="submit" id="exportButton" style="margin-bottom: 2%;margin-left: 37%;" class="btn btn green button-rounder col-md-offset-5 col-md-2">Export to Excel</button>
+                                     </div>
+                                     <div class="row">
+                                     <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+                                      <div style="display:inline;"> Note:</div>
+                                      <div style="display:inline;"> For the filters selected, the exported table provides corresponding information on the number of facilities to be visited in total, already visited, still pending, and percentage of inspection progress.
+                                      </div> 
+                                      </div>
+                                   </div>
+                                 </form>
+                                 <br><br>
+
+                             </div>
+
+                         </div>
+                     </div>
+                     <!-- END EXAMPLE TABLE PORTLET-->
+                 </div>
+
+             </div>
+         </div>
+         <!-- END PAGE CONTENT INNER -->
+     </div>
+
+     <script>
+        highlightMenu(["inspProgressPlanning","aggregateProgress"]);
+          function periodChange(){
+
+                      if($("#inspPeriodDropdown").val()==null){
+
+                        $("#exportButton").attr("disabled",true);
+
+                        $("#errorMsg1").show();
+                      }else{
+                         $("#exportButton").attr("disabled",false);
+
+                        $("#errorMsg1").hide();
+                      }
+                    }
+    </script>

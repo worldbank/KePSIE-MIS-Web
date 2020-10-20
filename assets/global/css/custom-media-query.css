@@ -1,0 +1,189 @@
+        /* Media Query */
+
+
+          @media screen and (max-width: 767px) {
+            .figure {
+                width:99%;
+                text-align: center;
+                margin: 0px auto;
+            }
+        }
+
+        @media ( min-width : 768px) and (max-width: 1050px) {
+            .figure {
+                width:98%;
+                text-align: center;
+                margin: 0px auto;
+            }
+        }
+
+       
+        @media screen and (min-width: 1200px) {
+            .progressFigure {
+                width:100%;
+                text-align: center;
+                margin: 0px auto;
+
+            }
+        }
+
+       
+
+ @media (min-width: 1231px){
+        .col-md-4 {
+            width: 26.33333%;
+        }
+
+        .col-md-2 {
+            width: 23.66667%;
+        }
+        .col-md-3 {
+            width: 20%;
+        }
+        .col-md-1 {
+            width: 13.33333%;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 1230px){
+        .col-sm-2 {
+            width: 23.66667%;
+        }
+        .col-sm-4 {
+            width: 26.33333%;
+        }
+        .col-sm-3 {
+            width: 20%;
+        }
+        .col-sm-1 {
+            width: 13.33333%;
+        }
+    }
+
+   
+@media (max-width: 767px){
+    .col-xs-8 {
+     margin-left: 12px;
+ }
+}
+
+
+
+@media (min-width: 992px){
+            .col-md-4 {
+                width: 26.33333%;
+            }
+
+            .col-md-2 {
+                width: 23.66667%;
+            }
+        }
+        @media (min-width: 768px) {
+            .col-sm-2 {
+                width: 23.66667%;
+            }
+            .col-sm-4 {
+                width: 26.33333%;
+            }
+        }
+
+        @media (max-width: 767px){
+            .col-xs-8 {
+             margin-left: 12px;
+         }
+     }
+
+
+
+@media screen and (max-width: 990px) {
+            /*.form-control {
+                width: 70%;
+            }*/
+            .date-picker{
+                width: 70% !important;
+            }
+
+
+        }
+      /*  @media screen and (min-width: 991px) {
+           .form-control {
+            width: 100%  ;
+        }*/
+        
+
+
+ @media screen and (max-width: 767px) {
+      
+        .reason {
+            width: 70%;
+        }
+
+    }
+
+   
+    @media (min-width: 768px){
+        .form-horizontal .control-label {
+            padding-top: 0px !important;
+        }
+    }
+
+
+
+
+
+
+
+/*@media screen and (max-width: 990px) {
+  form .form-control {
+    width: 320px !important;
+  }               
+}*/
+/*@media screen and (min-width: 991px) {
+ form .form-control {
+  width:  320px !important; ;
+}          
+}
+*/
+
+        @media screen and (max-width: 767px) {
+          
+          .Issues{
+            width: 70%;
+        }
+      }
+
+@media (min-width: 1231px){
+   .colMd4 {
+       width: 26.33333%;
+   }
+
+   .colMd2 {
+       width: 23.66667%;
+   }
+   .colMd3 {
+       width: 20%;
+   }
+   .colMd1 {
+       width: 13.33333%;
+   }
+}
+@media (min-width: 768px) and (max-width: 1230px){
+   .colSm2 {
+       width: 23.66667%;
+   }
+   .colSm4 {
+       width: 26.33333%;
+   }
+   .colSm3 {
+       width: 20%;
+   }
+   .colSm1 {
+       width: 13.33333%;
+   }
+}
+
+@media (max-width: 767px){
+   .colXs8 {
+    margin-left: 12px;
+}
+}
+      /*Media query end*/

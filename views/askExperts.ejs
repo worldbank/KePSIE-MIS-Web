@@ -1,0 +1,291 @@
+
+<style type="text/css">
+
+  p{
+    margin-bottom: 0px
+  }
+
+@media (max-width: 500px) and (min-width: 50px) {
+   .askExpert1{
+       width: 103%;
+   }
+    .askExpert2{
+       width: 100%;
+   }
+}
+
+@media (max-width: 1000px) and (min-width: 501px) {
+   .askExpert1{
+       width: 105%;
+   }
+    .askExpert2{
+       width: 100%;
+   }
+}
+
+@media (max-width: 1500px) and (min-width: 1001px) {
+   .askExpert1{
+       width: 63%;
+   }
+    .askExpert2{
+       width: 60%;
+   }
+}
+
+@media (max-width: 2500px) and (min-width: 1501px) {
+   .askExpert1{
+       width: 94%;
+   }
+    .askExpert2{
+       width: 90%;
+   }
+}
+</style>
+
+<div class="page-content-wrapper" style=" overflow-x: hidden;">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+
+
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/ask/askExperts">Ask the Expert</a>
+        <i class="fa fa-circle"></i>
+      </li>
+
+      <li>
+        <span class="active">Ask Query</span>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet light portlet-fit portlet-form bordered">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-commenting-o font-red"></i>
+              <span class="caption-subject font-red sbold uppercase">Ask the Expert</span>
+            </div>
+            
+          </div>
+
+
+
+          <div class="portlet-body" ng-app="askExpertApp"  ng-controller="askExpertCtrl">
+            <!-- BEGIN FORM-->
+            <form  id="form1" class="form-horizontal"  name="askExpertForm" novalidate>
+              <div class="form-body">
+                <div class="form-group">
+                  <label class="control-label col-md-3">Ask the following expert(s)
+                   <span class="required"> * </span>
+                 </label>
+
+                 <div class="col-md-7 askExpert1">
+                  <select  class="bs-select form-control" ng-model="expert.board" name="board" ng-class="{ 'has-error' : askExpertForm.board.$invalid && !askExpertForm.board.$pristine }" multiple 
+                  ng-change="otherBoardName()" data-selected-text-format="count"
+                  required >
+                  <option value='MOH Coordinator'>MOH Coordinator</option>
+                  <option value='Clinical Officers Council'>Clinical Officers Council</option>
+                  <option value='Medical Laboratory Technicians and Technologists Board'>Medical Laboratory Technicians and Technologists Board</option>
+                  <option value='Medical Practitioners and Dentists Board'>Medical Practitioners and Dentists Board</option>
+                  <option value='Nutritionists and Dieticians Institute'>Nutritionists and Dieticians Institute</option>
+                  <option value='Nursing Council of Kenya'>Nursing Council of Kenya</option>
+                  <option value='Pharmacy and Poisons Board'>Pharmacy and Poisons Board</option>
+                  <option value='Public Health Officers and Technicians Council'>Public Health Officers and Technicians Council</option>
+                  <option value='Radiation Protection Board'>Radiation Protection Board</option>
+                </select> 
+
+              </div>
+              <label class="col-md-offset-3 col-md-9 " style="font-size: 13px">You can select multiple expert(s) </label>
+              <p class="col-md-offset-3 col-md-3 ng-hide" ng-show="(askExpertForm.board.$touched || submitted) && askExpertForm.board.$error.required"
+              style="color:#a94442">Expert is required.</p>
+            </div>
+           
+
+            <div class="form-group ">
+              <label class="control-label col-md-3">Category / JHIC Section
+               <span class="required"> * </span>
+             </label>
+             <div class="col-md-7 askExpert2" ">
+              <select  id="sections" class="form-control" ng-model="expert.section" ng-change="sectionValue()" name="section" ng-class="{ 'has-error' : askExpertForm.section.$invalid && !askExpertForm.section.$pristine }"
+              required > 
+              <option value="">Select...</option>
+
+              <% for(var i=1;i<=14;i++){ %>
+              <option value="s<%=i%>" ><%= __("s"+i) %></option>
+              <%}%>
+              <option value="Inspection Protocols and Procedures">Inspection Protocols and Procedures</option>
+              <option value="Logistics">Logistics</option>
+              <option value="Other">Other</option>
+            </select> 
+
+          </div>
+          <p class="col-md-offset-3 col-md-3 ng-hide" ng-show="(askExpertForm.section.$touched || submitted) && askExpertForm.section.$error.required"
+          style="color:#a94442">JHIC Section is required.</p>
+        </div>
+        <div class="form-group ng-hide" ng-show="otherSection">
+          <label class="control-label col-md-3">Other, specify
+            <span class="required"> * </span>
+          </label>
+          <div class="col-md-7 ">
+            <input type="text" id="otherSection" class="form-control" name="otherSection" ng-model="expert.otherSection" ng-class="{ 'has-error' : askExpertForm.otherSection.$invalid && !askExpertForm.otherSection.$pristine }" required
+            /> 
+          </div>
+          <p class="col-md-offset-3 col-md-3 ng-hide" ng-show="(askExpertForm.otherSection.$touched || submitted) && askExpertForm.otherSection.$error.required"
+          style="color:#a94442">JHIC Section is required.</p>
+        </div>
+
+        <div class="ng-show" ng-hide="expert.section== 'Other' || expert.section== 'Inspection Protocols and Procedures' || expert.section=='Logistics'" >
+          <div class="form-group ng-hide" ng-show="expert.section != null">
+            <label class="control-label col-md-3">Select JHIC Sub-section
+             <span class="required"> * </span>
+
+           </label>
+           <div class="col-md-7">
+            <select id="sub_sections" class="form-control"  ng-model="expert.sub_section" name="sub_section" ng-change="SubsectionValue()" ng-class="{ 'has-error' : askExpertForm.sub_section.$invalid && !askExpertForm.sub_section.$pristine }" ng-required="expert.section!= 'Other' && expert.section!= 'Inspection Protocols and Procedures' && expert.section!='Logistics'"
+            > 
+            <option value="">Select...</option>
+
+          </select>
+
+        </div>
+        <p class="col-md-offset-3 col-md-3 ng-hide" ng-show="(askExpertForm.sub_section.$touched || submitted) && askExpertForm.sub_section.$error.required"
+        style="color:#a94442">JHIC Sub-section is required.</p> 
+      </div>
+
+      <div class="form-group ng-hide" ng-show="othersub_section">
+        <label class="control-label col-md-3">Other, specify
+          <span class="required"> * </span>
+        </label>
+        <div class="col-md-7 ">
+          <input type="text" id="othersub_section" class="form-control" name="othersub_section" ng-model="expert.othersub_section" ng-class="{ 'has-error' : askExpertForm.othersub_section.$invalid && !askExpertForm.othersub_section.$pristine }" ng-required="expert.section!= 'Other' && expert.section!= 'Inspection Protocols and Procedures' && expert.section!='Logistics'"
+          /> 
+        </div>
+        <p class="col-md-offset-3 col-md-4 ng-hide" ng-show="(askExpertForm.othersub_section.$touched || submitted) && askExpertForm.othersub_section.$error.required"
+        style="color:#a94442">JHIC Sub-section is required.</p>
+      </div>
+
+      <div class="ng-show" ng-hide="expert.sub_section== 'Other' || (expert.sub_section == '' || expert.sub_section == null)" >
+        <div class="form-group ng-hide" ng-show="expert.section != null  ">
+          <label class="control-label col-md-3">Select JHIC Sub-sub-section
+           <span class="required"> * </span>
+
+         </label>
+         <div class="col-md-7">
+          <select id="sub_sub_sections" class="form-control" ng-model="expert.sub_sub_section" 
+          name="sub_sub_section" ng-change="SubsubsectionValue()" ng-class="{ 'has-error' : askExpertForm.sub_sub_section.$invalid && !askExpertForm.sub_sub_section.$pristine }" 
+          ng-required="expert.section!= 'Other' && expert.sub_section!= 'Other' && expert.section!= 'Inspection Protocols and Procedures' && expert.section!='Logistics'"> 
+          <option value="">Select...</option>
+        </select> 
+      </div>
+      <p class="col-md-offset-3 col-md-4 ng-hide"  ng-show="(askExpertForm.sub_sub_section.$touched || submitted) && askExpertForm.sub_sub_section.$error.required"
+      style="color:#a94442">JHIC Sub-sub-section is required.</p> 
+    </div>
+
+    <div class="form-group ng-hide" ng-show="othersub_sub_section">
+      <label class="control-label col-md-3">Other, specify
+        <span class="required"> * </span>
+      </label>
+      <div class="col-md-7 ">
+        <input type="text" id="othersub_sub_section" class="form-control" name="othersub_sub_section" ng-model="expert.othersub_sub_section" ng-class="{ 'has-error' : askExpertForm.othersub_sub_section.$invalid && !askExpertForm.othersub_sub_section.$pristine }" ng-required="expert.section!= 'Other' && expert.sub_section!= 'Other' && expert.section!= 'Inspection Protocols and Procedures' && expert.section!='Logistics'"
+        /> 
+      </div>
+      <p class="col-md-offset-3 col-md-4 ng-hide" ng-show="(askExpertForm.othersub_sub_section.$touched || submitted) && askExpertForm.othersub_sub_section.$error.required"
+      style="color:#a94442">JHIC Sub-sub-section is required.</p>
+    </div>
+
+  </div>
+</div>
+
+<i class="col-md-offset-3 col-md-9 ng-hide "  ng-show="(askExpertForm.query.$dirty )"
+>Please check FAQs to confirm that your query has not been clarified previously.</i> 
+<div class="form-group">
+
+  <label class="control-label col-md-3">Query
+   <span class="required"> * </span>
+ </label>
+ <div class="col-md-7">
+  <trix-editor  angular-trix trix-initialize="trixInitialize(e, editor);" trix-change="trixChange(e, editor);" trix-selection-change="trixSelectionChange(e, editor);" trix-focus="trixFocus(e, editor);" trix-blur="trixBlur(e, editor);" trix-file-accept="trixFileAccept(e, editor);" trix-attachment-add="trixAttachmentAdd(e, editor);" trix-attachment-remove="trixAttachmentRemove(e, editor);" ng-model="expert.query" name="query"  ng-class="{ 'has-error' : askExpertForm.query.$invalid && !askExpertForm.query.$pristine }" required ></trix-editor>
+</div>
+<p class="col-md-offset-3 col-md-3 ng-hide"  ng-show="(askExpertForm.query.$touched || submitted) && askExpertForm.query.$error.required"
+style="color:#a94442">Query is required.</p> 
+</div>
+
+<div class="row">
+  <label class="control-label italic">
+    <i >
+     Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+   </label>
+
+ </div>
+ <div class="form-actions">
+  <div class="row">
+   <!--  <div class="col-md-offset-4 col-md-7"> -->
+   <div class="col-md-12 col-sm-12 text-center">
+    <button ng-disabled="askExpertForm.$invalid"  ng-click="askQuery(askExpertForm)" class="btn green button-rounder submitQuery">Submit</button>
+    <a type="button" class="btn button-rounder grey-salsa btn-outline" href="<%=sails.config.routesPrefix%>/ask/askExperts">Cancel</a>
+  </div>
+</div>
+</div>
+
+</form>
+</div>
+
+
+<select id="all_Sub_sec" style="width:20%; display: none;"  >
+
+
+  <% for(var i=1;i<=14;i++){ %>
+  <% var x='a'; %>
+  <% while(__("s"+i+x)!="s"+i+x){ %>
+
+  <option value=<%= i+x %> ><%= __("s"+i+x) %></option>
+
+  <%  x= String.fromCharCode(x.charCodeAt() + 1); %>
+
+  <%}%>
+  <%}%>
+
+</select>
+
+<select id="all_Sub_sub_sec" style="width:20%; display: none; "  >
+
+
+  <% for(var i=1;i<=14;i++){ %>
+  <% var x='a'; %>
+  <% while(__("s"+i+x)!="s"+i+x){ %>
+
+
+  <% var y=1; %>
+  <% while(__("s"+i+x+"_"+y)!="s"+i+x+"_"+y){ %>
+  <option value=<%= i+x %> ><%= __("s"+i+x+"_"+y) %></option>
+  <% y=y+1; %>
+  <%}%>
+  <%  x= String.fromCharCode(x.charCodeAt() + 1); %>
+
+  <%}%>
+  <%}%>
+
+</select>
+
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+
+  highlightMenu(["ask"]);
+</script>

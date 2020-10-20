@@ -1,0 +1,101 @@
+
+
+<div class="page-content-wrapper" ng-app="groupApp" ng-controller="groupCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+       <li>
+        <a href="<%=sails.config.routesPrefix%>/group/all">Group Management</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">Add Group</span>
+      </li>
+    </ul>
+
+    <div class="row" >
+     <div class="col-md-12 col-sm-12">
+       <div class="portlet light portlet-fit portlet-form bordered">
+        <div class="portlet-title">
+          <div class="caption">
+            <i class="fa fa-commenting-o font-green"></i>
+            <span class="caption-subject font-green sbold uppercase">Create New Group </span>
+          </div>
+
+        </div>
+
+        <form  class="form-horizontal" name="groupAddForm" novalidate>
+          <div class="form-body">
+
+           <div class="form-group">
+            <label class="control-label col-md-2" >Group Name
+              <span class="required"> * </span>
+            </label>
+            <div class="col-md-7">
+              <input type="text" name="name" ng-model="name"  class="form-control" ng-class="{ 'has-error' : groupAddForm.name.$invalid && !groupAddForm.name.$pristine }" ng-pattern="/^[a-zA-Z ]*$/"  ng-blur="checkgroup()" required /> 
+
+            </div>
+            <div class="col-md-offset-2 col-md-3" >
+             <div class="" ng-messages="groupAddForm.name.$error">
+
+              <div ng-message="pattern" style="color:#a94442">Only characters are allowed.</div>
+            </div>
+            <span class=" ng-hide" ng-show="(groupAddForm.name.$touched || submitted) && groupAddForm.name.$error.required"
+            style="color:#a94442">Name is required.</span>
+            <span class=" ng-hide" ng-show="groupExist"  style="color:#a94442">Group is already exists.</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-md-2" >Group Purpose
+           <span class="required"> * </span>
+         </label>
+         <div class="col-md-7 grp_resp" ">
+        <select  class="bs-select form-control" ng-model="purpose" name="purpose" ng-class="{ 'has-error' : groupAddForm.purpose.$invalid && !groupAddForm.purpose.$pristine }" multiple 
+          required />
+          <option value="Ask the Expert">Ask the Expert</option> 
+          <option value="Closure">Closure</option> 
+        </select> 
+         </div>
+      <div class="col-md-offset-2 col-md-3" >
+      <span class="ng-hide" ng-show="(groupAddForm.purpose.$touched || submitted) && groupAddForm.purpose.$error.required"
+      style="color:#a94442">Purpose is required.</span>
+      </div>
+    </div>
+
+    <div class="portlet box">
+      <div class="portlet-title">
+        <div class="caption" style="color: grey">
+         Select User 
+       </div>
+       <div class="tools "></div>
+     </div>
+     <div class="portlet-body">
+      <table class="table table-striped table-bordered table-hover" id="usergrplist">
+      </table>
+    </div>
+  </div> 
+</div>
+<div class="form-actions">
+  <div class="row">
+  <div class="col-md-12 col-sm-12 text-center">
+      <button type="submit" ng-click="createGroup(groupAddForm)" ng-disabled="!groupAddForm.$valid" class="btn green button-rounder">Save</button>
+      <a type="button" class="btn grey-salsa btn-outline button-rounder" href="<%=sails.config.routesPrefix%>/group/all">Cancel</a>
+    </div>
+  </div>
+</div>
+
+</form>
+</div>
+</div>
+</div>
+</div> 
+</div>
+<script type="text/javascript">
+    highlightMenu(["group"]);
+</script>

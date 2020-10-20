@@ -1,0 +1,174 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<div id="pageStyleDiv">
+    
+</div>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="completeJHICAggregateModule" ng-controller="completeJHICAggregateController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <ul class="page-breadcrumb breadcrumb">
+            <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span style=" color: #337ab7;">Complete JHIC Reports</span>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span class="active">Aggregate JHIC Reports
+                </span>
+            </li>
+        </ul>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="portlet box" style="background-color: white">
+                    <div class="headerSection">
+                        <div class="headerLabelSection">
+                            Aggregate JHIC Report (as of latest facility inspection)
+                        </div>
+                            <div class="exportSection">
+                                <form style="display:inline-block" id="reportExcelForm" action="<%=sails.config.routesPrefix%>/completejhic/aggregate/exportAsExcel" method="POST">
+                                    <input type="hidden" id="reportType" name="reportType" value="{{currentReport}}"/>
+                                    <input type="hidden" id="county" name="county" value="{{selectCounty.value}}"/>
+                                    <input type="hidden" id="subCounty" name="subCounty" value="{{selectSubCounty.value}}"/>
+                                    <input type="hidden" id="ownership" name="ownership" value="{{selectOwnership.value}}"/>
+                                    <input type="hidden" id="level" name="level" value="{{selectLevel.value}}"/>
+                                </form>
+                                <form style="display:inline-block" id="reportPDFForm" action="<%=sails.config.routesPrefix%>/completejhic/aggregate/exportAsPDF" method="POST">
+                                    <input type="hidden" id="reportHTML" name="reportHTML"/>
+                                    <input type="hidden" id="observations" name="observations" value="{{observations}}"/>
+                                    <input type="hidden" id="reportType" name="reportType" value="{{currentReport}}"/>
+                                    <input type="hidden" id="county" name="county" value="{{selectCounty.value}}"/>
+                                    <input type="hidden" id="subCounty" name="subCounty" value="{{selectSubCounty.value}}"/>
+                                    <input type="hidden" id="ownership" name="ownership" value="{{selectOwnership.value}}"/>
+                                    <input type="hidden" id="level" name="level" value="{{selectLevel.value}}"/>
+                                </form>
+                                <button ng-click="createJHICAggregateExcel()">
+                                    Excel
+                                    <i class="fa fa-download"></i>
+                                </button>
+                                <button ng-click="createJHICAggregatePDF()">
+                                    PDF
+                                    <i class="fa fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                   
+                    <div class="filterDiv" >
+                       <form role="form" class="filterTable">
+                        <div class="row" style="padding-top: 0.5%;">
+
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                              <span class="input-group-addon filterLabel leftalign">
+                                County </span>
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-8">
+                             <select id="countyDropdown" class="form-control" ng-model="selectCounty" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                             </select>
+                         </div>
+
+                         <div class="col-md-2 col-sm-2 col-xs-12">
+                            <span class="input-group-addon filterLabel leftalign">
+                                Sub-County </span>
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-8">
+                             <select id="subCountyDropdown" class="form-control" ng-model="selectSubCounty" ng-options="c.value for c in subCounties track by c.key" ng-change="filterChanged()">
+                             </select>
+                         </div>
+
+                     </div>
+
+                     <div class="row" style="padding-bottom: 6px;">
+                        <div class="col-md-2 col-sm-2 col-xs-12">
+                            <span class="input-group-addon filterLabel leftalign">
+                                Ownership </span>
+                            </div>
+
+                            <div class="col-md-4 col-sm-4 col-xs-8">
+                             <select id="ownershipDropdown" class="form-control" ng-model="selectOwnership" ng-options="c.value for c in ownerships track by c.key" ng-change="filterChanged()">
+                             </select>
+                         </div>
+
+                         <div class="col-md-2 col-sm-2 col-xs-12">
+                           <span class="input-group-addon filterLabel leftalign">
+                               Level </span>
+                           </div>
+
+                           <div class="col-md-4 col-sm-4 col-xs-8">
+                            <select id="levelDropdown" class="form-control" ng-model="selectLevel" ng-options="c.value for c in levels track by c.key" ng-change="filterChanged()">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bodyDiv">
+
+                <br />
+
+                <div class="col-md-12 col-sm-12 col-xs-12 report-title" style="padding-bottom: 7px">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <h1 id="pagehead">
+                                    Aggregate JHIC Report - {{currentReport}}
+                                    <small style="color:#697882">(Observations: {{observations}})</small>
+                                </h1>
+                            </td>
+                            <td align="right">
+                                <div class="actionsDiv">
+                                    <div  class="actionDiv">
+                                        <a style="font-size: 12px;" class="btn btn-primary selectBtnStyle" href="" title="Overview and By Unit" id="overviewBtn" ng-click="changeReport('Overview')">Overview</a>
+                                    </div>
+                                    <div class="actionDiv">
+                                        <a style="font-size: 12px;" class="btn btn-primary normalBtnStyle" href="" title="Complete JHIC" id="completeBtn" ng-click="changeReport('Complete')">Complete</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="row" id="reportRow">
+                    <div class="col-md-12 col-sm-12 col-xs-12" id="reportContainer" style="float: left">
+                        <div id="reportStyleDiv">
+                            <% include completeJHICStyle %>
+                        </div>
+                        <div id="sec2to13" style="display: none">
+                            <% include completeJHICAggregate2to13 %>
+                        </div>
+                        <% include completeJHICAggregate14 %>
+                        <!-- <div id="charts" class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px !important;">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          
+                             <div id="figure1" class="figure col-md-6 col-sm-6 col-xs-12" style="padding: 0px !important;font-family:'Open Sans'"></div>
+                            <div id="figure2" class="figure col-md-6 col-sm-6 col-xs-12" style="padding: 0px !important"></div>
+                            
+                            </div>
+                            <br />
+                        </div> -->
+                    </div>
+
+                    <div class="col-md-offset-5" id="noData">Sorry, No Data Found.</div>
+               </div>
+                <br>
+            </div>
+        </div>
+        </div>
+    </div>
+     </div>
+</div>
+</div>
+</div>
+
+<script>
+    highlightMenu(["completeJHICReports","aggregateReport"]);
+</script>

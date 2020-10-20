@@ -1,0 +1,239 @@
+<% if(info["_outofbusiness"]==1) {%>
+<i class="outofbusiness">Note: This facility is out of business.</i><br><br>
+<% } %>
+<div class="panel panel-default table1 table-responsive">
+  <div class="header1" onClick="hideShow('s14Body')">
+    <a class="secLink" href="javascript:void(0)">
+      <%= __("s14") %>
+    </a>
+  </div>
+  <table class="table table1" cellspacing="0">
+    <tbody id="s14Body">
+      
+     
+      <tr class="header2">
+        <td align="right" class="text-right sectionCell14">&nbsp;</td>
+        <td colspan="4"><%= __("s14d") %></td>
+      </tr>
+      <tr>
+        <td class="text-right sectionCell14">&nbsp;</td>
+        <td colspan="4">
+          <table class="table innertable" cellspacing="0" width="100%">
+            <tr>
+              <th class="leftCell"><%= __("s14d_1a") %></th>
+              <th class="leftCell" style="width:1%">&nbsp;</th>
+              <th class="leftCell"><%= __("s14d_1b") %></th>
+              <th class="scoreCell greyBackground"><%= __("s14d_1c") %><br />Score</th>
+              <th class="scoreCell"><%= __("s14d_1d") %><br />Score</th>
+              <th class="scoreCell"><%= __("s14d_1e") %><br />Score</th>
+            </tr>
+            <% for(var i=2;i<=13;i++){ %>
+            <tr>
+              <td class="text-left sectionCell" style="width:11%">Section <%=i%></td>
+              <% if(previous_info!=null) {%>
+              <% if(info["s"+i+"_os"] > previous_info["s"+i+"_os"]) {%>
+              <td><img src="<%=sails.config.assetURL%>/images/up_16.png" /></td>
+              <% }else if(info["s"+i+"_os"] < previous_info["s"+i+"_os"]){  %>
+              <td><img src="<%=sails.config.assetURL%>/images/down_16.png" /></td>
+
+              <% }else{ %>
+              <td></td>
+              <% } %>
+              <% }else{ %>
+              <td></td>
+              <% } %>
+              <td class="labelCell"><%= __("s"+i) %></td>
+              <% if(info["s"+i+"_ms"]==undefined) {%>
+              <td class="contentCell1 greyBackground notAvail">N/A</td>
+              <% }else {  %>
+              <td class="contentCell1 greyBackground"><%=info["s"+i+"_ms"].toFixed(2)%></td>
+              <% } %>
+              <% if(info["s"+i+"_os"]==undefined) {%>
+              <td class="contentCell1 notAvail">N/A</td>
+              <% }else { %>
+              <td class="contentCell1"><%=info["s"+i+"_os"].toFixed(2)%></td>
+              <% } %>
+              <% if(info["s"+i+"_ps"]==undefined) {%>
+              <td class="contentCell1 notAvail">N/A</td>
+              <% }else { %>
+              <td class="contentCell1"><%=info["s"+i+"_ps"].toFixed(2)%>%</td>
+              <% } %>
+            </tr>
+
+            <% } %>
+            <tr>
+              <!-- <% var total_ms=0;
+              var total_os=0;
+              var total_os_pre=0;
+              
+              for(var i=2;i<=13;i++){
+              if(info["s"+i+"_ms"]!=undefined){
+              
+              total_ms+=info["s"+i+"_ms"];
+            }
+            if(info["s"+i+"_os"]!=undefined){
+            
+            total_os+=info["s"+i+"_os"];
+          }
+        }
+        if(previous_info!=null) {
+        for(var i=2;i<=13;i++){
+        
+        if(previous_info["s"+i+"_os"]!=undefined){
+        
+        total_os_pre+=previous_info["s"+i+"_os"];
+      }
+    }
+  }
+  %> -->
+  <td class="text-left sectionCell">&nbsp;</td>
+  <% if(previous_info!=null) {%>
+  <% if(info["total_os"] > previous_info["total_os"]) {%>
+  <td><img src="<%=sails.config.assetURL%>/images/up_16.png" /></td>
+  <% }else if(info["total_os"] < previous_info["total_os"]){  %>
+  <td><img src="<%=sails.config.assetURL%>/images/down_16.png" /></td>
+
+  <% }else{ %>
+  <td></td>
+  <% } %>
+  <% }else{ %>
+  <td></td>
+  <% } %>
+  <td class="labelCell boldCell"><%= __("s14d_total") %></td>
+  
+  <% if(total_ms==undefined) {%>
+  <td class="contentCell1 greyBackground boldCell">N/A</td>
+  <% }else{ %>
+  <td class="contentCell1 greyBackground boldCell">
+    <%=total_ms.toFixed(2) %></td>
+  <% } %>
+
+  <% if(info["total_os"]==undefined) {%>
+  <td class="contentCell1 boldCell">N/A</td>
+  <% }else{ %>
+    <td class="contentCell1 boldCell"> <%=info["total_os"].toFixed(2) %></td>
+  <% } %>
+
+  <% if(info["total_ms"]==undefined || info["total_os"]==undefined) {%>
+  <td class="contentCell1 boldCell">N/A</td>
+  <% }else{ %>
+    <td class="contentCell1 boldCell"><%= ((info["total_os"]*100)/(info["total_ms"])).toFixed(2) %>%</td>
+  <% } %>
+  </tr>
+  <tr class="sectionNote ">
+   
+    <td colspan="6" class="noteStyle">Note: N/A is used to indicate when information is not available, because health facilities inspected may not have that particular unit/service. </td>
+  </tr>
+</table>
+</td>
+</tr>
+<% if(typeof facility == 'undefined' || facility==true) { %>
+<tr class="header2">
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td class="labelCell14" colspan="4"><%= __("s14e") %></td>
+</tr>
+<tr>
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td class="labelCell14 questionCell"><%= __("risk_c") %></td>
+  <td class="largeContentCell" colspan="3">
+  <%if(info.risk_c!=undefined){%>
+  <%=info.risk_c%>
+    <%}%>
+  </td>
+</tr>
+
+<tr class="header2">
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td colspan="4"><%= __("s14c") %></td>
+</tr>
+<tr>
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td class="labelCell14 questionCell"><%= __("s14c_1a") %></td>
+  <td class="largeContentCell" colspan="3">
+  <%if(info.s14c_1a!=undefined){%>
+  <%=info.s14c_1a%>
+    <%}%>
+  </td>
+</tr>
+<tr>
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td class="labelCell14 questionCell"><%= __("s14c_1b") %></td>
+  <td class="largeContentCell" colspan="3">
+  <%if(info.s14c_1b!=undefined){%>
+  <%=info.s14c_1b%>
+  <%}%>
+  </td>
+</tr>
+
+<tr class="header2">
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td colspan="4"><%= __("s14a") %></td>
+</tr>
+<tr>
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td class="labelCell14 questionCell"><%= __("s14a_1a") %></td>
+  <td class="labelCell14">
+   <%if(info.s14a_1a!=undefined){%>
+   <%=info.s14a_1a %>
+   <%}%></td>
+  <td class="labelCell14 questionCell"><%= __("s14a_1b") %></td>
+  <td class="labelCell14">
+   <%if(info.s14a_1b!=undefined){%>
+   <%=info.s14a_1b%>
+   <%}%></td>
+</tr>
+<tr>
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td class="labelCell14 questionCell"><%= __("s14a_1c") %></td>
+  <td class="labelCell14">
+   <%if(info.s14a_1c!=undefined){%>
+   <%=info.s14a_1c %>
+   <%}%></td>
+  <td class="labelCell14 questionCell"><%= __("s14a_1d") %></td>
+  <td class="labelCell14">
+   <%if(info.s14a_1d!=undefined){%>
+  <%=info.s14a_1d %>
+  <%}%></td>
+</tr>
+<tr>
+  <td align="right" class="text-right sectionCell14">&nbsp;</td>
+  <td class="labelCell14 questionCell"><%= __("s14a_1e") %></td>
+  <td class="labelCell14">
+  <%if(info.s14a_1e!=undefined){%>
+  <%=info.s14a_1e %>
+   <%}%></td>
+           <!--  <td class="labelCell14 questionCell"><%= __("s14a_1f") %></td>
+           <td class="labelCell14"> <img alt="" style="height: 34%;width: 100%;" src="<%=sails.config.routesPrefix%>/signature/<%= info.s14_a_1f %>" /></td> -->
+         </tr>
+
+         <tr class="header2">
+          <td align="right" class="text-right sectionCell14">&nbsp;</td>
+          <td colspan="4"><%= __("s14b") %></td>
+        </tr>
+        <tr>
+          <td align="right" class="text-right sectionCell14">&nbsp;</td>
+          <td class="labelCell14 questionCell"><%= __("s14b_1a") %></td>
+          <td class="labelCell14">
+          <%if(info.s14b_1a!=undefined){%>
+          <%=info.s14b_1a%>
+          <%}%></td>
+          <td class="labelCell14 questionCell"><%= __("s14b_1c") %></td>
+          <td class="labelCell14">
+          <%if(info.s14b_1c!=undefined){%>
+          <%=info.s14b_1c%>
+          <%}%></td>
+        </tr>
+        <tr>
+          <td align="right" class="text-right sectionCell14">&nbsp;</td>
+          <td class="labelCell14 questionCell"><%= __("s14b_1b") %></td>
+          <td class="labelCell14">
+          <%if(info.s14b_1b!=undefined){%>
+          <%=info.s14b_1b%>
+          <%}%></td>
+            <!-- <td class="labelCell14"><%= __("s14a_1d") %></td>
+            <td class="labelCell14"><%=info.s14b_1d%></td> -->
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>

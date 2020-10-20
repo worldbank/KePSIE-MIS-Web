@@ -1,0 +1,264 @@
+<script type="text/javascript">
+   $( document ).ready(function() {
+
+ //  $('#passwordtab1').hide();
+ $('#profile').click(function () {
+
+    $('#passwordtab1').show();
+});
+});
+</script>
+<style type="text/css">
+
+   @media screen and (max-width: 1000px) {
+    .systemTitle {
+
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .systemTitle{
+        margin-left: 35%;
+        bottom: 7px;
+        max-width:380px;
+    }
+    .titleBr{
+        display: inline;
+    }
+}
+
+
+
+@media (max-width: 1130px) and (min-width: 1001px) {
+    .systemTitle{
+        margin-left: 30%;
+        bottom: -10px;
+        max-width:380px;
+    }
+    .titleBr{
+        display: inline;
+    }
+    .titleBr1{
+        display: block;
+        text-align: center
+
+    }
+    .custom_nav{
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+
+
+@media (max-width: 500px) and (min-width: 241px) {
+    .systemTitle{
+        margin-left: 30%;
+        bottom: -10px;
+        text-align: center
+        max-width:380px;
+
+    }
+    .titleBr{
+        display: block;
+        text-align: center;
+    }
+
+     .custom_nav{
+         margin-left: 30px;
+         margin-top: 10px;
+    }
+
+     .btn-overflow{
+        width:240px;
+        overflow: hidden; 
+        text-overflow: ellipsis;
+     }
+
+
+}
+
+
+@media (max-width: 240px) and (min-width: 50px) {
+    .systemTitle{
+        margin-left: 30%;
+        bottom: -10px;
+        text-align: center
+        max-width:380px;
+
+    }
+    .titleBr{
+        display: block;
+        text-align: center;
+    }
+     .custom_nav{
+         margin-left: 300px;
+         margin-top: 10px;
+    }
+
+      #user_data{
+       margin-top:-35px;
+       margin-left: -30%;
+     }
+
+     .btn-overflow{
+        width:180px;
+        overflow: hidden; 
+        text-overflow: ellipsis;
+     }
+   
+}
+
+
+@media (max-width: 1000px) and (min-width: 501px) {
+    .systemTitle{
+        margin-left: 30%;
+        bottom: -10px;
+        max-width:380px;
+    }
+    .titleBr{
+        display: inline;
+    }
+    .titleBr1{
+        display: block;
+        text-align: center
+    }
+    .custom_nav{
+       text-align: center;
+       margin-top: 10px;
+   }
+}
+
+.page-header.navbar .top-menu .navbar-nav>li.dropdown-user .dropdown-toggle>img {
+
+    margin-left: 1px;
+
+}
+
+.page-header.navbar .top-menu .navbar-nav>li.dropdown-user .dropdown-toggle {
+    padding: 24px 10px 14px !important;
+}
+
+.page-header.navbar .top-menu .navbar-nav>li.dropdown-notification .dropdown-toggle {
+    padding: 31px 10px 14px !important;
+}
+
+.removeUndeLine{
+    text-decoration: none !important;
+}
+
+.pending-actions {
+    overflow-x: hidden;
+    height: auto;
+    max-height: 200px;
+}
+.time{
+    float: right;
+    
+}
+
+</style>
+<!-- BEGIN HEADER -->
+
+<div class="page-header navbar navbar-fixed-top" >
+    <div class="page-header-inner">
+
+        <!-- BEGIN LOGO -->
+        <div class="page-logo">
+            <a href="<%=sails.config.routesPrefix%>/dashboard" style="text-decoration: none">
+                <img src="<%=sails.config.assetURL%>/images/moh_logo.png" class="logo-default" style="height:69px;margin-right: 0px;margin-left: 15px;margin-top: 0px;">
+            </a>
+            <div class="menu-toggler sidebar-toggler">
+                <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+            </div>
+        </div>
+        <!-- END LOGO -->
+
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse"
+        data-target=".navbar-collapse"> </a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
+
+
+        <h4 class="systemTitle" style="line-height: 1.6;font-weight:600;color:#2D6CA2;font-size: 21px;position: absolute;">
+
+            KePSIE Inspection <span class="titleBr"> Monitoring <span class="titleBr1"> System</span></span>
+        </h4>
+
+
+        <!-- BEGIN PAGE TOP -->
+        <div class="page-top custom_nav"  >
+
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu" >
+                  <% if( req.session.actions != undefined) { %>
+                <div class="page-actions">
+                    <div class="btn-group pull-right">
+                        <button type="button" class="btn btn-circle  red-mint btn-sm " data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <span class="hidden-sm hidden-xs">Your Pending Actions: <%=req.session.actions.length%></span>
+                            <i class="fa fa-angle-down"></i>
+                        </button>
+                          <% if(req.session.actions.length>0) { %>
+                        <ul class="dropdown-menu pending-actions" role="menu">
+
+                            <% for(i=0;i< req.session.actions.length;i++) {
+                            var tmp=req.session.actions[i].createdAt;
+                            var date = CountyService.formateSpecificDate(new Date(tmp))%>
+                            <li>
+                            <% if(req.session.actions[i].type=="AskExpert") { %>
+                                    <a href=" <%=sails.config.routesPrefix%>/ask/answer/<%=req.session.actions[i].id %>">
+                                        <i class="fa fa-gavel"></i> <%=req.session.actions[i].text %>
+                                        <br> <small><i><span class="time"><%=date%></span></i> </small></a>
+                                        <% } %>
+
+                                    </li>
+                                    <% } %>   
+                                </ul>
+                                <% } %>
+                            </div>
+                        </div>
+                        <% } %>
+                        <ul class="nav navbar-nav pull-right ">
+                            <li class="separator hide"></li>
+
+                            <li class="separator hide"></li>
+                            <!-- BEGIN INBOX DROPDOWN -->
+                            <li class="separator hide"></li>
+
+
+                            <li class="dropdown dropdown-user dropdown-dark" id="user_data">
+                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+                                data-close-others="true">
+                                <span class="username" style="width: auto;max-width:100px;white-space: nowrap;overflow: hidden;  text-overflow: ellipsis;text-align:right;"> <%= req.session.loggedInUser.name  %> </span>
+                                <% if(req.session.loggedInUser.path !="" && req.session.loggedInUser.path !=undefined){ %>
+                                <img alt="" class="img-circle"  src="<%=sails.config.routesPrefix%>/upload/<%= req.session.loggedInUser.path %>" style="border: 2px #a3c2c2 solid;margin-top:-8px;"/>
+                                <%}else{ %>
+
+                                <img alt="" class="img-circle" src="<%=sails.config.routesPrefix%>/images/profilephoto.png" style="border: 2px #a3c2c2 solid;margin-top:-8px;"/>
+                                <% } %>
+
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-default">
+                                <li>
+                                    <a  id="profile" href="<%=sails.config.routesPrefix%>/user/profile">
+                                        <i  class="icon-user"></i> My Profile </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="<%=sails.config.routesPrefix%>/logout">
+                                            <i class="icon-key"></i> Log Out </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                                <!-- END USER LOGIN DROPDOWN -->
+
+                            </ul>
+                        </div>
+                        <!-- END TOP NAVIGATION MENU -->
+                    </div>
+                    <!-- END PAGE TOP -->
+                </div>
+            </div>
+            <div class="clearfix">
+            </div>
+            <!-- END HEADER -->

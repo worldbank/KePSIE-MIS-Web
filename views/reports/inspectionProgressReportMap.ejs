@@ -1,0 +1,216 @@
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CLSd-3FnPHmG_R3pVV2yFrURNBT22Tc&callback=initMapProgress"
+type="text/javascript"></script>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="inspectionProgressMapModule" ng-controller="inspectionProgressMapController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                            <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Inspection Progress Reports</span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td width="30%" align="right">
+                        <div class="btn-group btn-group-solid ">
+                                <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectionprogress/table" >
+                                <i class="fa fa-table" style="font-size: 14px;"></i>
+                                Tables</a>
+
+                              <a type="button" class="btn green active kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectionprogress/map"  >
+                                <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                                Maps</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        <div class="row" id="reportRow">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box" style="background-color: white">
+                    <div class="headerSection">
+                        <div class="headerLabelSection">
+                            Inspection Progress Reports - Map
+                        </div>
+                        <div class="exportSection">
+                            <form action="<%=sails.config.routesPrefix%>/report/summary/map/exportAsKML" method="post">
+                                    <input type="hidden" name="county" value="{{countyValue}}"></input>
+                                    <input type="hidden" name="ownership" value="{{ownershipValue}}"></input>
+                                    <input type="hidden" name="level" value="{{levelValue}}"></input>
+                                    <button type="submit" id="submit">
+                                        KML
+                                        <i class="fa fa-download"></i>
+                                    </button>
+                                </form>
+                        </div>
+                    </div>
+
+                     <div class="filterDiv">
+                       <form role="form" class="filterTable">
+                                        <div class="row">
+                                            <div class="col-md-4 filterStyle" >
+                                                <div class="input-group">
+                                                    <span class="input-group-addon filterLabel">
+                                                       County </span>
+                                                      <select id="countyDropdown" class="form-control" ng-model="countyValue"
+                                        onchange="initMap()">
+                                        <%
+                                        var map = CountyService.getCountiesByRole(req.session.loggedInUser);
+                                        for(i in map) {
+                                            %><option value="<%= map[i].key %>"><%= map[i].value %></option><%
+                                        }
+                                        %>
+                                    </select></div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                            <div class="col-md-4 filterStyle" >
+                                                <div class="input-group">
+                                                   
+                                                    <span class="input-group-addon filterLabel">
+                                                        Ownership </span>
+                                                       <select class="form-control" id="ownershipDropdown" ng-model="ownershipValue"
+                                    onchange="initMap()">
+                                    <option value="all">All</option>
+                                    <option value="Public">Public</option>
+                                    <option value="Private">Private</option>
+                                </select>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <div class="col-md-4 filterStyle" >
+                                                <div class="input-group">
+                                                   
+                                                    <span class="input-group-addon filterLabel">
+                                                        Level </span>
+                                                         <select class="form-control" id="levelDropdown" ng-model="levelValue"
+                                onchange="initMap()">
+                                <option value="all">All</option>
+                                <option value="1">Level 2</option>
+                                <option value="2">Level 3</option>
+                                <option value="3">Level 4</option>
+                                 <option value="4">Level 5</option>
+                            </select>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </form>
+                                    </div>
+
+
+                   <!--  <div class="filterDiv">
+                            <table class="filterTable">
+                                <tr>
+                                    <td class="filterLabel">County
+                                        <select id="countyDropdown" class="filterDropdown" ng-model="countyValue"
+                                        onchange="initMap()">
+                                        <%
+                                        var map = CountyService.getCountiesByRole(req.session.loggedInUser);
+                                        for(i in map) {
+                                            %><option value="<%= map[i].key %>"><%= map[i].value %></option><%
+                                        }
+                                        %>
+                                    </select>
+                                </td>
+                                <td class="filterLabel">Ownership
+                                    <select class="filterDropdown" id="ownershipDropdown" ng-model="ownershipValue"
+                                    onchange="initMap()">
+                                    <option value="all">All</option>
+                                    <option value="Public">Public</option>
+                                    <option value="Private">Private</option>
+                                </select>
+                            </td>
+                            <td class="filterLabel">Level
+                                <select class="filterDropdown" id="levelDropdown" ng-model="levelValue"
+                                onchange="initMap()">
+                                <option value="all">All</option>
+                                <option value="1">Level 2</option>
+                                <option value="2">Level 3</option>
+                                <option value="3">Level 4</option>
+                                 <option value="4">Level 5</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div> -->
+                    
+                    <div class="portlet-body">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+</div>
+<div id="markerProgressInfoWindow">
+    <table id="markerProgressInfoWindowTable">
+        <tr>
+            <th colspan="2"><label id="facilityIdIW"></label></th>
+        </tr>
+        <tr>
+            <td>Facility Name</td>
+            <td><label id="facilityNameIW"></label></td>
+        </tr>
+        <tr>
+            <td>County</td>
+            <td><label id="countyIW"></label></td>
+        </tr>
+        <tr>
+            <td>Sub County</td>
+            <td><label id="subCountyIW"></label></td>
+        </tr>
+        <tr>
+            <td>Ownership</td>
+            <td><label id="ownershipIW"></label></td>
+        </tr>
+        <tr>
+            <td>Level</td>
+            <td><label id="levelIW"></label></td>
+        </tr>
+        <tr>
+            <td>JHIC Score</td>
+            <td><label id="jhicScoreIW"></label></td>
+        </tr>
+        <tr>
+            <td>Compliance Category</td>
+            <td><label id="riskCIW"></label></td>
+        </tr>
+        <tr>
+            <td>Follow-up Action</td>
+            <td><label id="followUpActionIW"></label></td>
+        </tr>
+        <tr>
+            <td>Market Size</td>
+            <td><label id="marketSizeIW"></label></td>
+        </tr>
+        
+    </table>
+</div>
+<div id="legend">
+
+</div>
+<script>
+    highlightMenu(["inspProgress"]);
+</script>

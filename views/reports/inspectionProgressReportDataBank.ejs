@@ -1,0 +1,109 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.src.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="inspectionProgressDataBankModule" ng-controller="inspectionProgressDataBankController">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE HEAD-->
+
+        <!-- END PAGE HEAD-->
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                            <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <span class="active">Facility-Level Progress
+                                </span>
+                            </li>
+                        </ul>
+                    </td>
+                        <td width="30%" align="right">
+                            <div class="btn-group btn-group-solid ">
+                                <a type="button" class="btn green resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/facilityLevelProgress" >
+                                <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                                   Figures</a>
+                                   <a type="button" class="btn green active resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectionprogress/dataBank" style="border-color:#fdfdfd">
+                                    <i class="fa fa-table" style="font-size: 14px;"></i>
+                                    Tables</a>
+                               </div>
+                           </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row" id="reportRow">
+            <div class="col-md-12">
+                <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                <div class="portlet box" style="background-color: white">
+                    <div class="headerSection">
+                        <div class="headerLabelSection">
+                            Inspection Progress Reports - Table
+                        </div>
+                       
+                </div>
+                <div class="filterDiv" style="background-color: white">
+                     <form role="form" class="filterTable" id="progressAndActionForm" action="<%=sails.config.routesPrefix%>/progressAndAction/exportDatabank" method="POST">
+
+                        <div class="row" style="padding-top: 0.5%;">
+
+                                <div class="col-md-2">
+                                          <span class="input-group-addon filterLabel leftalign">
+                                            County </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                          <select class="form-control" name="county" id="countyDropdown" ng-model="selectCounty" ng-options="c.value for c in counties track by c.key" onchange="inspectionProgressCountyChnaged()">
+                                   </select>
+                                 </div>
+
+                                  <div class="col-md-2">
+                                        <span class="input-group-addon filterLabel leftalign">
+                                                    Sub-County </span>
+                                 </div>
+
+                                 <div class="col-md-4">
+                                           <select class="form-control" name="subCounty" id="subCountyDropdown" ng-model="selectSubCounty" ng-options="c.value for c in subCounties track by c.key" >
+                                    </select>
+                                 </div>
+
+                        </div>
+                         <br><br>
+
+                        <div class="row">
+                         <button type="submit" style="margin-bottom: 2%;" class="btn green button-rounder center-block"">Export to Excel</button>
+                         </div>
+
+                          <div class="row">
+                                     <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+                                      <div style="display:inline;"> Note:</div>
+                                      <div style="display:inline;"> For the filters selected, the exported table provides corresponding information on facilities’ mean score, date of inspection, follow-up action, and the next inspection date. </div>
+                       </div></div>
+
+                                  </form>
+                      <br><br>
+                       
+   </div>
+             </div>
+         </div>
+         <!-- END EXAMPLE TABLE PORTLET-->
+     </div>
+ </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+</div>
+
+<script>
+    highlightMenu(["inspProgressPlanning"]);
+
+</script>

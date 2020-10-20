@@ -1,0 +1,319 @@
+<style>
+.bootstrap-select > .dropdown-toggle {
+  /*width:95%;*/
+  height:22px !important;
+}
+.bs-select {
+    padding-left : 0 !important;
+}
+</style>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="qcPlanTableModule" ng-controller="qcPlanTableCtrl">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                             <li>
+                                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                             <li>
+                                <span class="active">Checks and Quality Reports</span>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                              <li>
+                                <span class="active">Planning</span>
+                               
+                            </li>
+                            
+                        </ul>
+                    </td>
+                 
+                    <td width="30%" align="right">
+                        <div class="btn-group btn-group-solid ">
+
+
+                            <a type="button" class="btn green kepsie-tabs " href="<%=sails.config.routesPrefix%>/qualitychecks/planning/figure" >
+                             <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                             Figures</a>
+
+                             <a type="button" class="btn green active kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/table" >
+                                <i class="fa fa-table" style="font-size: 14px;"></i>
+                                Tables</a>
+
+                               
+                                    <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/map" >
+                                        <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                                        Maps</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                 <div class="row">
+                    <div class="col-md-12">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet box" >
+                            <div class="headerSection">
+                                <div class="headerLabelSection">
+                                    Monthly Quality Checks Visit Plan
+                                </div>
+                                
+                            </div>
+
+                            <div class="filterDiv" style="background-color: white">
+                                <form role="form" class="filterTable" id="visitPlanDataBankForm" action="<%=sails.config.routesPrefix%>/qualitychecks/planning/exportDatabank" method="POST">
+
+
+                                   <div class="row">
+                                    <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+                                            <span style="padding-right: 50px" class="input-group-addon filterLabel">
+                                             County </span>
+                                             <select id="countyDropdown" class="form-control" ng-model="selectedCounty" 
+                                             name="county" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                                         </select></div>
+                                         <!-- /input-group -->
+                                     </div>
+                                     <!-- /.col-md-6 -->
+                                     <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+
+                                            <span class="input-group-addon filterLabel">
+                                                Quality Officer </span>
+                                                <select id="inspectorDropdown" class="form-control" ng-model="selectedOfficer"  name="officerId" ng-options="off_name.name for off_name in officers track by off_name._id" ng-change="filterChanged()">
+                                                </select>
+                                                <input type="hidden" name="officerName" value="{{selectedOfficer.name}}">
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4 filterStyle" >
+                                            <div class="input-group">
+
+                                                <span class="input-group-addon filterLabel">
+                                                    Inspection Period </span>
+
+                                                    <selectpicker id="inspPeriodDropdown"  name="inspPeriod" data-array="inspPeriods" data-selected="selectedInspector" onchange="periodChange()"></selectpicker>
+
+                                                     <div id="errorMsg1" style="color:#a94442;display:none"><label>Inspection Period is required.</label></div>
+
+
+
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                        </div>
+
+
+
+                                        <br><br>
+
+
+
+
+
+                                        <div class="row">
+                                           <button  id="exportButton" type="submit" style="margin-bottom: 2%;margin-left: 45%;" class="btn green button-rounder col-md-offset-5 col-md-2">Export to Excel</button>
+                                       </div>
+                                       <div class="row">
+                                     <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+                                      <div style="display:inline;"> Note:</div>
+                                      <div style="display:inline;">       
+                                For the filters selected, the exported table provides corresponding information on the facilities that you should plan to conduct quality checks during the selected inspection period, including: facility ID, facility name, sub-county, ownership, level, quality officer name, nearest market, market ID, market size, treatment group, SCHMT office, distance from county office, transportation mode, in-charge name, in-charge phone, detailed description of location, inspection type, recommended camping location, estimated transport time from camping location, landmark, alternate contact, alternate contact’s phone, longitude and latitude of facility location, the types of quality checks to conduct, and the corresponding dates for each type of checks. 
+
+                                       </div>
+                                       </div>
+                                       </div>
+                                   </form>
+                                   <br><br>
+                               </div>
+
+                           </div>
+                       </div>
+                       <!-- END EXAMPLE TABLE PORTLET-->
+                   </div>
+
+                     <% if(req.flash('noPdfFound') != ""){ %>
+                    <div id="hide">
+                            <div  class="alert alert-danger alert-dismissable" >
+                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                              No PDF available.
+                          </div> 
+                          </div>
+                          <%}%> 
+                   <div class="row">
+                    <div class="col-md-12">
+                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                        <div class="portlet box" >
+                            <div class="headerSection">
+                                <div class="headerLabelSection">
+                                    Daily Quality Checks Visit Plan
+                                </div>
+                                
+                            </div>
+
+                            <div class="filterDiv" style="background-color: white">
+                                <form role="form" class="filterTable" id="visitPlanDataBankForm2" action="<%=sails.config.routesPrefix%>/qualitychecks/planning/exportDatabankPdf" method="POST">
+
+
+                                   <div class="row">
+                                    <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+                                            <span style="padding-right: 50px" class="input-group-addon filterLabel">
+                                             County </span>
+                                             <select  class="form-control" ng-model="county_name" 
+                                             name="county" ng-options="c.value for c in countiesPdf track by c.key" ng-change="countyChangedPdf()">
+                                         </select></div>
+                                         <!-- /input-group -->
+                                     </div>
+                                     <!-- /.col-md-6 -->
+                                     <div class="col-md-4 filterStyle" >
+                                        <div class="input-group">
+
+                                            <span class="input-group-addon filterLabel">
+                                                 Quality Officer </span>
+                                                <select  class="form-control" ng-model="selectedOfficerPdf"  name="officerId" ng-options="off_name.name for off_name in officersPdf track by off_name._id" ng-change="filterChangedPdf()">
+                                                </select>
+                                                <input type="hidden" name="officerName" value="{{selectedOfficerPdf.name}}">
+                                            </div>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4 filterStyle" >
+                                            <div class="input-group">
+
+                                                <span class="input-group-addon filterLabel">
+                                                    Inspection Period </span>
+
+                                                    <selectpicker id="inspPeriodDropdown1" name="inspPeriod" data-array="inspPeriodsPdf" data-selected="inspector_name" onchange="periodChange1()" >
+
+                                                </selectpicker>
+
+                                                <div id="errorMsg2" style="color:#a94442;display:none"><label>Inspection Period is required.</label></div>
+
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+
+                                                  <div class="col-md-4 filterStyle" >
+                                            <div class="input-group">
+
+                                                <span style="padding-right: 42px" class="input-group-addon filterLabel">
+                                                    Facility <span class="required" style="color: rgb(224, 34, 34);"> * </span></span></span>
+
+                                                 
+                                            <select id="facilityList" class="js-example-basic-multiple
+                                             form-control" name="facilityList"
+                                             multiple="multiple" >
+ 
+                                            </select>
+                                          <div id="errorMsg" style="color:#a94442"></div>
+                                                </div>
+                                                <!-- /input-group -->
+                                            </div>
+                                            <!-- /.col-md-6 -->
+                                        </div>
+                                        <br><br>
+
+                                        <div class="row">
+                                           <button  id="exportButton1" type="submit" style="margin-bottom: 2%;margin-left: 45%;" class="btn green button-rounder col-md-offset-5 col-md-2">Export to PDF</button>
+                                       </div>
+                                        <div class="row">
+                                     <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+                                      <div style="display:inline;"> Note:</div>
+                                      <div style="display:inline;">  For the filters selected, the exported pdf report provides corresponding information on the facilities that you are visiting for quality checks for the day, including: facility ID, facility name, ownership, level, inspection number, nearest market, treatment group, in-charge name, in-charge phone, detailed description of location, landmark, alternate contact, alternate contact’s phone, and longitude and latitude of facility location. 
+                                       </div>
+                                       </div></div>
+                                   </form>
+                                   <br><br>
+                               </div>
+
+                           </div>
+                       </div>
+                       <!-- END EXAMPLE TABLE PORTLET-->
+                   </div>
+               
+              
+                          <script>
+                        $('#hide').delay(1000).fadeOut(3000); 
+                        </script>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+
+<!-- END PAGE CONTENT INNER -->
+</div>
+
+<script>
+    var filename = "<%=__('summary_jhic_figure_filename')%>";
+    highlightMenu(["qualityReports","planning"]);
+    $(".js-example-basic-multiple").select2();
+</script>
+
+
+<script>
+// just for the demos, avoids form submit
+
+$( "#visitPlanDataBankForm2" ).validate({
+
+    rules: {
+        facilityList:{
+            required:true
+        },
+    },
+
+    messages : {
+
+      facilityList: {
+        required : "Facility is required."
+    }
+
+},
+errorPlacement: function(error, element) {
+ error.appendTo('#errorMsg');
+}
+            });
+
+
+$('#facilityList').on("change", function(){
+    if($('#facilityList').val()!=null)
+    $('#errorMsg').hide();
+else
+    $('#errorMsg').show();
+});
+
+
+
+function periodChange(){
+
+                      if($("#inspPeriodDropdown").val()==null){
+
+                        $("#exportButton").attr("disabled",true);
+
+                        $("#errorMsg1").show();
+                      }else{
+                         $("#exportButton").attr("disabled",false);
+
+                        $("#errorMsg1").hide();
+                      }
+                    }
+
+                    function periodChange1(){
+
+                      if($("#inspPeriodDropdown1").val()==null){
+
+                        $("#exportButton1").attr("disabled",true);
+
+                        $("#errorMsg2").show();
+                      }else{
+                         $("#exportButton1").attr("disabled",false);
+
+                        $("#errorMsg2").hide();
+                      }
+                    }
+</script>

@@ -1,0 +1,639 @@
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts.src.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-3d.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/highcharts-more.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/exporting.js" type="text/javascript"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/pattern-fill.js"></script>
+<script src="<%=sails.config.assetURL%>/global/plugins/highcharts/js/modules/drilldown.js"></script>
+
+
+<link href="<%=sails.config.assetURL%>/global/css/custom-media-query.css" rel="stylesheet" type="text/css"/>
+
+<script language="javascript" type="text/javascript">
+  $(function () {
+    $("#fileupload").change(function () {
+      if (typeof (FileReader) != "undefined") {
+        var dvPreview = $("#dvPreview");
+        dvPreview.html("");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+        $($(this)[0].files).each(function () {
+          var file = $(this);
+          if (regex.test(file[0].name.toLowerCase())) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var img = $("<img />");
+              img.attr("style", "height:100px;width: 100px");
+              img.attr("src", e.target.result);
+              dvPreview.append(img);
+            }
+            reader.readAsDataURL(file[0]);
+          } else {
+           
+            dvPreview.html("");
+            return false;
+          }
+        });
+      } else {
+
+      }
+    });
+  });
+</script>
+
+<style>
+  #facilityDept.bootstrap-select > .dropdown-toggle {
+    /*width:95%;*/
+    height:22px !important;
+  }
+
+  #dataBankForm button.dropdown-toggle {
+    height: 22px !important;
+  }
+
+/*
+@author:Karthik
+@purpose:Added to make select boxex responsive in closureTab/facility screen.
+*/
+@media screen and (min-width: 1000px) {
+
+  .facility_resp{
+    margin-left:24%;
+  }
+}
+
+
+
+</style>
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="facilityClosureModule" ng-controller="facilityClosureCtrl">
+  <!-- BEGIN CONTENT BODY -->
+
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+
+    <% if(req.flash('closureRequest') != ""){ %>
+    <div id="hide">
+      <div id="facilityCloseAlert" class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>                        
+        Your Request for Facility Close is Successfully Sent.
+      </div>
+    </div>
+    <%}%> 
+    <script>
+      $('#hide').delay(1000).fadeOut(3000); 
+    </script>
+    <div class="breadcrumbDiv">
+      <table width="100%">
+        <tr>
+          <td>
+            <ul class="page-breadcrumb breadcrumb ">
+              <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span style=" color: #337ab7;">Closures and Other Issues</span>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span class="active">Closures</span>
+              </li>
+            </ul>
+          </td>
+          <td width="60%" align="right">
+            <div class="btn-group btn-group-solid ">
+
+              <% if(req.session.loggedInUser.role=="Inspector"){ %>
+              <a type="button" id="facility" class="btn green active button-rounder" ng-click="tabChange($event)" style="border-color :#fdfdfd;">
+                <i class="fa fa-table" style="font-size: 14px;"></i>
+                Facility</a>
+
+                <a type="button" id="department" class="btn green button-rounder" ng-click="tabChange($event)" style="border-color:#fdfdfd" >
+                  <i class="fa fa-list" style="font-size: 14px;"></i>
+                  Department</a>
+                  <a type="button" id="summary"  class="btn green  button-rounder" 
+                  ng-click="tabChange($event)" style="border-color:#fdfdfd" >
+                  <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                  Summary</a>
+                  <% } %>
+
+
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+
+        <!-- END PAGE BREADCRUMB -->
+
+        <!-- BEGIN MAIN CONTENT -->
+        <div class="row">
+          <div class="col-md-12">
+            <div class="portlet box" style="background-color: white">
+
+              <!-- BEGIN HEADER -->
+              <div class="headerSection ng-hide" ng-show="facilityForm">
+                <div class="headerLabelSection">
+                  Notify Facility Closure
+                </div>
+              </div>
+              <div class="headerSection ng-hide" ng-show="departmentForm">
+                <div class="headerLabelSection">
+                  Notify Department  Closure
+                </div>
+              </div>
+
+              <!-- END HEADER -->
+
+
+              <!-- BEGIN FORM SECTION -->
+              <div class="portlet-body form formSection  ng-hide" ng-show="facilityForm">
+                <form class="form-horizontal" name="closureFacilityForm"  novalidate>
+                  <div class="form-body">
+                    <div class="form-group">
+                      <label class="col-md-2 control-label">Facility ID<span class="required"> * </span></label>
+                      <div class="col-md-5 facilityID_resp">
+
+                        <select id="selectedFacility" class="bs-select form-control" name="facilityId" 
+                        ng-model="closure.facilityId" 
+                        data-live-search="true"  onchange="angular.element(this).scope().changeFacility()" 
+                        required >
+                        <option value="">Select...
+                        </option>
+                        <% for(var i=0;i< facilityId.length;i++){ %>
+                        <option value="<%= facilityId[i]['latest']['_hfid'] %>"><%= facilityId[i]['latest']["_hfname"] %> (<%= facilityId[i]['latest']["_hfid"] %>)</option>
+                        <% }%>
+                      </select>
+
+
+                      <!--   <input type="text" class="form-control" name="facilityId"  ng-model="closure.facilityId" class="form-control" ng-pattern="/^[0-9]{5}$/" required placeholder="Enter Facility ID" ng-blur="checkFacility(closure.facilityId)" /> -->
+
+                    </div>
+
+                    <div class="col-md-8 facility_resp">
+                      <div class="" ng-messages="closureFacilityForm.facilityId.$error">
+
+                        <div ng-message="pattern" style="color:#a94442">Must be a valid 5 digits Facility ID.</div>
+                      </div>
+                      <p class="ng-hide" ng-show="(closureFacilityForm.facilityId.$touched || submitted) && closureFacilityForm.facilityId.$error.required"
+                      style="color:#a94442">Facility ID is required.</p>
+                      <p class=" ng-hide" ng-show="facilityExist && !closureFacilityForm.facilityId.$error.required 
+                      "  style="color:#a94442">Closure Request for Facility {{closure.facilityId}} is already Sent.</p>
+                      <p class="ng-hide" ng-show="closure.facilityId!=null" style="color:#333333">You are submitting a closure notice for a {{facilityName}}</p>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-2">Date of Inspection<span class="required"> * </span></label>
+                    <div class="col-md-5">
+                      <input class="form-control form-control-inline input-medium date-picker" style="width:100% !important"
+                      name="inspDate" ng-model="closure.inspDate" ng-class="{ 'has-error' : closureFacilityForm.inspDate.$invalid && !closureFacilityForm.inspDate.$pristine }" required
+                      size="16" type="text" value="">
+
+                    </div>
+                    <p class="col-md-offset-2 col-md-8 facility_resp ng-hide" ng-show="(closureFacilityForm.inspDate.$touched || submitted) && closureFacilityForm.inspDate.$error.required"
+                    style="color:#a94442">Inspection Date is required.</p>
+                  </div>
+
+
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">Reason for Closure<span class="required"> * </span></label>
+                    <div class="col-md-5 facilityID_resp1">
+                      <select id="clsrReason"  class="form-control reason bs-select" name="reason" ng-model="closure.reason" ng-change="clsrReasonChange()" ng-class="{ 'has-error' : closureFacilityForm.reason.$invalid && !closureFacilityForm.reason.$pristine }" ng-attr-title="{{closure.reason}}" multiple required>
+
+            
+                        <option value="">Select...</option>
+
+                        <%  var reasonFacility = CountyService.getClosureReasonFacility();
+                        for(i in reasonFacility) { %>
+
+                        <option id="opt" value="<%= reasonFacility[i] %>" title="<%= reasonFacility[i] %>"><%= reasonFacility[i] %></option>
+
+
+
+                        <% } %>
+
+
+                      </select>
+                    </div>
+                    <p class="col-md-offset-2 col-md-8 facility_resp ng-hide" ng-show="(closureFacilityForm.reason.$touched || submitted) && closureFacilityForm.reason.$error.required"
+                    style="color:#a94442">Reason is required.</p>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-2">Photo<span class="required" style="visibility:hidden"> * </span></label>
+                    <div class="col-md-5 ">
+                      <div class="fileinput fileinput-new" data-provides="fileinput">
+                        <div class="input-group input-large">
+                          <div class="form-control uneditable-input input-fixed input-medium" style="padding-top: 0px;" data-trigger="fileinput">
+                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                            <span class="fileinput-filename"> </span>
+
+                          </div>
+                          <span class="input-group-addon btn default btn-file filebtn">
+                            <span class="fileinput-new filebtn"> Select file </span>
+                            <span class="fileinput-exists filebtn"> Change </span>
+                            <input type="file" id="fileupload" name="..."  file-model="facilityClosureFile" ng-model="document"  > </span>
+                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists filebtn" data-dismiss="fileinput"> Remove </a>
+                          </div>
+                        </div>
+                        <div id="dvPreview">
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="row">
+                     <label class="col-md-offset-2 col-md-7 facility_resp" style="padding-bottom: 1%;">
+                      Only jpg or png image file is allowed.
+                    </label>
+                  </div>
+                  <div class="row">
+                  <label class="control-label col-md-5 italic">
+                      <i >
+                       Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+                     </label>
+
+                   </div>
+                   <br>
+                   <div class="form-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class="col-md-5">
+                      <button type="submit" ng-click="closureFacilitySubmit(closureFacilityForm)" class="btn green button-rounder">Notify Closure</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- END FORM SECTION -->
+
+
+            <div class="portlet-body form formSection ng-hide" ng-show="departmentForm">
+              <form class="form-horizontal" name="closureDepartmentForm"  novalidate>
+                <div class="form-body">
+
+                 <div class="form-group">
+                  <label class="col-md-2 control-label">Facility ID<span class="required"> * </span></label>
+                  <div class="col-md-5 facilityID_resp">
+
+                    <select id="facilityDept" class="bs-select form-control " name="facilityId" 
+                    ng-model="closureDepartment.facilityId"
+                    data-live-search="true"   onchange="angular.element(this).scope().changeFacilityDept()"
+
+                    required >
+                    <option value="">Select...
+                    </option>
+                    <% for(var i=0;i< facilityId.length;i++){ %>
+                    <option value="<%= facilityId[i]['latest']['_hfid'] %>"><%= facilityId[i]['latest']["_hfname"] %> (<%= facilityId[i]['latest']["_hfid"] %>)</option>
+                    <% }%>
+                  </select>
+
+                </div>
+                <div class="col-md-offset-2 col-md-8 facility_resp">
+                  <div class="" ng-messages="closureDepartmentForm.facilityId.$error">
+
+                    <div ng-message="pattern" style="color:#a94442;">Must be a valid 5 digits Facility ID.</div>
+                  </div>
+                  <p class="ng-hide" ng-show="(closureDepartmentForm.facilityId.$touched || submittedDepartment) && closureDepartmentForm.facilityId.$error.required"
+                  style="color:#a94442;">Facility ID is required.</p>
+
+                  <p class="ng-hide" ng-show="closureDepartment.facilityId!=null" style="color:#333333">You are submitting a closure notice for a Department of {{facilityDept}}</p>
+
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-2 control-label">Department<span class="required"> * </span></label>
+                <div class="col-md-5">
+                 <!--  <input type="text" class="form-control" name="departmentName"  ng-model="closureDepartment.departmentName" required placeholder="Enter Department Name" /> -->
+
+
+                 <select class="form-control"   name="departmentName" ng-model="closureDepartment.departmentName" ng-class="{ 'has-error' : closureDepartmentForm.departmentName.$invalid  && !closureDepartmentForm.departmentName.$pristine }" ng-change="facilityExist=false" required >
+                   <option value="">Select...</option>
+
+                   <%  var deptName = CountyService.getClosureDeptName();
+                   for(i in deptName) { %>
+
+                   <option value="<%= deptName[i] %>"><%= deptName[i] %></option>
+
+                   <% } %>
+                 </select>
+
+               </div>
+               <div class="col-md-offset-2 col-md-8 facility_resp">
+
+                <p class="ng-hide" ng-show="(closureDepartmentForm.departmentName.$touched || submittedDepartment) && closureDepartmentForm.departmentName.$error.required"
+                style="color:#a94442">Department Name is required.</p>
+                <p class=" ng-hide" ng-show="facilityExist && !closureDepartmentForm.facilityId.$error.required 
+                "  style="color:#a94442">Closure Request for  {{closureDepartment.departmentName}} Department of Facility {{closureDepartment.facilityId}} is already Sent.</p>
+
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-md-2">Date of Inspection<span class="required"> * </span></label>
+              <div class="col-md-5">
+                <input class="form-control form-control-inline input-medium date-picker" style="width:100% !important"
+                name="inspDateDept" ng-model="closureDepartment.inspDateDept" ng-class="{ 'has-error' : closureDepartmentForm.inspDateDept.$invalid && !closureDepartmentForm.inspDateDept.$pristine }" required
+                size="16" type="text" value="">
+
+              </div>
+              <p class="col-md-offset-2 col-md-8 facility_resp ng-hide" ng-show="(closureDepartmentForm.inspDateDept.$touched || submittedDepartment) && closureDepartmentForm.inspDateDept.$error.required"
+              style="color:#a94442">Inspection Date is required.</p>
+            </div>
+
+
+            <div class="form-group">
+              <label class="col-md-2 control-label">Reason for Closure<span class="required"> * </span></label>
+              <div class="col-md-5 ">
+                <select class="form-control reason bs-select" id="clsrReason1" name="reason" ng-model="closureDepartment.reason" ng-change="clsrReasonChange1()" ng-class="{ 'has-error' : closureDepartmentForm.reason.$invalid && !closureDepartmentForm.reason.$pristine }" ng-attr-title="{{closureDepartment.reason}}" multiple required>
+                  <option value="">Select...</option>
+                  <%  var reasonDept = CountyService.getClosureReasonDept();
+                  for(i in reasonDept) { %>
+
+                  <option value="<%= reasonDept[i] %>" title="<%= reasonDept[i] %>"><%= reasonDept[i] %></option>
+
+
+
+                  <% } %>
+
+
+                </select>
+              </div>
+              <p class="col-md-offset-2 col-md-8 ng-hide facility_resp" ng-show="(closureDepartmentForm.reason.$touched || submittedDepartment) && closureDepartmentForm.reason.$error.required"
+              style="color:#a94442">Reason is required.</p>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-md-2">Photo<span class="required" style="visibility:hidden"> * </span></label>
+              <div class="col-md-5">
+                <div class="fileinput fileinput-new" data-provides="fileinput">
+                  <div class="input-group input-large">
+                    <div class="form-control uneditable-input input-fixed input-medium" style="padding-top: 0px;" data-trigger="fileinput">
+                      <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                      <span class="fileinput-filename" > </span>
+
+                    </div>
+                    <span class="input-group-addon btn default btn-file"  style="line-height: 0;">
+                      <span class="fileinput-new"> Select file </span>
+                      <span class="fileinput-exists"> Change </span>
+                      <input type="file" id="fileupload" name="..."  file-model="departmentClosureFile" ng-model="document"  > </span>
+                      <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                    </div>
+                  </div>
+                  <div id="dvPreview">
+                  </div>
+                </div>
+
+              </div>
+              <div class="row">
+               <label class="col-md-offset-2 col-md-7 facility_resp" style="padding-bottom: 1%;">
+                Only jpg or png image file is allowed.
+              </label>
+            </div>
+             <div class="row">
+                  <label class="control-label col-md-5 italic">
+                      <i >
+                       Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+                     </label>
+
+                   </div>
+                   <br>
+             <div class="form-group">
+              <label class="col-md-2 control-label"></label>
+              <div class="col-md-5">
+                <button type="submit" ng-click="closureDepartmentSubmit(closureDepartmentForm)" class="btn green button-rounder">Notify Closure</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="row" id="idNote">
+        <label class="control-label col-md-12 " style="margin-bottom: 0%;" >
+          <div style="background-color: #f3f3f3;" >
+            <span style="font-size:12px">
+             Note: If the ID is 5 digits, it corresponds to the MFL number.</span>
+           </div>
+         </label>
+
+       </div>
+
+       <div  class="ng-hide"  ng-show="summaryForm">
+
+
+
+        <div class="portlet box" style="background-color: white">
+          <div class="headerSection  ng-hide" ng-show="summaryForm" >
+            <div class="headerLabelSection">
+              Summary of actions and status - Figure
+            </div>
+          </div>
+          <div class="filterDiv" >
+           <form role="form" class="filterTable" id="dataBankForm"  >
+            <div class="row" style="padding-top: 0.5%;">
+
+              <div class="col-md-1 colMd1 colSm1 colXs12">
+                <span class="input-group-addon filterLabel">
+                  County </span>
+                </div>
+                <div class="col-md-3 colMd3 colSm3 colXs8">
+                  <select id="countyDropdown" name="county" ng-model="figureCounty" class="form-control" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()" >
+
+                  </select></div>
+
+                  <div class="col-md-1 colMd1 colSm1 colXs12">
+                    <span class="input-group-addon filterLabel">
+                      Facility/Department </span>
+                    </div>
+                    <div class="col-md-3 colMd3 colSm3 colXs8">
+                      <select id="indicator" name="department"  class="form-control bs-select" data-selected-text-format="count" multiple  onchange="angular.element(this).scope().filterChange()" style="height:22px;">
+                        <option value="All" selected>All</option>
+                        <option value="Facility">Facility</option>
+                        <option value="Pharmacy">Pharmacy</option>
+                        <option value="Laboratory">Laboratory</option>
+                        <option value="Radiology">Radiology</option>
+                        <option value="Nutrition">Nutrition</option>
+
+                      </select>
+
+                    </div>
+                    <div class="col-md-1 colMd1 colSm1 colXs12">
+                      <span class="input-group-addon filterLabel leftalign">
+                        Inspection Period </span>
+                      </div>
+                      <div class="col-md-3 colMd3 colSm3 colXs8">
+                        <select id="inspPeriodDropdown" class="form-control" ng-model="figureInspPeriod" ng-options="period.value for period in inspPeriods track by period.key" ng-change="filterChange()">
+
+                        </select>
+                      </div>
+
+                    </div>
+                    <div class="row" style="padding-top: 0.5%;">
+                  <div class="col-md-1 colMd1 colSm1 colXs12">
+                  <span class="input-group-addon filterLabel leftalign">
+                    Status </span>
+                  </div>
+                  <div class="col-md-3 colMd3 colSm3 colXs8">
+                    <select id="inspPeriodDropdown" class="form-control" ng-model="facilityStatus"  ng-change="filterChange()">
+                    <option value="All" selected>All</option>
+                    <option value="Closure">Reported for Closure</option>
+                    <option value="Closed">Reported for Physical Closure</option>
+                    <option value="Graced">Given Grace Periods</option>
+                    </select>
+                  </div>
+                </div>
+
+
+                  </form>
+
+                </div>
+
+                <div class="portlet-body">
+                  <table class="table table-bordered" style="">
+
+                    <tr>
+
+
+                      <td id="summaryFigure"  class="col-md-12 table-bordered figure" >
+
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+              </div>
+
+
+
+              <div class="headerSection  ng-hide" ng-show="summaryForm" >
+                <div class="headerLabelSection">
+                  Summary of actions and status - Excel
+                </div>
+              </div>
+              <div class="filterDiv ng-hide"  ng-show="summaryForm">
+
+               <form role="form" class="filterTable" id="dataBankForm" action="<%=sails.config.routesPrefix%>/exportClosureSummary" method="POST" >
+                <div class="row" style="padding-top: 0.5%;">
+
+                  <div class="col-md-2">
+                    <span class="input-group-addon filterLabel">
+                      County </span>
+                    </div>
+                    <div class="col-md-4">
+                      <select  name="county" class="form-control" >
+                        <option value="All" selected>All</option>
+                        <option value="1">Kakamega</option>
+                        <option value="2">Kilifi</option>
+                        <option value="3">Meru</option>
+                      </select></div>
+
+                      <div class="col-md-2">
+                        <span class="input-group-addon filterLabel">
+                          Facility/Department </span>
+                        </div>
+                        <div class="col-md-4">
+                          <select  name="department" id="selectedIndicator" class="form-control bs-select" data-selected-text-format="count" onchange="indicatorChange()" multiple  >
+                            <option value="All" selected>All</option>
+                            <option value="Facility">Facility</option>
+                            <option value="Pharmacy">Pharmacy</option>
+                            <option value="Laboratory">Laboratory</option>
+                            <option value="Radiology">Radiology</option>
+                            <option value="Nutrition and Dietetics">Nutrition and Dietetics</option>
+
+                          </select>
+                          <div id="errorMsg1" style="color:#a94442;display:none"><label>Facility/Department is required.</label></div>
+                        </div>
+                      </div>   <div class="row">
+                      <div class="col-md-2 col-sm-2 col-xs-12">
+                        <span class=" input-group-addon filterLabel leftalign">Inspection Date (From) </span> 
+
+                      </div>
+
+                      <div class="col-md-4 col-sm-12 col-xs-12">
+                        <input type="text"  class="form-control fixwidth-text" id="fromDate" 
+                        name="fromDate"/>
+
+                        <input type="hidden" id="fromDateV" />
+                      </div>
+
+                      <div class="col-md-2 col-sm-2 col-xs-12">
+                       <span class=" input-group-addon filterLabel">
+                        Inspection Date (To) </span>
+                        
+                      </div>
+
+                      <div class="col-md-4 col-sm-12 col-xs-12">
+                        <input type="text" class=" form-control fixwidth-text"  id="toDate"
+                        name="toDate"/>
+                        <input type="hidden" id="toDateV" />
+                         <span class="" id="dateValidation"  style="color:#a94442;display: none">From Date must be before To Date</span>
+                      </div>
+                    </div>
+                    <br><br>
+                    <div class="row">
+                      
+                      <button type="submit" style="margin-bottom: 2%;" class="btn green button-rounder center-block exportBtn">Export to Excel</button>
+
+
+
+                    </div>
+                    <div class="row">
+                     <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+                      <div style="display:inline;"> Note:</div>
+                      <div style="display:inline;"> For the filters selected, the exported table provides corresponding information on a list of facilities & departments that are notified for closure, including: county, facility ID, facility name, closure type, reason for closure, date of inspection, inspector, date of closure, overdue (days), whether closure notice is appealed, reason for appeal (if appealed), whether the facility is re-opened, and date of re-opening (if re-opened). 
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <br><br>
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- END MAIN CONTENT -->
+
+</div>
+<!-- END CONTENT BODY -->
+</div>
+
+
+<script>
+
+  $('.date-picker').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+
+    locale: {format: 'DD-MM-YYYY'},
+    maxDate: new Date(),
+  }).val('Select...');
+  highlightMenu(["closureOtherIssues","closure"]);
+  $("#facilityCloseAlert").delay(4000).fadeOut("slow");
+
+  var tabName="<%=req.param('tab') %>";
+
+  console.log("tabName=========");
+  console.log(tabName);
+  $(".js-example-basic-multiple").select2();
+  function indicatorChange(){
+
+
+    if($("#selectedIndicator").val()==null){
+
+      $(".exportBtn").attr("disabled",true);
+
+      $("#errorMsg1").show();
+    }else{
+     $(".exportBtn").attr("disabled",false);
+
+     $("#errorMsg1").hide();
+   }
+ }
+
+</script>
+

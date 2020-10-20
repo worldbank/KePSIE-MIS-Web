@@ -1,0 +1,279 @@
+<style type="text/css">
+  .todo-container .todo-tasks-item {
+    padding: 15px 31px !important;
+  }
+  .listFormat {
+    margin-bottom: -40px !important;
+  }
+  .portlet-body{
+        word-wrap: break-word;
+  }
+</style>
+
+
+<div class="page-content-wrapper" ng-app="expertAnsApp"  ng-controller="expertAnsCtrl">
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <ul class="page-breadcrumb breadcrumb">
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <a href="<%=sails.config.routesPrefix%>/ask/askExperts">Ask the Expert</a>
+        <i class="fa fa-circle"></i>
+      </li>
+      <li>
+        <span class="active">Answer</span>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-md-12">
+       <input type="hidden" id="questionid" value="<%=req.param('id')%>"> </input>
+       <div class="app-ticket app-ticket-details">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="portlet light bordered">
+              <div class="portlet-title tabbable-line">
+                <div class="caption caption-md">
+                  <i class="icon-globe theme-font hide"></i>
+                  <span class="caption-subject font-blue-madison bold uppercase">Question Details</span>
+                </div>
+              </div>
+              <div class="portlet-body">
+
+
+                <div class="row">
+                  <div class="col-xs-8">
+                    <div class="ticket-msg">
+                      <h4>
+                        <i class="icon-note"></i> Question</h4>
+
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="ticket-msg">
+                        <span class="bold">Date: </span> <%= queryDetail.createdAt %> </div>
+                      </div>
+                      <div class="row">  </div>
+                      <br/>
+
+                      <div class="col-md-12" >
+                        <i class="fa fa-circle " style="font-size: 6px;
+                        margin: 0 2px 0 4px;
+                        position: relative;
+                        top: -1px;color: #85898E;"></i>
+                        <% if(queryDetail.section != "Other"){ %>
+                        <b> JHIC Section: </b><%= __(queryDetail.section) %>
+                        <% }else{ %>
+                        <b> JHIC Section: </b><%= queryDetail.otherSection %>
+                        <% } %>
+                      </div>
+                      <% if(queryDetail.section != "Other" && queryDetail.section !="Inspection Protocols and Procedures" && queryDetail.section !="Logistics"){ %>
+
+                      <div class=" col-md-6" >
+                        <i class="fa fa-circle " style="font-size: 6px;
+                        margin: 0 2px 0 4px;
+                        position: relative;
+                        top: -1px;color: #85898E;"></i>
+                        <% if(queryDetail.sub_section != "Other"){ %>
+                        <b> JHIC Sub-section: </b><%= queryDetail.sub_section %>
+                        <% }else{ %>
+                        <b>JHIC Sub-section: </b><%= queryDetail. othersub_section %>
+                        <% } %>
+                      </div>
+                      <% } %>
+                    </div>
+                    <div class="row">
+
+                     <% if(queryDetail.section != "Other" && queryDetail.section !="Inspection Protocols and Procedures" && queryDetail.section !="Logistics"){ %>
+                     <% if(queryDetail.sub_section != "Other"){ %>
+
+                     <div class=" col-md-12" >
+                      <i class="fa fa-circle " style="font-size: 6px;
+                      margin: 0 2px 0 4px;
+                      position: relative;
+                      top: -1px;color: #85898E;"></i>
+                      <% if(queryDetail.sub_sub_section != "Other"){ %>
+                      <b>JHIC Sub-sub-section: </b><%= queryDetail.sub_sub_section %>
+                      <% }else{ %>
+                      <b>JHIC Sub-sub-section: </b><%= queryDetail. othersub_sub_section %>
+                      <% } %>
+                    </div>
+                    <% } %>
+                    <% } %>
+                    <div class="col-md-12" >
+                      <i class="fa fa-circle lblstyle " style="font-size: 6px;
+                      margin: 0 2px 0 4px;
+                      position: relative;
+                      top: -1px;color: #85898E;"></i>
+                      <% if(queryDetail.board != "Other"){ %>
+                      <b> Expert(s): </b><%= queryDetail.board %>
+                      <% }else{ %>
+                      <b> Expert(s): </b><%= queryDetail.otherBoard %>
+                      <% } %>
+                    </div>
+
+                  </div>                                             
+                  <br/>
+                  <p> <%- queryDetail.query %> </p>
+
+                  <div class="ticket-line"></div>
+                  <% if(queryDetail.response != undefined){ %>
+                  <% var flag=0; for(var i=0;i< queryDetail.response.length;i++) { %>
+                  <%  if(queryDetail.response[i].is_deleted== false) {  flag=1; %>
+
+                  <% } }%>
+                  <% if(flag==0 && showAnswerEditor==false){ %>
+                  <h4> No answer available</h4>
+                  <% } else { %>
+                  <div class="todo-head">
+
+                    <h4><i class="icon-action-redo"></i>
+                      <span class="todo-grey"></span> Answers</h4>
+
+                    </div>
+                    <div class="todo-container">
+                      <ul class="todo-tasks-content ">
+                        <% for(var i=0;i< queryDetail.response.length;i++) { %>
+                        <% if(queryDetail.response[i].is_deleted== false) { %>
+
+                        <li class="todo-tasks-item"> 
+                            <div id="deleteConfirmation<%= i+1 %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header alert alert-danger" style="color: #a94442">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                               
+                                               <span class="panel-icon"><i class="glyphicon glyphicon-trash"></i>
+                                               </span>
+                                               <span class="modal-title "> Delete Answer</span>
+                                             </div>
+                                             <div class="modal-body">
+                                              <p> Are you sure you want to delete this answer ? </p>
+                                            </div>
+                                            <div class="modal-footer">
+
+                                              <button data-dismiss="modal"
+
+                                              ng-click="deleteAnswer('<%= req.param('id') %>','<%=queryDetail.response[i]._id %>')" class="btn blue">Yes</button>
+                                              <button class="btn default" data-dismiss="modal" aria-hidden="true">No</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <i>
+                                      <p class="todo-inline todo-float-r" style="color: #333333;"> Answered By :&nbsp;<%= queryDetail.response[i].name %>,
+                                          <span class=""><%= queryDetail.response[i].date %></span> </p>
+                                          <br>
+                                          <% if(queryDetail.response[i].UpdatedBy_name!=undefined) {%>
+                                          <p class="todo-inline  todo-float-r" style="color: #337ab7;">Last Edited By :&nbsp; <%= queryDetail.response[i].UpdatedBy_name %>,
+                                            <span class=""><%= queryDetail.response[i].UpdatedAt_date %></span> </p>
+                                            <% } %>
+                                          </i>
+                                          <div class="todo-inline" style="word-break: break-all;">
+                                            <div  id="hideAnswer<%= i+1 %>" >
+                                              <blockquote ><%- queryDetail.response[i].answer %>
+                                              </blockquote></div>
+                                              <div ng-bind-html="answer<%=i+1%>"></div>
+                                            </div>
+                                            <br>
+
+                          <% if((queryDetail.response[i].expert_id==req.session.loggedInUser.id && showAnswerEditor==false) || (req.session.loggedInUser.role=="Admin") || (req.session.loggedInUser.role=="WB -Supervisors") ) { %>
+
+                                              <p class="todo-inline todo-float-l" style="font-size: 18px;"><a class="todo-green fa fa-pencil-square-o" title="Edit" ng-click="showEditor('<%= i+1 %>','<%- queryDetail.response[i].answer %>')"></a>
+
+                            <a class="todo-red fa fa-trash-o deleteAnswer" title="Delete"  href="#deleteConfirmation<%= i+1 %>"   data-toggle="modal"></a> </p>
+                                      <% } %>
+                                            <form  id="ansEditor<%= i+1 %>" style="display:none"  name="ansEditForm<%= i+1 %>" novalidate>
+                                              <div class="row">
+                                                <div class="col-md-10">
+                                                </br>
+                                              </br>
+
+                                              <div class="todo-tasks-content">
+
+                                               <trix-editor  angular-trix trix-initialize="trixInitialize(e, editor);" trix-change="trixChange(e, editor);" trix-selection-change="trixSelectionChange(e, editor);" trix-focus="trixFocus(e, editor);" trix-blur="trixBlur(e, editor);" trix-file-accept="trixFileAccept(e, editor);" trix-attachment-add="trixAttachmentAdd(e, editor);" trix-attachment-remove="trixAttachmentRemove(e, editor);" ng-model="answer<%= i+1 %>" name="answer<%= i+1 %>" id="answer<%= i+1 %>" ng-class="{ 'has-error' : ansEditForm<%= i+1 %>.answer<%= i+1 %>.$invalid && !ansEditForm<%= i+1 %>.answer<%= i+1 %>.$pristine }" style="min-height: 200px;"  required></trix-editor>
+
+                                               <p class=" col-md-3 ng-hide"  ng-show="(ansEditForm<%= i+1 %>.answer<%= i+1 %>.$touched || submitted) && ansEditForm<%= i+1 %>.answer<%= i+1 %>.$error.required"
+                                                 style="color:#a94442">Answer is required.</p> 
+                                               </div>
+                                             </div>
+                                           </div>
+                                           <br>
+                                           <div class="row">
+                                            <div class="col-md-offset-4 col-md-4">
+                                              <button type="submit"  ng-click="updateAnswer(ansEditForm<%= i+1 %>,<%= i+1 %>,'<%= req.param('id') %>',<%=queryDetail.response[i]._id %>)" class="btn green button-rounder">Submit</button>
+                                              <a type="button" class="btn grey-salsa btn-outline button-rounder" ng-click="showEditor('<%= i+1 %>','<%- queryDetail.response[i].answer %>')">Cancel</a>
+                                            </div>
+                                          </div>
+                                        </form>
+
+                                      </li>
+
+                                      <% } %>
+                                      <% } %>
+                                    </ul>
+                                  </div>
+                                  <% } %>
+                                  <% } %>
+                                  <% if(showAnswerEditor==true) { %>
+
+                                  <div class="row">
+                                    <div class="col-xs-12">
+                                      <h4>
+                                        <i class="icon-action-redo"></i> Answer the query</h4>
+
+                                      </div>
+                                    </div>
+
+
+
+                                    <form  name="ansExpertForm" novalidate>
+                                      <div class="row">
+                                       <div class="col-md-12">
+                                         <trix-editor  angular-trix trix-initialize="trixInitialize(e, editor);" trix-change="trixChange(e, editor);" trix-selection-change="trixSelectionChange(e, editor);" trix-focus="trixFocus(e, editor);" trix-blur="trixBlur(e, editor);" trix-file-accept="trixFileAccept(e, editor);" trix-attachment-add="trixAttachmentAdd(e, editor);" trix-attachment-remove="trixAttachmentRemove(e, editor);" ng-model="answer" name="answer"  ng-class="{ 'has-error' : ansExpertForm.answer.$invalid && !ansExpertForm.answer.$pristine }" style="min-height: 200px;"  required></trix-editor>
+
+                                         <p class=" col-md-3 ng-hide"  ng-show="(ansExpertForm.answer.$touched || submitted) && ansExpertForm.answer.$error.required"
+                                         style="color:#a94442">Answer is required.</p> 
+
+                                       </div>
+
+                                     </div>
+                                   </div>
+
+                                   <br/>
+
+                                   <div class="row">
+                                    <div class="col-md-offset-4 col-md-4">
+                                      <button type="submit"  ng-click="ansQuery(ansExpertForm)" class="btn green button-rounder">Submit</button>
+                                      <a type="button" class="btn grey-salsa btn-outline button-rounder" href="<%=sails.config.routesPrefix%>/ask/askExperts">Cancel</a>
+                                    </div>
+                                  </div>
+
+                                </form>
+                                <% } else { %>
+                                <div class="row">
+                                  <div class="col-md-offset-5 col-md-4">
+
+                                   <a type="button" class="btn grey-salsa btn-outline button-rounder" href="<%=sails.config.routesPrefix%>/ask/askExperts">Back</a>
+                                 </div></div>
+                                 <% } %>
+                               </div>
+                             </div>
+                           </div>
+                         </div>
+                       </div>
+                       <!-- END PROFILE CONTENT -->
+                     </div>
+                   </div>
+                   <!-- END PAGE BASE CONTENT -->
+
+                   <script type="text/javascript">
+
+                    highlightMenu(["ask"]);
+                  </script>
+

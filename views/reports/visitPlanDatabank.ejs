@@ -1,0 +1,349 @@
+<style>
+
+  .bootstrap-select > .dropdown-toggle {
+    /*width:95%;*/
+    height:22px !important;
+  }
+  .filter-option {
+    padding-left: 2% !important;
+  }
+</style>
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="inspectorVisitPlanModule" ng-controller="inspectorVisitPlanCtrl">
+
+  <!-- BEGIN CONTENT BODY -->
+  <div class="page-content">
+    <!-- BEGIN PAGE HEAD-->
+
+    <!-- END PAGE HEAD-->
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <div class="breadcrumbDiv">
+      <table width="100%">
+        <tr>
+          <td>
+            <ul class="page-breadcrumb breadcrumb ">
+              <li>
+                <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span style=" color: #337ab7;">Inspection Planning</span>
+                <i class="fa fa-circle"></i>
+              </li>
+              <li>
+                <span class="active">Inspector Visit Plan</span>
+              </li>
+            </ul>
+          </td>
+          <td width="30%" align="right">
+            <div class="btn-group btn-group-solid ">
+
+              <!-- <a type="button" class="btn green b1 resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectorVisitPlan/figure" >
+                <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                Figures</a> -->
+                <a type="button" class="btn green active resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectorVisitPlan/dataBank">
+                  <i class="fa fa-table" style="font-size: 14px;"></i>
+                  Tables</a>
+
+
+                  <a type="button" class="btn green  resTab kepsie-tabs" href="<%=sails.config.routesPrefix%>/inspectionplanning/map"  >
+                    <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                    Maps</a>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <!-- BEGIN EXAMPLE TABLE PORTLET-->
+              <div class="portlet box" >
+                <div class="headerSection">
+                  <div class="headerLabelSection">
+                    Monthly Inspector Visit Plan
+                  </div>
+
+                </div>
+
+
+
+                <div class="filterDiv" style="background-color: white">
+
+                  <form role="form" class="filterTable" id="visitPlanDataBankForm" action="#" method="POST">
+                <div class="row">
+                    <div class="col-md-4 filterStyle " >
+                      <div class="input-group">
+                        <span class="input-group-addon filterLabel">
+                         County &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+                         <select id="countyDropdown" class="form-control visitdatabank_resp" ng-model="selectedCounty" 
+                         name="county" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                       </select></div>
+                       <!-- /input-group -->
+                     </div>
+                     <!-- /.col-md-6 -->
+                     <div class="col-md-4 filterStyle" >
+                      <div class="input-group">
+
+
+                        <span class="input-group-addon filterLabel">
+                          Inspector's Name </span>
+                          <select id="inspectorDropdown" class="form-control" ng-model="selectedInspector"  name="inspId" ng-options="insp.name for insp in inspectors track by insp._id" ng-change="filterChanged()">
+                          </select>
+                          <input type="hidden" name="inspName" value="{{selectedInspector.name}}">
+                        </div>
+                        <!-- /input-group -->
+                      </div>
+                      <div class="col-md-4 filterStyle" >
+                        <div class="input-group">
+
+                          <span class="input-group-addon filterLabel">
+                            Inspection Period </span>
+
+                            <selectpicker id="inspPeriodDropdown" name="inspPeriod" data-array="inspPeriods" data-selected="selectedInspector" onchange="periodChange()"  ></selectpicker>
+                            <div id="errorMsg1" style="color:#a94442;display:none"><label  class="error">Inspection Period is required.</label></div>
+
+
+                          </div>
+                          <!-- /input-group -->
+                        </div>
+                        <!-- /.col-md-6 -->
+                      </div>
+
+
+
+                      <br><br>
+
+                      <div class="row">
+                        <div class="col-md-offset-4 col-md-2">
+                         <button type="submit"  ng-click="export2Excel()" style="margin-bottom: 2%;" class="btn green button-rounder center-block exportButton">Export to Excel
+                         </button>
+                       </div>
+                       <div class=" col-md-2">
+                       <button type="submit" ng-click="export2Pdf()" style="margin-bottom: 2%;" class="btn green button-rounder center-block exportButton">Export to PDF </button>
+                       </div>
+                     </div>
+                     <br>
+                     <div class="row">
+                       <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+                        <div style="display:inline;"> Note:</div>
+                        <div style="display:inline;"> For the filters selected, the exported table provides corresponding information on the facilities that you should plan to visit during the selected inspection period, including: facility ID, facility name, sub-county, ownership, level, planned inspection date, inspection number, inspector name, nearest market, market ID, market size, treatment group, SCHMT office, distance from county office, transportation mode, in-charge name, in-charge phone, detailed description of location, inspection type, recommended camping location, estimated transport time from camping location, landmark, alternate contact, alternate contact’s phone, and longitude and latitude of facility location.
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <br><br>
+                </div>
+
+              </div>
+            </div>
+            <!-- END EXAMPLE TABLE PORTLET-->
+          </div>
+
+           <% if(req.flash('noPdfFound') != ""){ %>
+          <div id="hide">
+            <div  class="alert alert-danger alert-dismissable" >
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              No PDF available.
+            </div> 
+          </div>
+          <%}%> 
+          <div class="row">
+            <div class="col-md-12">
+              <!-- BEGIN EXAMPLE TABLE PORTLET-->
+              <div class="portlet box" >
+                <div class="headerSection">
+                  <div class="headerLabelSection">
+                    Daily Inspector Visit Plan
+                  </div>
+                </div>
+
+
+                <div class="filterDiv" style="background-color: white">
+
+                  <form role="form" class="filterTable" id="visitPlanDataBankForm2"  action="<%=sails.config.routesPrefix%>/visitPlan/exportDatabankPdf" method="POST">
+
+
+                   <div class="row">
+                    <div class="col-md-4 filterStyle" >
+                      <div class="input-group">
+                        <span style="padding-right: 50px" class="input-group-addon filterLabel">
+                         County&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+                         <select  class="form-control" ng-model="county_name" 
+                         name="county" ng-options="c.value for c in countiesPdf track by c.key" ng-change="countyChangedPdf()">
+                       </select></div>
+                       <!-- /input-group -->
+                     </div>
+                     <!-- /.col-md-6 -->
+                     <div class="col-md-4 filterStyle" >
+                      <div class="input-group">
+
+                        <span class="input-group-addon filterLabel">
+                          Inspector's Name </span>
+                          <select  class="form-control" ng-model="inspector_name"  name="inspId" ng-options="insp.name for insp in inspectorsPdf track by insp._id" ng-change="filterChangedPdf()">
+                          </select>
+                          <input type="hidden" name="inspName" value="{{inspector_name.name}}">
+                        </div>
+                        <!-- /input-group -->
+                      </div>
+                      <div class="col-md-4 filterStyle" >
+                        <div class="input-group">
+
+                          <span class="input-group-addon filterLabel">
+                            Inspection Period </span>
+
+                            <selectpicker id="inspPeriodDropdown1" name="inspPeriod" data-array="inspPeriodsPdf" data-selected="inspector_name"
+                            onchange="periodChange1()" >
+
+                          </selectpicker>
+                          <div id="errorMsg2" style="color:#a94442;display:none">
+                          <label >Inspection Period is required.</label></div>
+
+
+                        </div>
+                        <!-- /input-group -->
+
+                      </div>
+
+                      <div class="col-md-4 filterStyle" >
+                        <div class="input-group">
+
+                          <span style="padding-right: 42px" class="input-group-addon filterLabel">
+                            Facility<span class="required" style="color: rgb(224, 34, 34);"> * </span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+
+                            <select id="facilityList" class="js-example-basic-multiple
+                            form-control" name="facilityList" 
+                            multiple="multiple">
+
+                          
+                          </select>
+                          <div id="errorMsg" style="color:#a94442"></div>
+                          <div id="filterNote"> <span style="font-size: 11px;">Note: choose all facilities you want to export information sheet for. </span></div> 
+                        </div>
+
+                        <!-- /input-group -->
+                      </div>
+
+                    </div>
+
+
+                    <br><br>
+
+                    <center>
+                    <div class="row">
+                     <button type="submit" id="exportButton1" style="margin-bottom: 2%; text-align: center;" class="btn btn green button-rounder">Export to PDF</button>
+                   </div>
+                   </center>
+                   <div class="row">
+                     <div class="col-md-12 col-sm-12" style="font-size:12px;width:100%;margin-left:1%;">
+
+                      <div style="display:inline;"> Note:</div>
+                      <div style="display:inline;"> For the filters selected, the exported pdf report provides corresponding information on the facilities that you are visiting for the day, including: facility ID, facility name, ownership, level, inspection number, nearest market, treatment group, in-charge name, in-charge phone, detailed description of location, landmark, alternate contact, alternate contact’s phone, and longitude and latitude of facility location. 
+                      </div>
+                    </div>
+                  </div>
+
+                </form>
+
+
+                <br><br>
+
+
+
+
+              </div>
+
+            </div>
+          </div>
+          <!-- END EXAMPLE TABLE PORTLET-->
+
+         
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <script>
+      $('#hide').delay(1000).fadeOut(3000); 
+    </script>
+  </div>
+</div>
+<!-- END PAGE CONTENT INNER -->
+<script>
+  highlightMenu(["inspPlanning"]);
+</script>
+
+<script type="text/javascript">
+ $(".js-example-basic-multiple").select2();
+</script>
+
+<script>
+// just for the demos, avoids form submit
+
+$( "#visitPlanDataBankForm2" ).validate({
+
+  rules: {
+    facilityList:{
+      required:true
+    },
+  },
+
+  messages : {
+
+    facilityList: {
+      required : "Facility is required."
+    }
+
+  },
+  errorPlacement: function(error, element) {
+   error.appendTo('#errorMsg');
+   
+ }
+});
+
+
+$('#facilityList').on("change", function(){
+  if($('#facilityList').val()!=null)
+    $('#errorMsg').hide();
+  
+  else
+    $('#errorMsg').show();
+ 
+});
+
+
+function periodChange(){
+
+  if($("#inspPeriodDropdown").val()==null){
+
+    $(".exportButton").attr("disabled",true);
+
+    $("#errorMsg1").show();
+  }else{
+   $(".exportButton").attr("disabled",false);
+
+   $("#errorMsg1").hide();
+ }
+}
+
+function periodChange1(){
+
+  if($("#inspPeriodDropdown1").val()==null){
+
+    $("#exportButton1").attr("disabled",true);
+
+    $("#errorMsg2").show();
+  }else{
+   $("#exportButton1").attr("disabled",false);
+
+   $("#errorMsg2").hide();
+ }
+}
+
+
+</script>

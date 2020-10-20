@@ -1,0 +1,458 @@
+<script language="javascript" type="text/javascript">
+  $(function () {
+    $("#fileupload").change(function () {
+      if (typeof (FileReader) != "undefined") {
+        var dvPreview = $("#dvPreview");
+        dvPreview.html("");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+        $($(this)[0].files).each(function () {
+          var file = $(this);
+          if (regex.test(file[0].name.toLowerCase())) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var img = $("<img />");
+              img.attr("style", "height:100px;width: 100px");
+              img.attr("src", e.target.result);
+              dvPreview.append(img);
+            }
+            reader.readAsDataURL(file[0]);
+          } else {
+            /*  alert(file[0].name + " is not a valid image file.");*/
+            dvPreview.html("");
+            
+
+            return false;
+          }
+        });
+      } else {
+
+      }
+    });
+    $("#fileupload1").change(function () {
+      if (typeof (FileReader) != "undefined") {
+        var dvPreview = $("#dvPreview1");
+        dvPreview.html("");
+        var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+        $($(this)[0].files).each(function () {
+          var file = $(this);
+          if (regex.test(file[0].name.toLowerCase())) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+              var img = $("<img />");
+              img.attr("style", "height:100px;width: 100px");
+              img.attr("src", e.target.result);
+              dvPreview.append(img);
+            }
+            reader.readAsDataURL(file[0]);
+          } else {
+            /*  alert(file[0].name + " is not a valid image file.");*/
+            dvPreview.html("");
+            
+
+            return false;
+          }
+        });
+      } else {
+
+      }
+    });
+  });
+</script>
+
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="resourceSubListApp" 
+ng-controller="resourceSubListCtrl">
+<!-- BEGIN CONTENT BODY -->
+<div class="page-content">
+
+  <div id="deleteConfirmation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header alert alert-danger" style="color: #a94442">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+          <span class="panel-icon"><i class="glyphicon glyphicon-trash"></i>
+          </span>
+          <span class="modal-title "> Delete Document</span>
+        </div>
+        <div class="modal-body">
+          <p> Are you sure you want to delete this Document ? </p>
+        </div>
+        <div class="modal-footer">
+
+          <button data-dismiss="modal" ng-click="deleteSubList()" class="btn blue button-rounder">Yes</button>
+          <button class="btn default button-rounder" data-dismiss="modal" aria-hidden="true">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- BEGIN PAGE BREADCRUMB -->
+  <ul class="page-breadcrumb breadcrumb">
+    <li>
+      <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <a href="<%=sails.config.routesPrefix%>/resources">Resources</a>
+      <i class="fa fa-circle"></i>
+    </li>
+    <li>
+      <span class="active"> <%= resources[0].name %> </span>
+    </li>
+  </ul>
+  <div class="row">
+    <div class="col-md-12">
+      <!-- BEGIN VALIDATION STATES-->
+      <div class="portlet light portlet-fit portlet-form bordered">
+        <div class="portlet-title">
+          <div class="caption">
+            <i class="fa fa-plus font-red"></i>
+            <span class="caption-subject font-red sbold uppercase">Add Document
+            </span>
+            <input type="hidden" id="categoryid" value="<%=req.param('id')%>" />
+
+          </div>
+
+        </div>
+
+        <div class="portlet-body" >
+          <!-- BEGIN FORM-->
+          <form  class="form-horizontal" ng-hide="addSubListBody" name="subListForm" 
+          novalidate>
+
+          <div class="form-body" >
+
+            <div class="form-group">
+              <label class="control-label col-md-3">Role
+                <span class="required"> * </span>
+              </label>
+              <div class="col-md-7">
+
+              <select  id="roleDropdown" ng-model="role"  name="role" data-selected-text-format="count"  class="form-control bs-select" ng-class="{ 'has-error' : subListForm.role.$invalid && !subListForm.role.$pristine }"
+                multiple required > 
+                <option key="0">All</option>
+                <option key="1">Admin</option>
+                <option key="2">Report Viewer(National)</option>
+                <option key="3">B&Cs - ITEG</option>
+                <option key="4">B&Cs - Licensing decision-makers</option>
+
+
+                <option key="5">B&Cs - Other B&Cs members</option>
+                <option key="6">MOH Coordinator</option>
+                <option key="7">WB -Supervisors</option>
+                <option key="8">WB - HIA Team</option>
+                <option key="9">WB - Research team</option>
+                <option key="10">High-level - KTF, WB</option>
+                <option key="11">Steering Committee</option>
+                <option key="12">Logistics Firm</option>
+                <option key="13">Counties - CEC</option>
+                <option key="14">Counties - CDH</option>
+                <option key="15">Counties - Focal points</option>
+                <option key="16">Report Viewer(County)/option>
+                 <option key="17">Inspector</option>
+                 <option key="18">Limited</option>
+
+               </select>
+             </div>
+             <p class="col-md-offset-3 col-md-8 ng-hide" ng-show="(subListForm.role.$touched || submitted) && subListForm.role.$invalid"
+             style="color:#a94442">Role is required.</p>
+           </div>
+
+           <div class="form-group">
+            <label class="control-label col-md-3">Title<span class="required"> * </span>
+
+            </label>
+            <div class="col-md-7">
+              <input type="text" id="subListName" name="name" ng-model="name"  class="form-control" ng-class="{ 'has-error' : subListForm.name.$invalid && !subListForm.name.$pristine }" ng-pattern="/^[a-zA-Z0-9 ]*$/"
+              ng-blur="checkCategorySubList()" required /> 
+
+            </div>
+            <div class="col-md-offset-3 col-md-8">
+             <div class="" ng-messages="subListForm.name.$error">
+
+              <div ng-message="pattern" style="color:#a94442">Only characters and numbers are allowed.</div>
+            </div>
+            <p class="ng-hide" ng-show="categorySubListExist"  style="color:#a94442;margin:0px;">Document with this title already exists.</p>
+            <p class=" ng-hide" ng-show="(subListForm.name.$touched || submitted)  && subListForm.name.$error.required"
+            style="color:#a94442">Title is required.</p>
+
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-md-3">Description<span class="required"> * </span>
+
+          </label>
+          <div class="col-md-7">
+            <textarea style="max-width:100%;" rows="5" columns="50" id="subListDescription" name="description" ng-model="description"  class="form-control" ng-class="{ 'has-error' : subListForm.description.$invalid && !subListForm.description.$pristine }" 
+            required ></textarea> 
+
+          </div>
+
+          <div class="col-md-offset-3 col-md-8">
+            <p class=" ng-hide" ng-show="(subListForm.description.$touched || submitted)  && subListForm.description.$error.required"
+            style="color:#a94442">Description is required.</p>
+
+          </div>
+
+        </div>
+        <span class="col-md-offset-3 col-md-8">
+          <label class="control-label italic">
+            <i>Either below Link or Attachment is required.</i></label></span>
+            <div class="form-group">
+              <label class="control-label col-md-3">Link
+
+              </label>
+              <div class="col-md-7">
+                <input type="url" id="subListLink" name="link" ng-model="link"  class="form-control" ng-class="{ 'has-error' : subListForm.link.$invalid && !subListForm.link.$pristine }" 
+                ng-required="!(link.length || document.length )" /> 
+
+              </div>
+
+              <div class="col-md-offset-3 col-md-8">
+                <p class=" ng-hide" ng-show="(submitted)  && subListForm.link.$error.required"
+                style="color:#a94442">Link is required.</p>
+                <p class="ng-hide" ng-show="subListForm.link.$error.url" style="color:#a94442">
+                  Not valid url ! <br> ex. https://www.google.com</p>
+
+                </div>
+
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-3">Attachment</label>
+                <div class="col-md-7">
+                  <div class="fileinput fileinput-new" data-provides="fileinput">
+                    <div class="input-group input-large">
+                      <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                        <span id="fileName" class="fileinput-filename" > </span>
+
+                      </div>
+                      <span class="input-group-addon btn default btn-file">
+                        <span class="fileinput-new"> Select file </span>
+                        <span class="fileinput-exists"> Change </span>
+
+                        <input type="file"   id="fileupload" name="attachedFile" 
+
+                        ng-class="{ 'has-error' : subListForm.attachedFile.$invalid && !subListForm.attachedFile.$pristine }"  
+                        file-model="myFile" ng-model="document"   ng-required="!(link.length || document.length )" /> </span>
+                        <a id="removeImg" href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                      </div>
+                    </div>
+                    <div id="dvPreview">
+
+                    </div>
+
+
+                  </div>
+
+                  <div class="col-md-offset-3 col-md-8">
+
+                    <div class=" ng-hide" ng-show="( submitted) && (subListForm.attachedFile.$error.required || subListForm.link.$error.required)"
+                    style="color:#a94442">Either Link or Attachment is required.</div>
+
+                  </div>
+
+                </div>
+                <div class="row">
+                  <label class="control-label italic">
+                    <i>
+                     Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+                   </label>
+
+                 </div>
+
+                 <div class="form-actions">
+                  <div class="row">
+                    <div class="col-md-offset-3 col-md-8">
+                      <button  class="btn green button-rounder" ng-click="addSubList(subListForm)">Save</button>
+                      <a type="button" class="btn grey-salsa btn-outline button-rounder" href="<%=sails.config.routesPrefix%>/resources">Cancel</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <form id="formSubmit"  class="form-horizontal ng-hide" ng-show="editSubListBody" name="editSubListForm" novalidate>
+              <div class="form-body" >
+
+               <div class="form-group">
+
+                 <div class="form-group">
+                  <label class="control-label col-md-3">Role
+                    <span class="required"> * </span>
+                  </label>
+                  <div class="col-md-7">
+
+                    <selectpicker  id="roleDropdownEdit" data-array="roles"
+                    data-selected="selectedRole" 
+                    >
+                  </selectpicker>
+                </div>
+                <p class="col-md-offset-3 col-md-8 ng-hide" ng-show="(editSubListForm.role.$touched || submitted) && editSubListForm.role.$invalid"
+                style="color:#a94442">Role is required.</p>
+              </div>
+
+              <label class="control-label col-md-3">Title<span class="required"> * </span>
+
+              </label>
+              <div class="col-md-7">
+                <input type="text" id="subListName" name="name" ng-model="editname"  class="form-control" ng-class="{ 'has-error' : editSubListForm.name.$invalid && !editSubListForm.name.$pristine }" 
+                ng-blur="checkCategorySubListEdit()" required /> 
+
+              </div>
+              <div class="col-md-offset-3 col-md-8">
+               <div class="" ng-messages="editSubListForm.name.$error">
+
+                <div ng-message="pattern" style="color:#a94442">Only characters and numbers are allowed.</div>
+              </div>
+              <p class="ng-hide" ng-show="categorySubListEditExist"  style="color:#a94442;margin:0px;">Document with this title already exists.</p>
+              <p class=" ng-hide" ng-show="(editSubListForm.name.$touched || submittedEdit)  && editSubListForm.name.$error.required"
+              style="color:#a94442">Title is required.</p>
+
+
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-md-3">Description<span class="required"> * </span>
+
+            </label>
+            <div class="col-md-7">
+              <textarea rows="5" columns="50" id="subListDescription" name="description" ng-model="editdescription"  class="form-control" ng-class="{ 'has-error' : editSubListForm.description.$invalid && !editSubListForm.description.$pristine }" 
+              required ></textarea> 
+
+            </div>
+
+            <div class="col-md-offset-3 col-md-8">
+              <p class=" ng-hide" ng-show="(editSubListForm.description.$touched || submittedEdit)  && editSubListForm.description.$error.required"
+              style="color:#a94442">Description is required.</p>
+
+            </div>
+
+          </div>
+          <span class="col-md-offset-3 col-md-8">
+            <label class="control-label italic">
+              <i>Either below Link or Attachment is required.</i></label></span>
+              <div class="form-group">
+                <label class="control-label col-md-3">Link
+
+                </label>
+                <div class="col-md-7">
+                  <input type="url"  id="subListLink" name="link" ng-model="editlink"  class="form-control" ng-class="{ 'has-error' : editSubListForm.link.$invalid && !editSubListForm.link.$pristine }" 
+                  ng-required="!(editlink.length || documentEdit.length )" /> 
+
+                </div>
+
+                <div class="col-md-offset-3 col-md-8">
+
+                  <p class="ng-hide" ng-show="editSubListForm.link.$error.url" 
+                  style="color:#a94442">
+                  Not valid url ! <br> ex. https://www.google.com</p>
+
+
+                </div>
+
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-3">Attachment</label>
+                <div class="col-md-7">
+                  <div class="fileinput fileinput-new" data-provides="fileinput">
+                    <div class="input-group input-large">
+                      <div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                        <span id="fileName1"   class="fileinput-filename" > </span>
+                        <input type="hidden" ng-model="sval" />
+
+                      </div>
+                      <span class="input-group-addon btn default btn-file">
+                        <span class="fileinput-new"> Select file </span>
+                        <span class="fileinput-exists"> Change </span>
+
+                        <input type="file"   id="fileupload1" name="attachedFile" 
+                        onchange="angular.element(this).scope().removeimg()"
+                        ng-class="{ 'has-error' : editSubListForm.attachedFile.$invalid && !editSubListForm.attachedFile.$pristine }"  
+                        file-model="myFileEdit" ng-model="documentEdit" 
+
+                        ng-required="trial && !(editlink.length || documentEdit.length )" /> 
+                      </span>
+                      <a id="removeImg1" href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                    </div>
+                  </div>
+                  <div id="dvPreview1">
+                  </div>
+                  <!--  <a id="prview" href="" class="fileinput-filename">{{myFileEdit.name}}</a> -->
+                  <img id="uploadImg1" src="#" style="height: 100px;width: 100px" class="img-responsive pic-bordered" alt="" />
+                </div>
+
+                <div class="col-md-offset-3 col-md-8">
+
+                  <div class=" ng-hide" ng-show="( submittedEdit) && (editSubListForm.attachedFile.$error.required || editSubListForm.link.$error.required)"
+                  style="color:#a94442">Either Link or Attachment is required.</div>
+
+
+              <!--  <p class=" ng-hide" ng-show="(submittedEdit)  &&
+                 editSubListForm.link.$error.required"
+                 style="color:#a94442">Link is required.</p> -->
+               </div>
+
+
+             </div>
+             <div class="row">
+              <label class="control-label italic">
+                <i>
+                 Fields marked with a   <span class="required"> * </span>  are mandatory </i>
+               </label>
+
+             </div>
+
+
+
+             <div class="form-actions">
+              <div class="row">
+                <div class="col-md-offset-3 col-md-8">
+                  <button  class="btn green button-rounder" ng-click="editSubList(editSubListForm)">Update</button>
+                  <a type="button" class="btn grey-salsa btn-outline button-rounder" href="<%=sails.config.routesPrefix%>/resources/include/<%=req.param('id')%>">Cancel</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+    <!-- END VALIDATION STATES-->
+  </div>
+</div>
+
+<div class="portlet box" style="background-color:white">
+  <div class="headerSection">
+    <div class="headerLabelSection">
+      Documents
+    </div>
+    <div class="tools "></div>
+  </div>
+  <div class="portlet-body">
+    <table class="table table-striped table-bordered table-hover" id="sublist">
+      <thead>
+        <tr>
+          <th class="centerContent"> Title</th>
+          <th class="centerContent"> Role</th>
+          <th class="centerContent"> Description</th>
+          <th class="centerContent"> Link</th>
+          <th class="centerContent"> Actions</th>
+
+        </tr>
+      </thead>
+
+    </table>
+  </div>
+</div>
+</div>
+</div>
+<script>
+  highlightMenu(["resources"]);
+
+</script>

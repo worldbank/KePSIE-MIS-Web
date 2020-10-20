@@ -1,0 +1,279 @@
+<style type="text/css">
+  #reportContainer td {
+    font-size: 13px;
+  }
+  #reportContainer th {
+    font-size: 14px;
+  }
+  .outofbusiness{
+   //color: #697882;
+    color: indianred;
+   font-weight: 600;
+  }
+</style>
+
+<link href="<%=sails.config.assetURL%>/global/css/custom-media-query.css" rel="stylesheet" type="text/css"/>
+<div class="page-content-wrapper" ng-app="completeJHICIndividualModule" ng-controller="completeJHICIndividualController">
+
+  <div id="emailForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="emailForm" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header alert alert-info" >
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+          <span class="panel-icon">
+           <i class="glyphicon glyphicon-edit"></i>
+         </span>
+         <span class="modal-title "> Send Mail</span>
+       </div>
+       <div class="modal-body">
+
+         <form class="form-horizontal" name="emailForm"  novalidate>
+           <div class="row">
+
+            <span class="col-md-1">
+              To </span>
+              <div class="col-md-8">
+                <select  class="js-example-basic-multiple" ng-model="emailDetail.toReceiver"  name="toReceiver" ng-class="{ 'has-error' : emailForm.toReceiver.$invalid && !emailForm.toReceiver.$pristine }"
+                multiple="multiple"  required>
+                <% if(info.s14a_1d != undefined && info.s14a_1d != "N/A") {%>
+                <option value="<%= info.s14a_1d%>" title="<%= info.s14a_1d %>" selected ><%= info.s14a_1d %></option>
+                <% } %>
+                <% for(var i=0;i< userList.length;i++){ 
+                var flag1=0;
+                if(userList[i].email==info.s14a_1d){
+                flag1=1;
+              }
+               if(flag1==0){ %>
+            <option value="<%= userList[i]['email'] %>" title="<%= userList[i]['role'] %>" ><%= userList[i]["name"] %> (<%= userList[i]['email'] %>|<%= userList[i]['role'] %> | <% if(userList[i]['county']!=undefined){  userList[i]['county'] } %>)</option>
+            <% }} %>
+            
+
+           
+          </select>
+
+        </div>
+
+      </div>
+      <div class="row">
+        <span class="col-md-1">
+        </span>
+        <div class="col-md-8">
+         <p class=" ng-hide" ng-show="(emailForm.toReceiver.$touched || submitted) && emailForm.toReceiver.$error.required"
+         style="color:#a94442">Recipient is required.</p>
+       </div>
+     </div>
+     <br>
+     <div class="row">
+
+      <span class="col-md-1">
+        Cc </span>
+        <div class="col-md-8">
+          <select  class=" js-example-basic-multiple" name="facilityList"
+          multiple="multiple" ng-model="emailDetail.ccReceiver">
+
+          <% for(var i=0;i< userList.length;i++){ 
+          var flag=0;
+          for(var j=0;j< ccUserList.length;j++){
+          if( userList[i]['email']==ccUserList[j]['email'] && ccUserList[j]['email']=="kenyapatientsafety@gmail.com"){
+          flag=1;
+        }
+      }
+      if(flag==0){
+      %>
+      <option value="<%= userList[i]['email'] %>" title="<%= userList[i]['role'] %>"  ><%= userList[i]["name"] %> (<%= userList[i]['email'] %>|<%= userList[i]['role'] %> | <% if(userList[i]['county']!=undefined){  userList[i]['county'] } %>)</option>  <% }else{ %>
+      <option value="<%= userList[i]['email'] %>" title="<%= userList[i]['role'] %>" selected><%= userList[i]["name"] %> (<%= userList[i]['email'] %>|<%= userList[i]['role'] %> |<% if(userList[i]['county']!=undefined){  userList[i]['county'] } %>)</option>
+      <% }}%>
+    </select>
+
+  </div>
+</div>
+<br>
+<div class="row">
+
+  <span class="col-md-1">
+    Bcc </span>
+    <div class="col-md-8">
+      <select  class=" js-example-basic-multiple" name="facilityList"
+      multiple="multiple" ng-model="emailDetail.bccReceiver" >
+      <% for(var i=0;i< userList.length;i++){ %>
+      <option value="<%= userList[i]['email'] %>" title="<%= userList[i]['role'] %>" ><%= userList[i]["name"] %> (<%= userList[i]['email'] %>|<%= userList[i]['role'] %> |<% if(userList[i]['county']!=undefined){  userList[i]['county'] } %>)</option>  <% } %>
+    </select>
+
+  </div>
+</div>
+<br>
+<div class="row">
+
+  <span class="col-md-1">
+    Subject </span>
+    <div class="col-md-8">
+      <input type="text" class="form-control" ng-model="emailDetail.subject" name=""/>
+    </div>
+
+
+  </div>
+  <br>
+  <div class="row">
+   <div class="col-md-12">
+    <trix-editor  angular-trix trix-initialize="trixInitialize(e, editor);" trix-change="trixChange(e, editor);" trix-selection-change="trixSelectionChange(e, editor);" trix-focus="trixFocus(e, editor);" trix-blur="trixBlur(e, editor);" trix-file-accept="trixFileAccept(e, editor);" trix-attachment-add="trixAttachmentAdd(e, editor);" trix-attachment-remove="trixAttachmentRemove(e, editor);" ng-model="emailDetail.content" name="query"  ng-class="{ 'has-error' : askExpertForm.query.$invalid && !askExpertForm.query.$pristine }" required ></trix-editor>
+  </div>
+</div>
+
+
+
+</form>
+
+</div>
+<div class="modal-footer">
+ <input type="hidden" id="mailReportHeader" name="mailReportHeader" value="<%=info._hfname%>" />
+ <input type="hidden" id="inspectionDate" name="inspectionDate" value="<%=info._date%>" />
+
+ <button  ng-click="sendPDF(emailForm)" class="btn blue button-rounder">Send</button>
+ <button class="btn default button-rounder" data-dismiss="modal" aria-hidden="true">No</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+<div class="page-content">
+  <!-- END PAGE HEAD-->
+  <div class="page-head">
+    <!-- BEGIN PAGE TITLE -->
+    <div class="page-title">
+      <% if (detail) { %>
+      <h1>Individual JHIC Complete Report - <%=info._hfname%></h1>
+      <% } else { %>
+      <h1>Individual JHIC Overview Report - <%=info._hfname%></h1>
+      <% } %>
+    </div>
+
+    <!-- END PAGE TITLE -->
+  </div>
+  <!-- END PAGE HEAD-->
+  <!-- BEGIN PAGE BREADCRUMB -->
+  <div class="breadcrumbDiv">
+    <table width="100%">
+      <tr>
+        <td width="70%">
+          <ul class="page-breadcrumb breadcrumb">
+            <li>
+              <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+              <i class="fa fa-circle"></i>
+            </li>
+            <li>
+              <span style=" color: #337ab7;">Complete JHIC Reports</span>
+              <i class="fa fa-circle"></i>
+            </li>
+            <li>
+              <a href="<%=sails.config.routesPrefix%>/completejhic/individual">Individual JHIC Reports</a>
+              <i class="fa fa-circle"></i>
+
+            </li>
+            <li>
+              <span class="active"><%=info._hfname%></span>
+              <span class="active"></span>
+            </li>
+          </ul>
+        </td>
+        <td align="right">
+          <% if (!detail) { %>
+
+          <div class="exportSection">
+            <button type="button" onclick="window.open('<%=sails.config.routesPrefix%>/completejhic/individualdetailed/<%=req.param("id")%>')">Detail Report</button>
+          </div>
+          <% } %>
+          <div class="exportSection">
+            <form id="reportForm" action="<%=sails.config.routesPrefix%>/completejhic/individual/exportAsPdf" method="POST">
+              <input type="hidden" id="reportHTML" name="reportHTML"/>
+              <input type="hidden" id="reportHeader" name="reportHeader" value="<%=info._hfname%>" />
+            </form>
+            <button type="button" onclick="createPDF()">
+              PDF
+              <i class="fa fa-download"></i>
+            </button>
+          </div>
+          <div class="exportSection">
+
+            <a id="emailPopup" href="#"   data-toggle="modal" >
+              <button type="button" ng-click="emailDetailView()" >Send Email
+
+                <i class="fa fa-upload"></i>
+              </button>
+            </a>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <!-- END PAGE BREADCRUMB -->
+
+  <div id="successMsg" class="alert alert-success alert-dismissable" style="display:none;">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>                        
+    Complete JHIC Report is sent sucessfully to recipient. Thank you for the patience.
+  </div>
+
+  <div class="row" id="reportRow">
+    <div id="styleDiv">
+      <% include completeJHICStyle %>
+    </div>
+
+    <div class="col-md-12" id="reportContainer">
+      <% include completeJHICIndividual14 %>
+      <% if (detail) { %>
+      <div style='page-break-before: always;'></div>
+      <% include completeJHICIndividual1 %>
+      <% include completeJHICIndividual2to13 %>
+      <% } else { %>
+      <script>hideShow("s14Body");</script>
+      <% } %>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  highlightMenu(["completeJHICReports","individualReport"]);
+  $(".js-example-basic-multiple").select2({tags: true});
+
+/*$('.js-example-basic-multiple').select2({
+          tags: true,
+          createTag: function (params) {
+            return {
+              id: params.term,
+              text: params.term,
+              newOption: true
+            }
+          },
+          templateResult: function (data) {
+            var $result = $("<span></span>");
+
+            $result.text(data.text);
+
+            if (data.newOption) {
+              $result.append(" <em>(new)</em>");
+            }
+
+            return $result;
+          }
+        });
+*/
+
+
+
+  var ownerEmail='<%=info.s14a_1d %>';
+  var ccUserList=<%-JSON.stringify( ccUserList) %>;
+
+  console.log("ccUserList");
+  console.log(ccUserList);
+
+  var info=<%-JSON.stringify( info) %>;
+ 
+</script>
+
+

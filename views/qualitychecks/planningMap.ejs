@@ -1,0 +1,191 @@
+
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-CLSd-3FnPHmG_R3pVV2yFrURNBT22Tc&callback=initVisitPlanMapQuality"
+type="text/javascript"></script>
+
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper" ng-app="qcPlanMapModule" ng-controller="qcPlanMapCtrl">
+    <!-- BEGIN CONTENT BODY -->
+    <div class="page-content">
+        <!-- BEGIN PAGE BREADCRUMB -->
+        <div class="breadcrumbDiv">
+            <table width="100%">
+                <tr>
+                    <td>
+                        <ul class="page-breadcrumb breadcrumb ">
+                         <li>
+                            <a href="<%=sails.config.routesPrefix%>/dashboard">Home</a>
+                            <i class="fa fa-circle"></i>
+                        </li>
+                        <li>
+                            <span class="active">Checks and Quality Reports</span>
+                            <i class="fa fa-circle"></i>
+                        </li>
+                        <li>
+                            <span class="active">Planning</span>
+
+                        </li>
+
+                    </ul>
+                </td>
+
+                <td width="30%" align="right">
+                    <div class="btn-group btn-group-solid ">
+
+
+                        <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/figure" >
+                         <i class="fa fa-bar-chart" style="font-size: 14px;"></i>
+                         Figures</a>
+
+                         <a type="button" class="btn green kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/table" >
+                            <i class="fa fa-table" style="font-size: 14px;"></i>
+                            Tables</a>
+
+                            <a type="button" class="btn green active kepsie-tabs" href="<%=sails.config.routesPrefix%>/qualitychecks/planning/map"  >
+                                <i class="fa fa-map-o" style="font-size: 14px;"></i>
+                                Maps</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="portlet box" style="background-color: white">
+                <div class="headerSection">
+                    <div class="headerLabelSection">
+                     Quality Checks Visit Plan - Maps 
+                 </div>
+                 <div class="exportSection">
+                    <form action="<%=sails.config.routesPrefix%>/qualitychecks/planning/map/exportAsKML" method="post">
+                        <input type="hidden" name="county" value="{{selectedCounty.value}}"></input>
+                        <input type="hidden" name="inspector" value="{{selectedInspector.inspectorId}}"></input>
+                        <input type="hidden" name="inspPeriod" value="{{selectedInspPeriod.value}}"></input>
+                        <button type="submit" id="submit">
+                            KML
+                            <i class="fa fa-download"></i>
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+
+
+            <div class="filterDiv">
+               <form role="form" class="filterTable">
+                <div class="row">
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                     <span class="input-group-addon filterLabel leftalign">
+                        County </span>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-8" style="padding-left:0px;padding-right:0px;">
+                       <select id="countyDropdown" class="form-control" ng-model="selectedCounty" ng-options="c.value for c in counties track by c.key" ng-change="countyChanged()">
+                       </select>
+                   </div>
+
+
+                   <div class="col-md-2 col-sm-2 col-xs-12">
+                     <span class="input-group-addon filterLabel leftalign">
+                       Quality Officer </span>
+                   </div>
+                   <div class="col-md-4 col-sm-4 col-xs-8" style="padding-left:0px;padding-right:0px;">
+                    <select id="inspectorDropdown" class="form-control" ng-model="selectedOfficer"  name="officerId" ng-options="off_name.name for off_name in officers track by off_name._id" ng-change="inspectorChanged()">
+                    </select>
+                </div>
+                <!-- /input-group -->
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                 <span class="input-group-addon filterLabel leftalign">
+                    Inspection Period </span>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-8" style="padding-left:0px;padding-right:0px;">
+                    <select id="inspPeriodDropdown" class="form-control" ng-model="selectedInspPeriod" ng-options="period.value for period in inspPeriods track by period.key" ng-change="inspectionPeriodChanged()">
+
+                    </select>
+                </div>
+                <!-- /input-group -->
+
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                 <span class="input-group-addon filterLabel leftalign">
+                    Indicator </span>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-8" style="padding-left:0px;padding-right:0px;">
+                 <select id="indicatorDropdown" ng-model="selectedIndicator"  class="form-control" data-selected-text-format="count" ng-change="indicatorChange()" >
+
+                   <option key="All" selected>All</option>
+                   <option key = "JHIC Discrepancies">JHIC Discrepancies</option>
+                   <option key = "Scorecard Non-Adherence">Scorecard Non-Adherence</option>
+                   <option key = "Facility Closure Non-Adherence">Facility Closure Non-Adherence</option>
+                   <option key = "Pharmacy Closure Non-Adherence">Pharmacy Closure Non-Adherence</option>
+                   <option key = "Lab Closure Non-Adherence">Lab Closure Non-Adherence</option>
+                   <option key = "Radiology Closure Non-Adherence">Radiology Closure Non-Adherence</option>
+                   <option key = "Nutrition Closure Non-Adherence">Nutrition Closure Non-Adherence</option>
+               </select>
+           </div>
+           <!-- /input-group -->
+       </div>
+
+   </form>
+</div>
+
+
+
+<div class="portlet-body">
+    <div id="map"></div>
+</div>
+</div>
+</div>
+
+
+</div>
+</div>
+<!-- END EXAMPLE TABLE PORTLET-->
+
+<!-- END PAGE CONTENT INNER -->
+</div>
+<div id="markerInfoWindow">
+    <table class="markerInfoWindowTable">
+        <tr>
+            <th colspan="2"><label id="facilityIdIW"></label></th>
+        </tr>
+        
+        <tr>
+            <td>Hf Name</td>
+            <td><label id="facilityNameIW"></label></td>
+        </tr>
+        <tr>
+            <td>County</td>
+            <td><label id="countyIW"></label></td>
+        </tr>
+        <tr>
+            <td>Sub County</td>
+            <td><label id="subCountyIW"></label></td>
+        </tr>
+
+        <tr>
+            <td>Level</td>
+            <td><label id="levelIW"></label></td>
+        </tr>
+        <tr>
+            <td>Ownership</td>
+            <td><label id="ownershipIW"></label></td>
+        </tr>
+        <tr>
+            <td>Market Size</td>
+            <td><label id="marketSizeIW"></label></td>
+        </tr>
+        
+    </table>
+</div>
+
+<div id="legend">
+
+</div>
+
+<script>
+    var filename = "<%=__('summary_jhic_figure_filename')%>";
+    highlightMenu(["qualityReports","planning"]);
+</script>
